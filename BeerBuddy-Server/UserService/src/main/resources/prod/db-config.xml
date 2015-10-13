@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" profile="prod"
+    xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean class="oracle.jdbc.pool.OracleDataSource" id="dataSource" p:URL="${jdbc.url}"
+        p:driverType="" p:password="${jdbc.password}" p:user="${jdbc.username}" />
+    <context:property-placeholder location="classpath:/dev/jdbc.properties" />
+</beans>
