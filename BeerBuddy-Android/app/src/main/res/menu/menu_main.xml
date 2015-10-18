@@ -1,6 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+  <!-- Nur anzeigen wenn eingeloggt -->
+    <item android:id="@+id/action_profil" android:title="@string/action_profil"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_freundesliste" android:title="@string/action_freundesliste"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_logout" android:title="@string/action_logout"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <!-- Nur anzeigen wenn nicht eingeloggt -->
+    <item android:id="@+id/action_login" android:title="@string/action_login"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <!-- Immer anzeigen -->
+    <item android:id="@+id/action_impressum" android:title="@string/action_impressum"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

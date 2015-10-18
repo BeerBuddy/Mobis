@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">BeerBuddy</string>
-    <string name="action_settings">Settings</string>
+    <string name="password">Password</string>
+    <string name="repassword">Retype-Password</string>
+    <string name="login_fb">Login with FB</string>
+    <string name="save">Save</string>
+
 </resources>
