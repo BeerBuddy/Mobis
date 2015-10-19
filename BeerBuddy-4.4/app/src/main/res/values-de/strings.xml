@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BeerBuddy</string>
+    <string name="email">Email</string>
+    <string name="password">Passwort</string>
+    <string name="repassword">Passwort wiederholen</string>
+    <string name="save">Speichern</string>
+</resources>
