@@ -11,6 +11,8 @@ import javax.persistence.Id;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 
@@ -18,6 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
+@RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
     @Id
@@ -26,10 +29,12 @@ public class Person {
 
     @NotBlank
     @Length(min = 3, max = 30)
+    @NonNull
     private String firstName;
 
     @NotBlank
     @Length(min = 3, max = 30)
+    @NonNull
     private String lastName;
 
 }

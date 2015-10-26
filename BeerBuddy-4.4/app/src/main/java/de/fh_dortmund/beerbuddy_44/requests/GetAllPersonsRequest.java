@@ -5,6 +5,8 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy.PersonList;
 
+//TODO URL auslagern
+//TODO Versionsnummer in URL
 public class GetAllPersonsRequest extends SpringAndroidSpiceRequest<PersonList> {
 
 
