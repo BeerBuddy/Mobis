@@ -13,10 +13,10 @@
         <item android:id="@+id/action_login" android:title="@string/action_login" android:icon="@android:drawable/ic_menu_manage"
             android:orderInCategory="100"  />
 
-        <!-- Immer anzeigen -->
+
         <item android:id="@+id/action_impressum" android:title="@string/action_impressum" android:icon="@android:drawable/ic_menu_share"
             android:orderInCategory="100"  />
-
+        <!-- Immer anzeigen
         <item android:id="@+id/nav_camara"
             android:title="Import" />
         <item android:id="@+id/nav_gallery" android:icon="@android:drawable/ic_menu_gallery"
@@ -25,9 +25,7 @@
             android:title="Slideshow" />
         <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
             android:title="Tools" />
-    </group>
-
-    <item android:title="Communicate">
+         <item android:title="Communicate">
         <menu>
             <item android:id="@+id/nav_share" android:icon="@android:drawable/ic_menu_share"
                 android:title="Share" />
@@ -35,6 +33,9 @@
                 android:title="Send" />
         </menu>
     </item>
+    -->
+    </group>
+
 
 </menu>
 

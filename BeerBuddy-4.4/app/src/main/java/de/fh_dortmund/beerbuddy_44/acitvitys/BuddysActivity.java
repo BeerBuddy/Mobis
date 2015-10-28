@@ -2,9 +2,8 @@ package de.fh_dortmund.beerbuddy_44.acitvitys;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -24,9 +24,8 @@ import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import de.fh_dortmund.beerbuddy_44.listener.rest.ListPersonRequestListener;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
-public class MainActivity
-        extends AppCompatActivity
-{
+public class BuddysActivity extends AppCompatActivity
+         {
 
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
@@ -52,7 +51,7 @@ public class MainActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+              DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -60,7 +59,7 @@ public class MainActivity
 
 
         //register Navigationb Listener
-        NavigationListener listener =new NavigationListener(this);
+       NavigationListener listener =new NavigationListener(this);
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
     }
@@ -96,4 +95,25 @@ public class MainActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+
+             private void performRequest() {
+                 BuddysActivity.this.setProgressBarIndeterminateVisibility(true);
+
+                 GetAllPersonsRequest request = new GetAllPersonsRequest();
+                 lastRequestCacheKey = request.createCacheKey();
+
+                 spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE, new ListPersonRequestListener() {
+                     @Override
+                     public void onRequestFailure(SpiceException e) {
+
+                     }
+
+                     @Override
+                     public void onRequestSuccess(PersonList listFollowers) {
+
+                     }
+                 });
+             }
+
 }
