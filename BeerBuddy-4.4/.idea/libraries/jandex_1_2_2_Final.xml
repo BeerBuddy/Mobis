@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jandex-1.2.2.Final">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jandex/1.2.2.Final/5881a59efdabb52c1b97f29e9015ef724aaabf65/jandex-1.2.2.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss/jandex/1.2.2.Final/998c6213335ae37f60fa16e15fb23eb23cd1887b/jandex-1.2.2.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

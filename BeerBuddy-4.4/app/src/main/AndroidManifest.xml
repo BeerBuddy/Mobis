@@ -14,8 +14,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+        <uses-library android:name="com.google.android.maps" />
         <activity
-            android:name=".acitvitys.MainActivity"
+            android:name=".acitvitys.MainViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -49,11 +50,11 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
-
+        <service
+            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
+            android:exported="false" />
     </application>
 
-    <service
-        android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
-        android:exported="false" />
+
 
 </manifest>
