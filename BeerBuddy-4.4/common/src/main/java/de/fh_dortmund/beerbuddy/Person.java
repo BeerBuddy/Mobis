@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-@RequiredArgsConstructor
+@RequiredArgsConstructor(suppressConstructorProperties = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
     @Id

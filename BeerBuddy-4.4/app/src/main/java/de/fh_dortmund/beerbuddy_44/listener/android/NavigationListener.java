@@ -11,18 +11,17 @@ import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BuddysActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.LoginActivity;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Created by David on 28.10.2015.
  */
+@RequiredArgsConstructor(suppressConstructorProperties = true)
 public class NavigationListener implements NavigationView.OnNavigationItemSelectedListener {
 
+    @NonNull
     private Activity activity;
-
-    public NavigationListener(Activity activity)
-    {
-        this.activity = activity;
-    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

@@ -1,4 +1,5 @@
 group 'de.fh.dortmund.beerbuddy.server'
+apply plugin: 'findbugs'
 version '1.0-SNAPSHOT'
 
 buildscript {

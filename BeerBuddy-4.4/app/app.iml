@@ -160,8 +160,8 @@
     <orderEntry type="library" exported="" name="play-services-appindexing-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-8.1.0" level="project" />
-    <orderEntry type="library" exported="" name="robospice-spring-android-1.4.14" level="project" />
     <orderEntry type="library" exported="" name="hibernate-validator-5.2.2.Final" level="project" />
+    <orderEntry type="library" exported="" name="robospice-spring-android-1.4.14" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-mapper-asl-1.9.13" level="project" />
