@@ -46,6 +46,6 @@ Vorraussetzung: Ein Nutzer hat eine Anfrage akzeptiert
 
 #Mockup
 
-![alt text](https://github.com/BeerBuddy/Mobis/tree/master/Dokumente/Mockup/BeerBuddy.png "Mockups mit Clickstream")
+![alt text](https://github.com/BeerBuddy/Mobis/blob/master/Dokumente/Mockup/BeerBuddy.png "Mockups mit Clickstream")
 
 
