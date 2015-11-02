@@ -1,6 +1,9 @@
 #BeerBuddy
 
-
+##Team
+David Grimm
+Marco Hölscher
+Andreas Wojtok
 
 ##Leitbild
 Unserer Vision ist es, dass Menschen schneller soziale Kontakte knüpfen sollten, indem sie sich mittels einer mobilen Anwendung mit anderen Menschen zum gemeinsamen Biertrinken verabreden.
