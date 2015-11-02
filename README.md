@@ -2,7 +2,9 @@
 
 ##Team
 David Grimm
+
 Marco Hölscher
+
 Andreas Wojtok
 
 ##Leitbild
