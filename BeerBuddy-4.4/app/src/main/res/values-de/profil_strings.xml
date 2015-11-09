@@ -4,4 +4,7 @@
         <string name="profil_username">Nutzername</string>
         <string name="profil_change_image">Bild ändern</string>
        <string name="profil_send_request">Abnfrage versenden</string>
+        <string name="profil_gender">Geschlecht</string>
+        <string name="profil_gender_male">Männlich</string>
+        <string name="profil_gender_female">Weiblich</string>
     </resources>

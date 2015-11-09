@@ -7,7 +7,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout/edit_profile_content_main"
-    tools:context=".EditProfilActivity">>
+    tools:context=".EditProfilActivity">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
@@ -16,13 +20,14 @@
 
 
         <ImageView
-            android:layout_width="match_parent"
+            android:src="@drawable/avatar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profil_image"
-            android:layout_weight="3.77" />
+            android:layout_gravity="right"
+            />
 
         <Button
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profil_change_image"
@@ -32,7 +37,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="@string/profil_username"
             />
 
@@ -44,7 +48,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="@string/email"
              />
 
@@ -52,6 +55,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/profil_email" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profil_gender"
+            />
+
+    <LinearLayout
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profil_gender_male"
+            android:id="@+id/radioButton_male"
+             />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profil_gender_female"
+            android:id="@+id/radioButton_female"
+             />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -114,4 +143,5 @@
             android:text="@string/save"
             android:id="@+id/profil_save" />
     </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

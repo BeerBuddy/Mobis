@@ -15,10 +15,12 @@
         android:weightSum="1">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:src="@drawable/avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/profil_image"
-            android:layout_weight="3.77" />
+            android:layout_gravity="right"
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -35,17 +37,16 @@
             />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/email"
-             />
+            android:text="@string/profil_gender"
+            />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/fab_margin"
-            android:id="@+id/profil_email"
-            android:text="beer.buddy@email.com"
+            android:text="male"
             />
 
         <TextView

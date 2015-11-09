@@ -4,4 +4,7 @@
     <string name="profil_username">Username</string>
     <string name="profil_change_image">Change Picture</string>
     <string name="profil_send_request">Send a Request</string>
+    <string name="profil_gender">Gender</string>
+    <string name="profil_gender_male">Male</string>
+    <string name="profil_gender_female">Female</string>
 </resources>
