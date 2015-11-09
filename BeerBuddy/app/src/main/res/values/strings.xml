@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BeerBuddy</string>
+    <string name="title_activity_main">BeerBuddy</string>
+    <string name="beer_buddy_headquarters">Beer Buddy Headquarters</string>
+</resources>
