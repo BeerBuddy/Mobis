@@ -1,11 +1,14 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 
+import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -67,7 +70,7 @@ public class MainViewActivity extends FragmentActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainview_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-     //   setSupportActionBar(toolbar);
+      //setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -120,5 +123,12 @@ public class MainViewActivity extends FragmentActivity implements OnMapReadyCall
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        MultiDex.install(this);
     }
 }

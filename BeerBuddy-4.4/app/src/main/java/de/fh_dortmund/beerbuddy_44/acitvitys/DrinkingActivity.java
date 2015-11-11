@@ -1,7 +1,9 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
@@ -21,5 +23,12 @@ public class DrinkingActivity extends AppCompatActivity {
         NavigationListener listener =new NavigationListener(this);
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        MultiDex.install(this);
     }
 }

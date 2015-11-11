@@ -1,9 +1,11 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -121,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements
                 // Could not resolve the connection result, show the user an
                 // error dialog.
                 //showErrorDialog(connectionResult);
-                Log.e(TAG,connectionResult.getErrorMessage());
+                Log.e(TAG,connectionResult.toString());
             }
         } else {
             // Show the signed-out UI
@@ -207,5 +209,12 @@ public class LoginActivity extends AppCompatActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        MultiDex.install(this);
     }
 }
