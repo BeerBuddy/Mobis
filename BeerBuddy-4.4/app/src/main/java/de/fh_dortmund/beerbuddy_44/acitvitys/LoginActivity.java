@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements
                 // Could not resolve the connection result, show the user an
                 // error dialog.
                 //showErrorDialog(connectionResult);
-                Log.e(TAG,connectionResult.getErrorMessage());
+                Log.e(TAG,connectionResult.toString());
             }
         } else {
             // Show the signed-out UI

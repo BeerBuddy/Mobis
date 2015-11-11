@@ -2,6 +2,8 @@ package de.fh.dortmund.beerbuddy.backend.entity.person;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import de.fh_dortmund.beerbuddy.Person;
+
 /**
  * Created by seckinger on 14.09.2015.
  */

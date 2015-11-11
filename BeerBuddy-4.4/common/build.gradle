@@ -8,4 +8,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
     compile ("org.projectlombok:lombok:1.16.6")
 
+    compile 'com.j256.ormlite:ormlite-core:4.48'
+
+    compile 'com.j256.ormlite:ormlite-core:4.48'
 }

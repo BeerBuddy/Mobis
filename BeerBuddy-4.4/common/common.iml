@@ -32,6 +32,7 @@
     <orderEntry type="library" exported="" name="hibernate-validator-5.2.2.Final" level="project" />
     <orderEntry type="library" exported="" name="jackson-annotations-2.6.3" level="project" />
     <orderEntry type="library" exported="" name="lombok-1.16.6" level="project" />
+    <orderEntry type="library" exported="" name="ormlite-core-4.48" level="project" />
     <orderEntry type="library" exported="" name="validation-api-1.1.0.Final" level="project" />
     <orderEntry type="library" exported="" name="jboss-logging-3.2.1.Final" level="project" />
     <orderEntry type="library" exported="" name="classmate-1.1.0" level="project" />
