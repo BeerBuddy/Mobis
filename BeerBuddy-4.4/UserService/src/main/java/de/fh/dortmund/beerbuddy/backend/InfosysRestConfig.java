@@ -4,6 +4,8 @@ import org.springframework.boot.autoconfigure.data.rest.SpringBootRepositoryRest
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
+import de.fh_dortmund.beerbuddy.Person;
+
 /**
  * Created by seckinger on 04.09.2015.
  */

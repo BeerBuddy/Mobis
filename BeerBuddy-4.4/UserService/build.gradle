@@ -28,6 +28,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
+    compile project(':common')
     // tag::jetty[]
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
