@@ -1,6 +1,9 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -52,6 +55,16 @@ public class EditProfilActivity extends AppCompatActivity
         setContentView(R.layout.edit_profil_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //finish instance on Logout
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                finish();
+            }
+        }, intentFilter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

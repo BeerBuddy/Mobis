@@ -45,8 +45,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/profil_geschlecht"
             android:layout_marginLeft="@dimen/fab_margin"
             android:text="male"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profil_age"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profil_alter"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:text="25"
             />
 
         <TextView

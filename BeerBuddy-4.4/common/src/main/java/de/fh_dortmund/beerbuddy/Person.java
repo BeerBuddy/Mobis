@@ -1,6 +1,7 @@
 package de.fh_dortmund.beerbuddy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
 import org.hibernate.validator.constraints.Email;
@@ -17,6 +18,7 @@ import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,8 +28,7 @@ import lombok.Setter;
 
 
 @Entity
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @RequiredArgsConstructor(suppressConstructorProperties = true)
@@ -49,14 +50,14 @@ public class Person {
     @DatabaseField
     String username;
     @Lob
-    @DatabaseField
+    @DatabaseField(dataType= DataType.BYTE_ARRAY)
     byte[]  image;
 
     @Length(min = 3, max = 30)
     @DatabaseField
     String password;
     @DatabaseField
-    boolean male;
+    int gender;
     @Temporal(TemporalType.DATE)
     @DatabaseField
     Date dateOfBirth;

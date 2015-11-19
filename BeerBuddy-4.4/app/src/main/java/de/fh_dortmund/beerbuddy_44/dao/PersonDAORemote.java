@@ -9,6 +9,8 @@ import java.util.List;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
+import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 import de.fh_dortmund.beerbuddy_44.requests.InsertPersonRequest;
 import de.fh_dortmund.beerbuddy_44.requests.UpdatePersonRequest;
@@ -23,10 +25,14 @@ class PersonDAORemote extends PersonDAO {
     }
 
     @Override
-    public List<Person> getAll() throws Exception {
-        GetAllPersonsRequest getAllPersonsRequest = new GetAllPersonsRequest();
-        PersonList persons = getAllPersonsRequest.loadDataFromNetwork();
-        return persons;
+    public List<Person> getAll() throws BeerBuddyException {
+        try {
+            GetAllPersonsRequest getAllPersonsRequest = new GetAllPersonsRequest();
+            PersonList persons = getAllPersonsRequest.loadDataFromNetwork();
+            return persons;
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to get All Persons",e);
+        }
     }
 
     @Override
@@ -40,14 +46,17 @@ class PersonDAORemote extends PersonDAO {
     }
 
     @Override
-    public void insertOrUpdate(Person p) throws Exception {
-        if(p.getId() == 0)
-        {
-            InsertPersonRequest req = new InsertPersonRequest(p);
-            req.loadDataFromNetwork();
-        }else{
-            UpdatePersonRequest req = new UpdatePersonRequest(p);
-            req.loadDataFromNetwork();
+    public void insertOrUpdate(Person p) throws BeerBuddyException {
+        try {
+            if (p.getId() == 0) {
+                InsertPersonRequest req = new InsertPersonRequest(p);
+                req.loadDataFromNetwork();
+            } else {
+                UpdatePersonRequest req = new UpdatePersonRequest(p);
+                req.loadDataFromNetwork();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to insert or update Person",e);
         }
     }
 }

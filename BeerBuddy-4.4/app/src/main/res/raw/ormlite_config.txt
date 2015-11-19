@@ -1,5 +1,5 @@
 #
-# generated on 2015/11/11 02:31:01
+# generated on 2015/11/19 02:27:45
 #
 # --table-start--
 dataClass=de.fh_dortmund.beerbuddy.Person
@@ -19,12 +19,13 @@ fieldName=username
 # --field-end--
 # --field-start--
 fieldName=image
+dataPersister=BYTE_ARRAY
 # --field-end--
 # --field-start--
 fieldName=password
 # --field-end--
 # --field-start--
-fieldName=male
+fieldName=gender
 # --field-end--
 # --field-start--
 fieldName=dateOfBirth
@@ -34,6 +35,32 @@ fieldName=interests
 # --field-end--
 # --field-start--
 fieldName=prefers
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=de.fh_dortmund.beerbuddy.FriendList
+tableName=friendlist
+# --table-fields-start--
+# --field-start--
+fieldName=id
+dataPersister=LONG
+generatedId=true
+useGetSet=true
+# --field-end--
+# --field-start--
+fieldName=personid
+canBeNull=false
+indexName=friendlist_personid_idx
+# --field-end--
+# --field-start--
+fieldName=friends
+foreignCollection=true
+# --field-end--
+# --field-start--
+fieldName=requests
+foreignCollection=true
 # --field-end--
 # --table-fields-end--
 # --table-end--

@@ -12,6 +12,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import de.fh_dortmund.beerbuddy.FriendList;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 
@@ -19,7 +20,7 @@ import de.fh_dortmund.beerbuddy_44.R;
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
  * the DAOs used by the other classes.
  */
-public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
+public final class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "beerBuddy.db";
@@ -28,6 +29,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	// the DAO object we use to access the SimpleData table
 	private Dao<Person, Long> simpleDao = null;
+	private Dao<FriendList, Long> freindListDao = null;
 	private RuntimeExceptionDao<Person, Long> simpleRuntimeDao = null;
 
 	public DatabaseHelper(Context context) {
@@ -78,6 +80,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			simpleDao = getDao(Person.class);
 		}
 		return simpleDao;
+	}
+
+	public Dao<FriendList, Long> getFreindListDao() throws SQLException {
+		if (freindListDao == null) {
+			freindListDao = getDao(FriendList.class);
+		}
+		return freindListDao;
 	}
 
 	/**

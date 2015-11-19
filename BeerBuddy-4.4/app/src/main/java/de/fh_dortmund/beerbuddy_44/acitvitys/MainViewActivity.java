@@ -1,6 +1,10 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,9 +15,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,15 +37,18 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
+import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import de.fh_dortmund.beerbuddy_44.listener.rest.ListPersonRequestListener;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
-public class MainViewActivity extends FragmentActivity implements OnMapReadyCallback
+public class MainViewActivity extends ActionBarActivity implements OnMapReadyCallback
 {
     private GoogleMap mMap;
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
+    private static final String TAG = "MainViewActivity";
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -70,7 +79,17 @@ public class MainViewActivity extends FragmentActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainview_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-      //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+
+        //finish instance on Logout
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                finish();
+            }
+        }, intentFilter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,14 +102,22 @@ public class MainViewActivity extends FragmentActivity implements OnMapReadyCall
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-
-
-
         //register Navigationb Listener
         NavigationListener listener =new NavigationListener(this);
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
+
+        //TODO check if User is not logged in
+        try {
+            if(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() != 0)
+            {
+                //send him to the Login
+               this.startActivityForResult(new Intent(this, LoginActivity.class), Activity.RESULT_OK);
+            }
+        } catch (BeerBuddyException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error accured during Logincheck ", e);
+        }
     }
 
     @Override
