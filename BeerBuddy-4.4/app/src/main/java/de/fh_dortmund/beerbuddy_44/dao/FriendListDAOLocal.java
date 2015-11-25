@@ -46,7 +46,6 @@ class FriendListDAOLocal extends FriendListDAO {
     public void addFreindRequest(long person, Person requestedPerson) throws BeerBuddyException {
         try {
             FriendList friendListId = getFriendListId(person);
-            friendListId.getRequests().add(requestedPerson);
             databaseHelper.getFreindListDao().update(friendListId);
         } catch (SQLException e) {
             throw new DataAccessException("Error accured addFreindRequest ", e);

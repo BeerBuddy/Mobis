@@ -2,19 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/action_profil" android:title="@string/action_profil" android:icon="@android:drawable/ic_menu_camera"
+        <item android:id="@+id/action_imdrinking" android:title="@string/action_imdrinking" android:icon="@drawable/ic_beer"
             android:orderInCategory="100"  />
-        <item android:id="@+id/action_freundesliste" android:title="@string/action_freundesliste" android:icon="@android:drawable/ic_menu_gallery"
+        <item android:id="@+id/action_profil" android:title="@string/action_profil" android:icon="@drawable/ic_account"
             android:orderInCategory="100"  />
-
-
-        <item android:id="@+id/action_main" android:title="@string/action_main" android:icon="@android:drawable/ic_menu_manage"
+        <item android:id="@+id/action_freundesliste" android:title="@string/action_freundesliste" android:icon="@drawable/ic_account_multiple"
             android:orderInCategory="100"  />
 
-        <item android:id="@+id/action_logout" android:title="@string/action_logout" android:icon="@android:drawable/ic_menu_slideshow"
+
+        <item android:id="@+id/action_main" android:title="@string/action_main" android:icon="@drawable/ic_map_marker_radius"
             android:orderInCategory="100"  />
 
-        <item android:id="@+id/action_impressum" android:title="@string/action_impressum" android:icon="@android:drawable/ic_menu_share"
+        <item android:id="@+id/action_logout" android:title="@string/action_logout" android:icon="@drawable/ic_logout"
+            android:orderInCategory="100"  />
+
+        <item android:id="@+id/action_impressum" android:title="@string/action_impressum" android:icon="@drawable/ic_help_circle"
             android:orderInCategory="100"  />
 
     </group>

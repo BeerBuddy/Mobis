@@ -1,5 +1,5 @@
 #
-# generated on 2015/11/19 02:27:45
+# generated on 2015/11/25 10:06:50
 #
 # --table-start--
 dataClass=de.fh_dortmund.beerbuddy.Person
@@ -56,10 +56,6 @@ indexName=friendlist_personid_idx
 # --field-end--
 # --field-start--
 fieldName=friends
-foreignCollection=true
-# --field-end--
-# --field-start--
-fieldName=requests
 foreignCollection=true
 # --field-end--
 # --table-fields-end--
