@@ -1,6 +1,7 @@
-Server Komponente (REST)
+﻿Server Komponente (REST)
 1. Login / Register (E-mail, Passwort)
 2. Profile (E-Mail, Username, Image(byte), Password, Geschlecht, Geburtsdatum, Intressen, Preverenzen)
 3. DrinkingSpot (GPS, Liste Personen, Beschreibung, Altersspanne, Datum)
 4. DrinkingInvitation (Falls Veranstaltung und dann Einladung an weitere Personen) (ID DrinkingSpot, PersonID(vom Einlader), Freitext (Einladungstext) -> Erzeugt ID welche über eigenen Link bestätigt werden kann /DrinkingSpotAccept
-5. FriendInvitation (Einladung Freundesliste) (PersonID(Einlader), ID(Eingeladender), Freitext) -> Erzeugt ID welche über eigenen Link bestätigt werden kann /FriendAccept
+5. FriendList (PersonID, ListePersonen)
+6. FriendInvitation (Einladung Freundesliste) (PersonID(Einlader), ID(Eingeladender), Freitext) -> Erzeugt ID welche über eigenen Link bestätigt werden kann /FriendAccept

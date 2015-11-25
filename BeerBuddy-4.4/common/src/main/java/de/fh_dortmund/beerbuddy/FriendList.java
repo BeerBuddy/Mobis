@@ -43,8 +43,4 @@ public class FriendList {
     @ForeignCollectionField(eager = false)
     List<Person> friends;
 
-    @NotBlank
-    @ForeignCollectionField(eager = false)
-    List<Person> requests;
-
 }
