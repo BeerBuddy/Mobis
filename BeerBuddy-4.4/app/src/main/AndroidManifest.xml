@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -15,7 +16,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat" >
+        android:theme="@style/AppTheme" >
         <uses-sdk
             android:minSdkVersion="18"
             android:targetSdkVersion="23" />
@@ -28,7 +29,7 @@
         <activity
             android:name=".acitvitys.MainViewActivity"
             android:label="@string/app_name"
-            android:theme="@style/ActionBar.Transparent.Example" >
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -37,27 +38,27 @@
 
         <activity
         android:name=".acitvitys.LoginActivity"
-        android:label="@string/app_name"
-        android:theme="@style/ActionBar.Transparent.Example" >
+        android:label= "@string/app_name"
+        android:theme="@style/AppTheme.NoActionBar" >
     </activity>
 
         <activity
             android:name=".acitvitys.BuddysActivity"
             android:label="@string/app_name"
-            android:theme="@style/ActionBar.Transparent.Example" >
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
 
         <activity
             android:name=".acitvitys.EditProfilActivity"
             android:label="@string/app_name"
-            android:theme="@style/ActionBar.Transparent.Example" >
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
         <activity
             android:name=".acitvitys.ViewProfilActivity"
             android:label="@string/app_name"
-            android:theme="@style/ActionBar.Transparent.Example" >
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
         <service

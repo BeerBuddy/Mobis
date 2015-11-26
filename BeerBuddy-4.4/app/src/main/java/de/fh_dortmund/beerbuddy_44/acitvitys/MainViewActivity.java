@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -29,12 +31,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import java.util.List;
+
+import de.fh_dortmund.beerbuddy.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
@@ -53,12 +59,40 @@ public class MainViewActivity extends ActionBarActivity implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        googleMap.setMyLocationEnabled(true);
+        try {
+            //get current GPS position
+            Location location = DAOFactory.getLocationDAO(this).getCurrentLocation();
+            //move the map to current location
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 10));
+            List<DrinkingSpot> spots= DAOFactory.getDrinkingSpotDAO(this).getAll(location);
+            for(DrinkingSpot ds : spots)
+            {
+                createMarker(ds);
+            }
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+            {
+
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    marker.showInfoWindow();
+                    return true;
+                }
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error accured during map initialising ", e);
+        }
     }
+
+    private void createMarker(DrinkingSpot ds) {
+        String[] split =ds.getGps().split(";");
+        LatLng sydney = new LatLng(Double.parseDouble(split[0]),Double.parseDouble(split[1]));
+        mMap.addMarker(new MarkerOptions().position(sydney).snippet(ds.getId()+"").title(ds.getPersons().get(0).getUsername() + " is drinking with "+ ds.getPersons().size()+" others."));
+    }
+
 
     @Override
     protected void onStart() {
@@ -109,16 +143,22 @@ public class MainViewActivity extends ActionBarActivity implements OnMapReadyCal
 
         //TODO check if User is not logged in
         try {
-            if(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() != 0)
+            if(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() == 0)
             {
                 //send him to the Login
                this.startActivityForResult(new Intent(this, LoginActivity.class), Activity.RESULT_OK);
+            } else {
+                Log.i(TAG, "user is logged in: " + DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
             }
         } catch (BeerBuddyException e) {
             e.printStackTrace();
             Log.e(TAG, "Error accured during Logincheck ", e);
         }
+
+        //get all Markers
+
     }
+
 
     @Override
     public void onBackPressed() {

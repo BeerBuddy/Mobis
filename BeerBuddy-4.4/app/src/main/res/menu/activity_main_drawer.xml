@@ -13,6 +13,9 @@
         <item android:id="@+id/action_main" android:title="@string/action_main" android:icon="@drawable/ic_map_marker_radius"
             android:orderInCategory="100"  />
 
+
+        <item android:id="@+id/action_message" android:title="@string/action_message" android:icon="@drawable/ic_message_alert"
+            android:orderInCategory="100"  />
         <item android:id="@+id/action_logout" android:title="@string/action_logout" android:icon="@drawable/ic_logout"
             android:orderInCategory="100"  />
 
