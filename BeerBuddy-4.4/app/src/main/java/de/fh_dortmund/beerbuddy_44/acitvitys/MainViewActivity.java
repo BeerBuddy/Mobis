@@ -49,7 +49,7 @@ import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import de.fh_dortmund.beerbuddy_44.listener.rest.ListPersonRequestListener;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
-public class MainViewActivity extends ActionBarActivity implements OnMapReadyCallback
+public class MainViewActivity extends AppCompatActivity implements OnMapReadyCallback
 {
     private GoogleMap mMap;
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);

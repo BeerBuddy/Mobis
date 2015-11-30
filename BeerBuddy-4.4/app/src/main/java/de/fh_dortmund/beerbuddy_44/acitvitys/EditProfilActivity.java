@@ -16,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -45,9 +46,9 @@ import de.fh_dortmund.beerbuddy_44.listener.android.ProfilSaveListener;
 import de.fh_dortmund.beerbuddy_44.picker.ImagePicker;
 import de.fh_dortmund.beerbuddy_44.picker.PickerFragmentFactory;
 
-public class EditProfilActivity extends ActionBarActivity {
+public class EditProfilActivity extends AppCompatActivity {
 
-    private static final int PICK_IMAGE_ID = 9213312;
+    private static final int PICK_IMAGE_ID = 1;
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
     private static final String TAG = "EditProfilActivity";
