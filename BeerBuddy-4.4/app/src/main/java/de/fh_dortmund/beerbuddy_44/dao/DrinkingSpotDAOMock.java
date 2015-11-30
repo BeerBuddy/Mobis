@@ -19,6 +19,7 @@ import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.DatabaseHelper;
+import de.fh_dortmund.beerbuddy_44.dao.util.MockUtil;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
@@ -37,11 +38,7 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
             "I feel sorry for people who don't drink. When they wake up in the morning, that's as good as they're going to feel all day."
     };
 
-    private String[] name = {"Bob", "Jill", "Tom", "Brandon", "Jamie", "Pamela", "Louis", "David", "Jack", "Dexter"};
-    private String[] lastnames = {"Cosby", "Jones", "Miller", "Cooper", "Snow", "Cruz", "Sanchez", "Morgan"};
 
-    private String[] interests = {"Baseball", "Sports", "TV", "Church", "Drinking", "Freinds", "Cars", "Travelling", "Reading", "Cooking"};
-    private String[] prefers = {"Guiness", "Cocktails", "Disco", "Bar", "Pints"};
 
     public DrinkingSpotDAOMock(Context context) {
         super(context);
@@ -57,7 +54,7 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
             sp.setAgeFrom(new Date());
             sp.setAgeTo(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365 * (int) (Math.random() * 30))));
             sp.setBeschreibung(descriptions[(int) Math.random() * descriptions.length]);
-            sp.setGps(getLocationRandom(l, 5));
+            sp.setGps(getLocationRandom(l, Math.random() * 10));
             sp.setPersons(createRandomPersons(i));
             sp.setStartTime(new Date());
             sp.setId(i);
@@ -70,23 +67,15 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
 
 
     private List<Person> createRandomPersons(int spid) {
-        List<Person> persons = new ArrayList<Person>();
-        for(int i = 0 ; i< (int)(Math.random() *20)+1; i++)
+        List<Person> list = MockUtil.createRandomPersons((int)(Math.random() *20)+1);
+        for(Person p : list)
         {
-            Person p = new Person();
-            p.setId(Long.parseLong(spid + "00" + i));
-            p.setGender((int) (Math.random() * 2) == 1 ? Person.Gender.MALE : Person.Gender.FEMALE);
-            p.setUsername(name[ (int)Math.random() * name.length]+ " " +lastnames[ (int)Math.random() * lastnames.length]);
-            p.setEmail(p.getUsername().replace(" ",".")+"@beerbuddy.com");
-            p.setDateOfBirth(getrandomDateOfBirth());
-            p.setInterests(interests[ (int)Math.random() * interests.length] +" "+ interests[ (int)Math.random() * interests.length] );
-            p.setPrefers(prefers[ (int)Math.random() * prefers.length] );
-            persons.add(p);
+            p.setId(Long.parseLong(spid + "00" +  p.getId()));
         }
-        return persons;
+        return list;
     }
 
-    private String getLocationRandom(Location location, int radius) {
+    private String getLocationRandom(Location location, double radius) {
         Random random = new Random();
 
         // Convert radius from meters to degrees
@@ -107,24 +96,7 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
         return  foundLongitude + ";" + foundLatitude;
     }
 
-    private int randBetween(int start, int end) {
-        return start + (int)Math.round(Math.random() * (end - start));
-    }
 
-    private Date getrandomDateOfBirth()
-    {
-        GregorianCalendar gc = new GregorianCalendar();
-
-        int year = randBetween(1900, 2010);
-
-        gc.set(gc.YEAR, year);
-
-        int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
-
-        gc.set(gc.DAY_OF_YEAR, dayOfYear);
-
-        return gc.getTime();
-    }
 
 
 }

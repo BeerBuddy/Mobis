@@ -7,5 +7,8 @@
     <string name="profil_gender">Gender</string>
     <string name="profil_gender_male">Male</string>
     <string name="profil_gender_female">Female</string>
-   <string name="profil_age">Age</string>
+    <string name="profil_age">Age</string>
+    <string name="profil_saved">Profil saved!</string>
+    <string name="profil_dateofbirth">Date of Birth</string>
+    <string name="profil_change_date">Pick</string>
 </resources>

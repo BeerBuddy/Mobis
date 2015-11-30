@@ -3,6 +3,7 @@ package de.fh_dortmund.beerbuddy_44.listener.android;
 import android.util.Log;
 import android.view.View;
 
+import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
@@ -35,10 +36,13 @@ public class ViewProfilListener implements  View.OnClickListener {
         }
     }
 
+    //TODO show Dialog to enter a invitation text
     private void sendRequest() {
         try {
-            Person p =DAOFactory.getPersonDAO(viewProfilActivity).getById(DAOFactory.getCurrentPersonDAO(viewProfilActivity).getCurrentPersonId());
-            DAOFactory.getFreindlistDAO(viewProfilActivity).addFreindRequest(profil.getId(), p);
+            FriendInvitation i = new FriendInvitation();
+            i.setEingeladenerId(profil.getId());
+            i.setEinladerId(DAOFactory.getCurrentPersonDAO(viewProfilActivity).getCurrentPersonId());
+            DAOFactory.getFriendInvitationDAO(viewProfilActivity).insertOrUpdate(i);
         } catch (BeerBuddyException e) {
             Log.e(TAG, "Error accoured during request", e);
         }

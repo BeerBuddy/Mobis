@@ -64,8 +64,9 @@ public class MainViewActivity extends ActionBarActivity implements OnMapReadyCal
             //get current GPS position
             Location location = DAOFactory.getLocationDAO(this).getCurrentLocation();
             //move the map to current location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 20));
             List<DrinkingSpot> spots= DAOFactory.getDrinkingSpotDAO(this).getAll(location);
+            Log.i(TAG, "Spots:  "+ spots.size());
             for(DrinkingSpot ds : spots)
             {
                 createMarker(ds);

@@ -29,7 +29,9 @@ class FriendListDAOLocal extends FriendListDAO {
 
     @Override
     public boolean isFriendFromId(long personid, long firendid) throws DataAccessException {
-        return getFriendListId(personid).getFriends().contains(firendid);
+        Person p = new Person();
+        p.setId(firendid);
+        return getFriendListId(personid).getFriends().contains(p);
     }
 
     @Override
@@ -42,14 +44,5 @@ class FriendListDAOLocal extends FriendListDAO {
         }
     }
 
-    @Override
-    public void addFreindRequest(long person, Person requestedPerson) throws BeerBuddyException {
-        try {
-            FriendList friendListId = getFriendListId(person);
-            databaseHelper.getFreindListDao().update(friendListId);
-        } catch (SQLException e) {
-            throw new DataAccessException("Error accured addFreindRequest ", e);
-        }
-    }
 
 }

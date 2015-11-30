@@ -88,6 +88,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:multidex:1.0.0'
+
+    compile 'com.sothree.slidinguppanel:library:3.2.0'
 }
 
 task writeOrmLiteConfig(type: JavaExec) {

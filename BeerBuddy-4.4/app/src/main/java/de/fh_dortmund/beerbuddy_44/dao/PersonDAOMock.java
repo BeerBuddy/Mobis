@@ -9,6 +9,7 @@ import java.util.Map;
 
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
+import de.fh_dortmund.beerbuddy_44.dao.util.MockUtil;
 
 /**
  * Created by David on 09.11.2015.
@@ -17,8 +18,13 @@ class PersonDAOMock extends PersonDAO {
 
     HashMap<Long,Person> users= new HashMap<Long,Person>();
 
-    public PersonDAOMock(Context context) {
+    public PersonDAOMock(Context context){
         super(context);
+        List<Person> list =MockUtil.createRandomPersons(10);
+        for(Person p:list)
+        {
+            users.put(p.getId(),p);
+        }
     }
 
     @Override
@@ -29,7 +35,13 @@ class PersonDAOMock extends PersonDAO {
 
     @Override
     public Person getById(long id) {
-        return users.get(id);
+        Person p = users.get(id);
+        if(p == null)
+        {
+            p = MockUtil.createRandomPerson(id);
+            users.put(id,p);
+        }
+        return p;
     }
 
     @Override

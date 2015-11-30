@@ -8,4 +8,5 @@
     <string name="repassword">Retype-Password</string>
     <string name="login_fb">Login with FB</string>
     <string name="save">Save</string>
+    <string name="pick_image_intent_text">Choose a picture</string>
 </resources>

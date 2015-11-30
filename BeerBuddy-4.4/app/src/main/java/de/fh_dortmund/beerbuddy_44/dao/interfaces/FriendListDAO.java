@@ -23,5 +23,4 @@ public abstract class FriendListDAO {
 
     public abstract FriendList getFriendListId(long personid) throws BeerBuddyException;
 
-    public abstract void addFreindRequest(long currentPersonId, Person profil) throws BeerBuddyException;
 }
