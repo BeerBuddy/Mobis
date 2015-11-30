@@ -34,6 +34,7 @@ import lombok.Setter;
 @RequiredArgsConstructor(suppressConstructorProperties = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
+
     @Id
     @GeneratedValue
     long id;
@@ -49,6 +50,7 @@ public class Person {
     @NonNull
     @DatabaseField
     String username;
+
     @Lob
     @DatabaseField(dataType= DataType.BYTE_ARRAY)
     byte[]  image;
@@ -56,13 +58,17 @@ public class Person {
     @Length(min = 3, max = 30)
     @DatabaseField
     String password;
+
     @DatabaseField
     int gender;
+
     @Temporal(TemporalType.DATE)
     @DatabaseField
     Date dateOfBirth;
+
     @DatabaseField
     String interests;
+
     @DatabaseField
     String prefers;
 

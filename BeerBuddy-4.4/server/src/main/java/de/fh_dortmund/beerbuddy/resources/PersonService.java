@@ -2,7 +2,7 @@ package de.fh_dortmund.beerbuddy.resources;
 
 import com.codahale.metrics.annotation.Timed;
 
-import de.fh_dortmund.beerbuddy.api.Person;
+import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy.persistence.PersonDB;
 
 import javax.ws.rs.*;

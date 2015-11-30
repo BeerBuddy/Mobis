@@ -2,16 +2,16 @@ package de.fh_dortmund.beerbuddy.persistence;
 
 import java.util.*;
 
-import de.fh_dortmund.beerbuddy.api.Person;
+import de.fh_dortmund.beerbuddy.Person;
 
 public class PersonDB {
-	private static Map<Integer, Person> persons = new HashMap<Integer, Person>();
+	private static Map<Long, Person> persons = new HashMap<>();
 
 	static {
-		persons.put(1, new Person(1, "FN1", "LN1", "email1@email.com"));
-		persons.put(2, new Person(2, "FN2", "LN2", "email2@email.com"));
-		persons.put(3, new Person(3, "FN3", "LN3", "email3@email.com"));
-		persons.put(4, new Person(4, "FN4", "LN4", "email4@email.com"));
+		persons.put(1L, new Person("email1@email.com", "user1"));
+		persons.put(2L, new Person("email2@email.com", "user2"));
+		persons.put(3L, new Person("email3@email.com", "user3"));
+		persons.put(4L, new Person("email4@email.com", "user4"));
 	}
 
 	public static Person getById(int id) {
@@ -20,7 +20,7 @@ public class PersonDB {
 
 	public static List<Person> getAll() {
 		List<Person> result = new ArrayList<Person>();
-		for (Integer key : persons.keySet()) {
+		for (Long key : persons.keySet()) {
 			result.add(persons.get(key));
 		}
 		return result;
@@ -39,9 +39,9 @@ public class PersonDB {
 	public static String save(Person person) {
 		String result = "";
 		if (persons.get(person.getId()) != null) {
-			result = "Updated Person with id=" + person.getId();
+			result = "Updated _Person with id=" + person.getId();
 		} else {
-			result = "Added Person with id=" + person.getId();
+			result = "Added _Person with id=" + person.getId();
 		}
 		persons.put(person.getId(), person);
 		return result;

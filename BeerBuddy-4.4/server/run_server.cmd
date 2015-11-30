@@ -1,0 +1,1 @@
+java -jar build/libs/beerbuddy-server.jar server src/main/java/de/fh_dortmund/beerbuddy/config/config.yaml
