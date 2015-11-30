@@ -1,6 +1,7 @@
 package de.fh_dortmund.beerbuddy_44.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import de.fh_dortmund.beerbuddy_44.dao.util.MockUtil;
  * Created by David on 09.11.2015.
  */
 class PersonDAOMock extends PersonDAO {
+    private static final String TAG ="PersonDAOMock";
 
     HashMap<Long,Person> users= new HashMap<Long,Person>();
 
@@ -59,13 +61,10 @@ class PersonDAOMock extends PersonDAO {
     public void insertOrUpdate(Person p) {
         if(p.getId() == 0)
         {
-            p.setId(generateID());
+            p.setId((long)(Math.random()*(double)Long.MAX_VALUE)+1);
         }
         users.put(p.getId(), p);
+        Log.d(TAG, "saved Person " + p.getId());
     }
 
-    private long generateID() {
-        long id = (long)Math.random()*Long.MAX_VALUE;
-        return (users.get(id) != null) ? id : generateID();
-    }
 }

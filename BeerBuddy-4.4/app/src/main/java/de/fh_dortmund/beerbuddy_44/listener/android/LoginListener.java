@@ -6,6 +6,7 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,9 +74,11 @@ public class LoginListener implements
                 return;
             }
             else{
+                Toast.makeText(activity, activity.getString(R.string.wrong_pw), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Wrong Password or Email");
             }
         } catch (BeerBuddyException e) {
+            Toast.makeText(activity, "Error accured during Login", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Error accured during Login", e);
         }
     }

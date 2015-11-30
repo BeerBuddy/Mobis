@@ -1,4 +1,4 @@
 <resources>
     <string name="email">Email</string>
-
+       <string name="wrong_pw">Wrong email or password!</string>
 </resources>

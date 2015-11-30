@@ -53,6 +53,7 @@ public final class MockUtil {
 
     public static Person createRandomPerson(long id) {
         Person p = new Person();
+        p.setPassword("test");
         p.setId(id);
         p.setGender((int) (Math.random() * 2) == 1 ? Person.Gender.MALE : Person.Gender.FEMALE);
         p.setUsername(name[(int) (Math.random() * name.length)] + " " + lastnames[(int) (Math.random() * lastnames.length)]);
