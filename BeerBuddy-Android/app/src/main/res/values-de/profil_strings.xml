@@ -1,7 +1,0 @@
-    <resources>
-        <string name="profil_vorlieben">Vorlieben</string>
-        <string name="profil_interessen">Intressen</string>
-        <string name="profil_username">Nutzername</string>
-        <string name="profil_change_image">Bild ändern</string>
-       <string name="profil_send_request">Abnfrage versenden</string>
-    </resources>
