@@ -96,7 +96,6 @@ public class EditProfilActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
 
-        //TODO Camera und Gallery Auswahl auf ChangePicture Button
         Button changePic = (Button) this.findViewById(R.id.action_profil_image);
         changePic.setOnClickListener(new View.OnClickListener() {
             @Override

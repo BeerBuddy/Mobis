@@ -14,26 +14,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ExpandableListView;
 
+import com.j256.ormlite.spring.DaoFactory;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import de.fh_dortmund.beerbuddy.FriendList;
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
+import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import de.fh_dortmund.beerbuddy_44.listener.rest.ListPersonRequestListener;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
-public class BuddysActivity extends AppCompatActivity
-         {
+public class BuddysActivity extends AppCompatActivity {
 
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
+    private static final String TAG = "BuddysActivity";
+
 
     @Override
     protected void onStart() {
@@ -46,7 +53,6 @@ public class BuddysActivity extends AppCompatActivity
         spiceManager.shouldStop();
         super.onStop();
     }
-
 
 
     @Override
@@ -67,7 +73,7 @@ public class BuddysActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-              DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -75,9 +81,22 @@ public class BuddysActivity extends AppCompatActivity
 
 
         //register Navigationb Listener
-       NavigationListener listener =new NavigationListener(this);
+        NavigationListener listener = new NavigationListener(this);
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
+
+        //buddys_requests
+        try {
+            FriendList friendList = DAOFactory.getFreindlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+            ExpandableListView listView = (ExpandableListView) this.findViewById(R.id.buddys_buddys);
+            listView.set
+            friendList.getFriends();
+        } catch (BeerBuddyException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        //buddys_buddys
+
+
     }
 
     @Override
@@ -109,30 +128,30 @@ public class BuddysActivity extends AppCompatActivity
     }
 
 
-             private void performRequest() {
-                 BuddysActivity.this.setProgressBarIndeterminateVisibility(true);
+    private void performRequest() {
+        BuddysActivity.this.setProgressBarIndeterminateVisibility(true);
 
-                 GetAllPersonsRequest request = new GetAllPersonsRequest();
-                 lastRequestCacheKey = request.createCacheKey();
+        GetAllPersonsRequest request = new GetAllPersonsRequest();
+        lastRequestCacheKey = request.createCacheKey();
 
-                 spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE, new ListPersonRequestListener() {
-                     @Override
-                     public void onRequestFailure(SpiceException e) {
+        spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE, new ListPersonRequestListener() {
+            @Override
+            public void onRequestFailure(SpiceException e) {
 
-                     }
+            }
 
-                     @Override
-                     public void onRequestSuccess(PersonList listFollowers) {
+            @Override
+            public void onRequestSuccess(PersonList listFollowers) {
 
-                     }
-                 });
-             }
+            }
+        });
+    }
 
-             @Override
-             protected void attachBaseContext(Context base) {
-                 super.attachBaseContext(base);
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
 
-                 MultiDex.install(this);
-             }
+        MultiDex.install(this);
+    }
 
 }

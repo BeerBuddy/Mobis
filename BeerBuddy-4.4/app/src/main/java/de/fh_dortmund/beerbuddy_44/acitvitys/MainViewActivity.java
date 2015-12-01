@@ -41,6 +41,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
