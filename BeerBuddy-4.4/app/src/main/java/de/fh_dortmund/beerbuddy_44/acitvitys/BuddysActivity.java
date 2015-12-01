@@ -89,7 +89,6 @@ public class BuddysActivity extends AppCompatActivity {
         try {
             FriendList friendList = DAOFactory.getFreindlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
             ExpandableListView listView = (ExpandableListView) this.findViewById(R.id.buddys_buddys);
-            listView.set
             friendList.getFriends();
         } catch (BeerBuddyException e) {
             Log.e(TAG, e.getMessage(), e);
