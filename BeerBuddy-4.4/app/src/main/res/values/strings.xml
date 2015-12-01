@@ -9,4 +9,5 @@
     <string name="login_fb">Login with FB</string>
     <string name="save">Save</string>
     <string name="pick_image_intent_text">Choose a picture</string>
+    <string name="gps_disabled_message">GPS is disabled! Do you want to activate it?</string>
 </resources>

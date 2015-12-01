@@ -10,7 +10,10 @@ import android.view.MenuItem;
 
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BuddysActivity;
+import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
+import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingInvitationActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
+import de.fh_dortmund.beerbuddy_44.acitvitys.ImprintActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.LoginActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
@@ -33,17 +36,33 @@ public class NavigationListener implements NavigationView.OnNavigationItemSelect
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent i = null;
-        if (id == R.id.action_main) {
-            i = new Intent(activity, MainViewActivity.class);
-            // Handle the camera action
-        } else if (id == R.id.action_logout) {
-            i = logout(i);
-        } else if (id == R.id.action_freundesliste) {
-            i = new Intent(activity, BuddysActivity.class);
-        } else if (id == R.id.action_impressum) {
+        switch(id)
+        {
+            case R.id.action_imdrinking:
+                i = new Intent(activity, DrinkingActivity.class);
+                break;
+            case R.id.action_profil:
+                i = new Intent(activity, EditProfilActivity.class);
+                break;
+            case R.id.action_freundesliste:
+                i = new Intent(activity, BuddysActivity.class);
+                break;
+            case R.id.action_main:
+                i = new Intent(activity, MainViewActivity.class);
+                break;
+            case R.id.action_message:
+                i = new Intent(activity, DrinkingInvitationActivity.class);
+                break;
+            case R.id.action_logout:
+                logout(i);
+                break;
+            case R.id.action_impressum:
+                i = new Intent(activity, ImprintActivity.class);
+                break;
+            default:
+                Log.e(TAG, "No action defined for Button: "+id);
+                break;
 
-        } else if (id == R.id.action_profil) {
-            i = new Intent(activity, EditProfilActivity.class);
         }
         if(i!= null)
         {
@@ -61,7 +80,8 @@ public class NavigationListener implements NavigationView.OnNavigationItemSelect
             broadcastIntent.setAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
             activity.sendBroadcast(broadcastIntent);
             DAOFactory.getCurrentPersonDAO(activity).deleteCurrentPerson();
-            i = new Intent(activity, LoginActivity.class);
+            activity.startActivityForResult(new Intent(activity, LoginActivity.class), Activity.RESULT_OK);
+            i = new Intent(activity, MainViewActivity.class);
         } catch (BeerBuddyException e) {
             Log.e(TAG, "Could not logout ", e);
         }

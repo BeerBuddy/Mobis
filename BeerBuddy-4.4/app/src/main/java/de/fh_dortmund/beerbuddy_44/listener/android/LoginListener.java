@@ -86,13 +86,18 @@ public class LoginListener implements
 
 
     private void gPlusSignInClicked() {
-        // User clicked the sign-in button, so begin the sign-in process and automatically
-        // attempt to resolve any errors that occur.
-        activity.setMShouldResolve(true);
-        activity.getMGoogleApiClient().connect();
+        try {
+            // User clicked the sign-in button, so begin the sign-in process and automatically
+            // attempt to resolve any errors that occur.
+            activity.setMShouldResolve(true);
+            activity.getMGoogleApiClient().connect();
 
-        // Show a message to the user that we are signing in.
-        Log.i(TAG, "Logged in");
+            // Show a message to the user that we are signing in.
+            Log.i(TAG, "Logged in");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error during g+ login", e);
+        }
     }
 
 
@@ -104,8 +109,8 @@ public class LoginListener implements
         // establish a service connection to Google Play services.
         Log.d(TAG, "onConnected:" + bundle);
         activity.setMShouldResolve(false);
-        if (Plus.PeopleApi.getCurrentPerson( activity.getMGoogleApiClient()) != null) {
-            Person currentPerson = Plus.PeopleApi.getCurrentPerson( activity.getMGoogleApiClient());
+        Person currentPerson = Plus.PeopleApi.getCurrentPerson(activity.getMGoogleApiClient());
+        if (currentPerson != null) {
             try {
                 de.fh_dortmund.beerbuddy.Person person = ObjectMapperUtil.toPerson(currentPerson);
                 DAOFactory.getPersonDAO(activity).insertOrUpdate(person);

@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /* Client used to interact with Google APIs. */
     @Getter
+    @Setter
     private GoogleApiClient mGoogleApiClient;
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
@@ -101,8 +102,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity_main);
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
        // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       //  ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -138,6 +139,9 @@ public class LoginActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
+            this.sendBroadcast(broadcastIntent);
             super.onBackPressed();
         }
     }

@@ -118,7 +118,7 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         setSupportActionBar(toolbar);
 
         //finish instance on Logout
-        IntentFilter intentFilter = new IntentFilter();
+       /* IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
         registerReceiver(new BroadcastReceiver() {
             @Override
@@ -126,7 +126,7 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
                 finish();
             }
         }, intentFilter);
-
+    */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

@@ -1,13 +1,20 @@
 package de.fh_dortmund.beerbuddy_44.dao;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 
+import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.LocationDAO;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.MissingPermissionException;
@@ -21,10 +28,11 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
     private final LocationManager locationManager;
     private Location currentBestLocation = null;
 
-    public LocationDAOLocal(Context context) throws BeerBuddyException{
+    public LocationDAOLocal(Activity context) throws BeerBuddyException{
         super(context);
         locationManager = (LocationManager)
                 context.getSystemService(Context.LOCATION_SERVICE);
+        turnGPSOn(context);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TWO_MINUTES, 10, this);
         } catch (SecurityException e) {
@@ -33,14 +41,49 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
 
     }
 
+    public void addLocationListener(LocationListener l)throws BeerBuddyException
+    {
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TWO_MINUTES, 10, l);
+        } catch (SecurityException e) {
+            throw new MissingPermissionException("No Permission to ACCESS_FINE_LOCATION or  ACCESS_COARSE_LOCATION", e);
+        }
+    }
+
+    private void turnGPSOn(final Activity context) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(R.string.gps_disabled_message)
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            context.startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            context.finish();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
     @Override
     public Location getCurrentLocation() throws BeerBuddyException {
         Location loc = getLastBestLocation();
-        if (isBetterLocation(loc, currentBestLocation)) {
-            return loc;
-        } else {
-            return currentBestLocation;
+        if (!isBetterLocation(loc, currentBestLocation)) {
+            loc = currentBestLocation;
         }
+
+        if(loc == null)
+        {
+
+        }
+
+        return loc;
     }
 
     private Location getLastBestLocation() throws BeerBuddyException {

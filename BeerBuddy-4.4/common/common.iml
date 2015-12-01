@@ -36,6 +36,5 @@
     <orderEntry type="library" exported="" name="validation-api-1.1.0.Final" level="project" />
     <orderEntry type="library" exported="" name="jboss-logging-3.2.1.Final" level="project" />
     <orderEntry type="library" exported="" name="classmate-1.1.0" level="project" />
-    <orderEntry type="library" exported="" name="common.common" level="project" />
   </component>
 </module>

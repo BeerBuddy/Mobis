@@ -36,61 +36,61 @@ import lombok.Getter;
  * Created by David on 01.11.2015.
  */
 public class DrinkingActivity extends AppCompatActivity {
-    private static final String TAG = "DrinkingListener";
+    private static final String TAG = "DrinkingActivity";
     @Getter
     private DrinkingSpot drinkingSpot;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.drinking_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.drinking_activity_main);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        //finish instance on Logout
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                finish();
+            //finish instance on Logout
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
+            registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    finish();
+                }
+            }, intentFilter);
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+
+
+            //register Navigationb Listener
+            NavigationListener listener = new NavigationListener(this);
+            NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(listener);
+
+
+            DrinkingListener drinkingListener = new DrinkingListener(this);
+
+            Button save = (Button) findViewById(R.id.drinking_save);
+            Button invite = (Button) findViewById(R.id.drinking_invite);
+            RadioButton alone = (RadioButton) findViewById(R.id.drinking_alone);
+            RadioButton group = (RadioButton) findViewById(R.id.drinking_group);
+
+            alone.setOnClickListener(drinkingListener);
+            group.setOnClickListener(drinkingListener);
+            invite.setOnClickListener(drinkingListener);
+            save.setOnClickListener(drinkingListener);
+
+            try {
+                 drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getActiveById(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+                if (drinkingSpot != null) {
+                    setValue(drinkingSpot);
+                }
+            } catch (BeerBuddyException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Error accured during getDrinkingSpot", e);
             }
-        }, intentFilter);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-
-        //register Navigationb Listener
-        NavigationListener listener = new NavigationListener(this);
-        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(listener);
-
-
-        DrinkingListener drinkingListener = new DrinkingListener(this);
-
-        Button save = (Button) findViewById(R.id.drinking_save);
-        Button invite = (Button) findViewById(R.id.drinking_invite);
-        RadioButton alone = (RadioButton) findViewById(R.id.drinking_alone);
-        RadioButton group = (RadioButton) findViewById(R.id.drinking_group);
-
-        alone.setOnClickListener(drinkingListener);
-        group.setOnClickListener(drinkingListener);
-        invite.setOnClickListener(drinkingListener);
-        save.setOnClickListener(drinkingListener);
-
-        try {
-             drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getActiveById(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-            if (drinkingSpot != null) {
-                setValue(drinkingSpot);
-            }
-        } catch (BeerBuddyException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error accured during getDrinkingSpot", e);
-        }
 
     }
 
