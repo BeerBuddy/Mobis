@@ -44,14 +44,19 @@ public class DrinkingSpot {
     @DatabaseField
     Date startTime;
 
-    @Temporal(TemporalType.DATE)
     @DatabaseField
-    Date ageFrom;
+    int ageFrom;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @DatabaseField
-    Date ageTo;
+    int ageTo;
 
     @DatabaseField
     String gps;
+
+    String description;
+
+   int amountMaleWithoutBeerBuddy;
+   int amountFemaleWithoutBeerBuddy;
+
+
 }

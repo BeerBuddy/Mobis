@@ -1,0 +1,63 @@
+apply plugin: 'java'
+apply plugin: 'gradle-one-jar'
+apply plugin: 'application'
+version '1.0-SNAPSHOT'
+
+// Use Java 7 by default
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// The main class of the application
+mainClassName = 'de.fh_dortmund.beerbuddy.ServerApplication'
+
+// Add Gradle OneJar Plugin, see https://github.com/rholder/gradle-one-jar
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+    }
+}
+
+// Set our project variables
+project.ext {
+    dropwizardVersion = '0.9.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':common')
+    compile (
+       'io.dropwizard:dropwizard-core:' + dropwizardVersion
+    )
+}
+
+// Configure the oneJar task
+task oneJar(type: OneJar) {
+    mainClass = mainClassName
+    archiveName = 'beerbuddy-server.jar'
+}
+
+// Configure the run task to start the Dropwizard service
+run {
+    args 'server', './src/main/java/de/fh_dortmund/beerbuddy/config/config.yaml'
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.4'
+}
+
+artifacts {
+    archives oneJar
+}
+
+run.dependsOn oneJar

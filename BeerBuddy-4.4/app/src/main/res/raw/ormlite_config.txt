@@ -1,5 +1,9 @@
 #
+<<<<<<< HEAD
 # generated on 2015/11/30 03:11:59
+=======
+# generated on 2015/11/30 01:47:45
+>>>>>>> 4676bed5038a39fcbe064cb40f77367a9e0a70a8
 #
 # --table-start--
 dataClass=de.fh_dortmund.beerbuddy.Person

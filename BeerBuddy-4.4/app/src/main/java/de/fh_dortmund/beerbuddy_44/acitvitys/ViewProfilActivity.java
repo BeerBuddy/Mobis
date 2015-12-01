@@ -27,6 +27,7 @@ import com.octo.android.robospice.SpiceManager;
 import java.util.Calendar;
 
 import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
@@ -115,10 +116,7 @@ public class ViewProfilActivity extends AppCompatActivity {
     private void fillValues(Person p) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(p.getImage(), 0, p.getImage().length);
         ((ImageView) findViewById(R.id.profil_image)).setImageBitmap(bitmap);
-        long ageInMillis = System.currentTimeMillis() - p.getDateOfBirth().getTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(ageInMillis);
-        ((TextView) findViewById(R.id.profil_alter)).setText(calendar.get(Calendar.YEAR));
+        ((TextView) findViewById(R.id.profil_alter)).setText( ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth()));
         ((TextView) findViewById(R.id.profil_username)).setText(p.getUsername());
         ((TextView) findViewById(R.id.profil_vorlieben)).setText(p.getPrefers());
         ((TextView) findViewById(R.id.profil_interessen)).setText(p.getInterests());

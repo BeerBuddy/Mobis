@@ -50,20 +50,33 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
         List<DrinkingSpot> spots = new ArrayList<DrinkingSpot>();
         for(int i = 0 ; i< 20; i++)
         {
-            DrinkingSpot sp = new DrinkingSpot();
-            sp.setAgeFrom(new Date());
-            sp.setAgeTo(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365 * (int) (Math.random() * 30))));
-            sp.setBeschreibung(descriptions[(int) Math.random() * descriptions.length]);
-            sp.setGps(getLocationRandom(l, Math.random() * 10));
-            sp.setPersons(createRandomPersons(i));
-            sp.setStartTime(new Date());
-            sp.setId(i);
-            spots.add(sp);
+            spots.add(createRandomDrinkingSpot(l));
         }
 
         return spots;
     }
 
+    private DrinkingSpot createRandomDrinkingSpot(Location l) {
+        DrinkingSpot sp = new DrinkingSpot();
+        sp.setId((long)(Math.random() * Long.MAX_VALUE));
+        sp.setAgeFrom((int) (Math.random() * 20) + 16);
+        sp.setAgeTo(sp.getAgeFrom() + (int) (Math.random() * 30));
+        sp.setBeschreibung(descriptions[(int) Math.random() * descriptions.length]);
+        sp.setGps(getLocationRandom(l, Math.random() * 10));
+        sp.setPersons(createRandomPersons((int)sp.getId()));
+        sp.setStartTime(new Date());
+        return sp;
+    }
+
+    @Override
+    public DrinkingSpot getActiveById(long currentPersonId) throws BeerBuddyException {
+        return createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+    }
+
+    @Override
+    public void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
+
+    }
 
 
     private List<Person> createRandomPersons(int spid) {

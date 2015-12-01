@@ -8,6 +8,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -81,5 +82,14 @@ public final class ObjectMapperUtil {
             throw new CouldNotParseDateException("Birthday could not be parsed: " +birthday +" format: "+ formatString,e);
         }
 
+    }
+
+    public static int getAgeFromBirthday(Date d)
+    {
+        long ageInMillis = System.currentTimeMillis() - d.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ageInMillis);
+        int age = calendar.get(Calendar.YEAR);
+        return age;
     }
 }

@@ -1,1 +1,0 @@
-java -jar target/BeerBuddy-Server-Dropwizard-1.0-SNAPSHOT.jar server src/main/java/de/fh_dortmund/beerbuddy/config/config.yaml

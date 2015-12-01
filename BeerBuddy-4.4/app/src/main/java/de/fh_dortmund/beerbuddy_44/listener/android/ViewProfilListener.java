@@ -2,6 +2,7 @@ package de.fh_dortmund.beerbuddy_44.listener.android;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.Person;
@@ -43,6 +44,7 @@ public class ViewProfilListener implements  View.OnClickListener {
             i.setEingeladenerId(profil.getId());
             i.setEinladerId(DAOFactory.getCurrentPersonDAO(viewProfilActivity).getCurrentPersonId());
             DAOFactory.getFriendInvitationDAO(viewProfilActivity).insertOrUpdate(i);
+            Toast.makeText(viewProfilActivity, viewProfilActivity.getString(R.string.request_send), Toast.LENGTH_SHORT).show();
         } catch (BeerBuddyException e) {
             Log.e(TAG, "Error accoured during request", e);
         }

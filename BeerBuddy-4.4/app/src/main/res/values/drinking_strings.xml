@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drinking_group">In a Group</string>
+    <string name="drinking_age_from">From</string>
+    <string name="drinking_age_to">To</string>
+    <string name="drinking_alone">Alone</string>
+    <string name="drinking_description">Description</string>
+    <string name="drinking_invited">Invited</string>
+    <string name="drinking_invite">Invite</string>
+    <string name="drinking_save">Show on Map</string>
+    <string name="drinking_saved">Drinking Spot saved</string>
+</resources>

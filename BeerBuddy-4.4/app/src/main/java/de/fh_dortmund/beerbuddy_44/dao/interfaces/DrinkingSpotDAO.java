@@ -20,4 +20,8 @@ public abstract class DrinkingSpotDAO {
     }
 
     public abstract List<DrinkingSpot> getAll(Location l) throws BeerBuddyException;
+
+    public abstract DrinkingSpot getActiveById(long currentPersonId) throws BeerBuddyException;
+
+    public abstract void insertOrUpdate(DrinkingSpot drinkingSpot)throws BeerBuddyException;
 }
