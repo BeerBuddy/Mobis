@@ -143,7 +143,6 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
 
-        //TODO check if User is not logged in
         try {
             if(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() == 0)
             {
@@ -156,6 +155,8 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
             e.printStackTrace();
             Log.e(TAG, "Error accured during Logincheck ", e);
         }
+
+        //TODO check if called with Extra Value long "id" if called show this drinking spot
 
         //get all Markers
 

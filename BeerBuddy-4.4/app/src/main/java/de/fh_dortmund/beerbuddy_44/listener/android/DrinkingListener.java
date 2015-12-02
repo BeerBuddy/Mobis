@@ -14,6 +14,7 @@ import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.picker.BuddyPicker;
 
 /**
  * Created by grimm on 01.12.2015.
@@ -61,8 +62,7 @@ public class DrinkingListener implements View.OnClickListener {
     }
 
     private void showInviteDialog() {
-        throw new NotImplementedException("Not yet implemented");
-        
+        BuddyPicker.show(context);
     }
 
     private void showGroupLayout() {
