@@ -131,6 +131,10 @@ public class EditProfilActivity extends AppCompatActivity {
             case Person.Gender.FEMALE:
                 ((RadioButton) findViewById(R.id.radioButton_female)).setChecked(true);
                 break;
+
+            case Person.Gender.OTHER:
+                ((RadioButton) findViewById(R.id.radioButton_other)).setChecked(true);
+                break;
             default:
                 Log.e(TAG, "No Gender specidied with the int value " + person.getGender());
                 break;
@@ -167,6 +171,8 @@ public class EditProfilActivity extends AppCompatActivity {
             person.setGender(Person.Gender.MALE);
         } else if (((RadioButton) findViewById(R.id.radioButton_female)).isChecked()) {
             person.setGender(Person.Gender.FEMALE);
+        }else{
+            person.setGender(Person.Gender.OTHER);
         }
         person.setEmail(((EditText) findViewById(R.id.profil_email)).getText().toString());
         person.setUsername(((EditText) findViewById(R.id.profil_username)).getText().toString());

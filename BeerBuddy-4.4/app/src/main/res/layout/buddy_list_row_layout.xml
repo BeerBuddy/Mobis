@@ -4,28 +4,44 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="@android:dimen/app_icon_size"
+        android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/buddy_list_row_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/avatar"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size" />
 
         <TextView
             android:id="@+id/buddy_list_row_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:text="VeryLongUsername"
+            android:layout_gravity="top" />
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal" >
         <Button
             android:id="@+id/buddy_list_row_button_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_account"/>
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:drawableTop="@drawable/ic_account"
+            />
         <Button
             android:id="@+id/buddy_list_row_button_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_account_plus"/>
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:drawableTop="@drawable/ic_account_plus"
+            />
+
+        </LinearLayout>
 
 
     </LinearLayout>

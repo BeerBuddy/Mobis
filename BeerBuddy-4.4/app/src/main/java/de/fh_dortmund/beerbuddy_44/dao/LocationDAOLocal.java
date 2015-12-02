@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,13 +29,15 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
     private final LocationManager locationManager;
     private Location currentBestLocation = null;
 
-    public LocationDAOLocal(Activity context) throws BeerBuddyException{
+    public LocationDAOLocal(Context context) throws BeerBuddyException{
         super(context);
         locationManager = (LocationManager)
                 context.getSystemService(Context.LOCATION_SERVICE);
         turnGPSOn(context);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TWO_MINUTES, 10, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, TWO_MINUTES, 10, this);
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, TWO_MINUTES, 10, this);
         } catch (SecurityException e) {
             throw new MissingPermissionException("No Permission to ACCESS_FINE_LOCATION or  ACCESS_COARSE_LOCATION", e);
         }
@@ -45,12 +48,14 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
     {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TWO_MINUTES, 10, l);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, TWO_MINUTES, 10, l);
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, TWO_MINUTES, 10, l);
         } catch (SecurityException e) {
             throw new MissingPermissionException("No Permission to ACCESS_FINE_LOCATION or  ACCESS_COARSE_LOCATION", e);
         }
     }
 
-    private void turnGPSOn(final Activity context) {
+    private void turnGPSOn(final Context context) {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(R.string.gps_disabled_message)
@@ -64,7 +69,6 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
-                            context.finish();
                         }
                     });
             AlertDialog alert = builder.create();
@@ -194,7 +198,6 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
@@ -204,7 +207,10 @@ class LocationDAOLocal extends LocationDAO implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        if(provider.equals(LocationManager.GPS_PROVIDER))
+        {
+            turnGPSOn(context);
+        }
     }
 
 }

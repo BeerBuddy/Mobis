@@ -80,6 +80,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/profil_gender_female" />
+                <RadioButton
+                    android:id="@+id/radioButton_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profil_gender_other" />
             </RadioGroup>
 
             <TextView

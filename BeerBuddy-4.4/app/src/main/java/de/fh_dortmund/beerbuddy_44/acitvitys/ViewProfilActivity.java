@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +40,7 @@ public class ViewProfilActivity extends AppCompatActivity {
 
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
-
+    private static final String TAG = "ViewProfilActivity";
     @Override
     protected void onStart() {
         super.onStart();
@@ -114,14 +115,31 @@ public class ViewProfilActivity extends AppCompatActivity {
     }
 
     private void fillValues(Person p) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(p.getImage(), 0, p.getImage().length);
-        ((ImageView) findViewById(R.id.profil_image)).setImageBitmap(bitmap);
-        ((TextView) findViewById(R.id.profil_alter)).setText( ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth()));
-        ((TextView) findViewById(R.id.profil_username)).setText(p.getUsername());
+        if(p.getImage() != null && p.getImage().length >0)
+        {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(p.getImage(), 0, p.getImage().length);
+            ((ImageView) findViewById(R.id.profil_image)).setImageBitmap(bitmap);
+        }
+       ((TextView) findViewById(R.id.profil_username)).setText(p.getUsername());
         ((TextView) findViewById(R.id.profil_vorlieben)).setText(p.getPrefers());
         ((TextView) findViewById(R.id.profil_interessen)).setText(p.getInterests());
-        //TODO gender abhängig von der Sprache setzen
-        ((TextView) findViewById(R.id.profil_geschlecht)).setText(p.getGender());
+        switch(p.getGender())
+        {
+            case Person.Gender.MALE:
+                ((TextView) findViewById(R.id.profil_geschlecht)).setText(getString(R.string.profil_gender_male));
+                break;
+            case Person.Gender.FEMALE:
+                ((TextView) findViewById(R.id.profil_geschlecht)).setText(  getString(R.string.profil_gender_female));
+                break;
+            case Person.Gender.OTHER:
+                ((TextView) findViewById(R.id.profil_geschlecht)).setText(  getString(R.string.profil_gender_other));
+                break;
+            default:
+                Log.e(TAG, "undefinde Gender for Person:"+ p.getId());
+                break;
+        }
+        int ageFromBirthday = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
+        ((TextView) findViewById(R.id.profil_alter)).setText( ageFromBirthday+"");
     }
 
 

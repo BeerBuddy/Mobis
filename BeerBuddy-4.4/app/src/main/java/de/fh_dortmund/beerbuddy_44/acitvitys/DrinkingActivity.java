@@ -13,10 +13,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
@@ -105,6 +107,8 @@ public class DrinkingActivity extends AppCompatActivity {
         {
             //hes drinking in a group
             ((RadioButton)findViewById(R.id.drinking_group)).setChecked(true);
+            LinearLayout layout = (LinearLayout) findViewById(R.id.drinking_group_layout);
+            layout.setVisibility(View.VISIBLE);
             //start counting
 
             int male =0;

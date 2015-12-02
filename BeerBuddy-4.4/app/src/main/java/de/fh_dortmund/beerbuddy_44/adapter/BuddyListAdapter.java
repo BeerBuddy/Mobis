@@ -19,6 +19,7 @@ import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
+import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 
@@ -46,34 +47,41 @@ public class BuddyListAdapter extends ArrayAdapter<Person> {
         View rowView = inflater.inflate(R.layout.buddy_list_row_layout, parent, false);
 
         final Person p = objects[position];
-        Bitmap bitmap = BitmapFactory.decodeByteArray(p.getImage(), 0, p.getImage().length);
-        ((ImageView)rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
-        ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
-        rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //show the profil
-                Intent i = new Intent(context, EditProfilActivity.class);
-                i.putExtra("id", p.getId());
-                context.startActivity(i);
+        if(p!= null)
+        {
+            if(p.getImage() != null && p.getImage().length > 0)
+            {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(p.getImage(), 0, p.getImage().length);
+                ((ImageView)rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
             }
-        });
-        rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //send a Friend Request
-                try {
-                    FriendInvitation i = new FriendInvitation();
-                    i.setEingeladenerId(p.getId());
-                    i.setEinladerId(DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId());
-                    DAOFactory.getFriendInvitationDAO(context).insertOrUpdate(i);
-                    Toast.makeText(context, context.getString(R.string.request_send), Toast.LENGTH_SHORT).show();
-                } catch (BeerBuddyException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Error accured during FreindRequest",e);
+            ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
+            rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //show the profil
+                    Intent i = new Intent(context, ViewProfilActivity.class);
+                    i.putExtra("id", p.getId());
+                    context.startActivity(i);
                 }
-            }
-        });
+            });
+            rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //send a Friend Request
+                    try {
+                        FriendInvitation i = new FriendInvitation();
+                        i.setEingeladenerId(p.getId());
+                        i.setEinladerId(DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId());
+                        DAOFactory.getFriendInvitationDAO(context).insertOrUpdate(i);
+                        Toast.makeText(context, context.getString(R.string.request_send), Toast.LENGTH_SHORT).show();
+                    } catch (BeerBuddyException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "Error accured during FreindRequest",e);
+                    }
+                }
+            });
+        }
+
         return rowView;
     }
 

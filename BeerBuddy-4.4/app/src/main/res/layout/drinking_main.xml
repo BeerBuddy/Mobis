@@ -11,136 +11,159 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".acitvitys.BuddysActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:measureWithLargestChild="true"
-        android:orientation="vertical">
-
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/drinking_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/drinking_group" />
-
-            <RadioButton
-                android:id="@+id/drinking_alone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/drinking_alone" />
-        </RadioGroup>
+        android:layout_height="fill_parent">
 
         <LinearLayout
-            android:id="@+id/drinking_group_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:measureWithLargestChild="true"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profil_gender_male" />
-
-            <NumberPicker
-                android:id="@+id/drinking_group_amount_male"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></NumberPicker>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profil_gender_female" />
-
-            <NumberPicker
-                android:id="@+id/drinking_group_amount_female"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></NumberPicker>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profil_age" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <RadioButton
+                    android:id="@+id/drinking_alone"
+                    android:textSize="24sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drinking_alone" />
+
+                <RadioButton
+                    android:id="@+id/drinking_group"
+                    android:textSize="24sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drinking_group" />
+
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/drinking_group_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profil_gender_male" />
+
+                    <NumberPicker
+                        android:id="@+id/drinking_group_amount_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></NumberPicker>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profil_gender_female" />
+
+                    <NumberPicker
+                        android:id="@+id/drinking_group_amount_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></NumberPicker>
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/drinking_age_from" />
+                    android:text="@string/profil_age"
+                    android:textSize="24sp"/>
 
-
-                <NumberPicker
-                    android:id="@+id/drinking_group_age_from"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></NumberPicker>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/drinking_age_to" />
+                    android:orientation="horizontal">
 
-                <NumberPicker
-                    android:id="@+id/drinking_group_age_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></NumberPicker>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/drinking_age_from" />
+
+
+                    <NumberPicker
+                        android:id="@+id/drinking_group_age_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></NumberPicker>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/drinking_age_to" />
+
+                    <NumberPicker
+                        android:id="@+id/drinking_group_age_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></NumberPicker>
+                </LinearLayout>
+
             </LinearLayout>
-        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/drinking_description" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drinking_description"
+                android:textSize="24sp"/>
 
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="150dip">
 
             <EditText
                 android:id="@+id/drinking_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </ScrollView>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/drinking_invited" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drinking_invited"
+                    android:textSize="24sp"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/drinking_invite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/ic_account_plus"
+                        android:text="@string/drinking_invite" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <ListView
+                android:id="@+id/drinking_buddys"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/drinking_invite"
+                android:id="@+id/drinking_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_account_plus"
-                android:text="@string/drinking_invite" />
+                android:text="@string/drinking_save" />
+
         </LinearLayout>
-
-
-        <ListView
-            android:id="@+id/drinking_buddys"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/drinking_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/drinking_save" />
-
-    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
