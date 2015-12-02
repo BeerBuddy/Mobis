@@ -23,4 +23,6 @@ public abstract class FriendInvitationDAO {
     public abstract List<FriendInvitation> getAllFor(long personid) throws BeerBuddyException;
 
     public abstract List<FriendInvitation> getAllFrom(long personid) throws BeerBuddyException;
+
+    public abstract void accept(FriendInvitation friendInvitation) throws BeerBuddyException;
 }

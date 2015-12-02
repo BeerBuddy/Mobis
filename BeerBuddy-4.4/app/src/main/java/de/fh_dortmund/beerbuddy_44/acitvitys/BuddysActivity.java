@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.j256.ormlite.spring.DaoFactory;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
@@ -26,9 +27,16 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import java.util.List;
+
+import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.FriendList;
+import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.adapter.BuddyListAdapter;
+import de.fh_dortmund.beerbuddy_44.adapter.FriendInvitationAdapter;
+import de.fh_dortmund.beerbuddy_44.adapter.FriendListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
@@ -40,6 +48,8 @@ public class BuddysActivity extends AppCompatActivity {
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
     private static final String TAG = "BuddysActivity";
+    private FriendList friendList;
+    private List<FriendInvitation> friendInvitations;
 
 
     @Override
@@ -69,6 +79,15 @@ public class BuddysActivity extends AppCompatActivity {
             }
         }, intentFilter);
 
+        IntentFilter intentFilter2 = new IntentFilter();
+        intentFilter.addAction(FriendInvitationAdapter.UPDATE_FRIENDLIST);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                setValue();
+            }
+        }, intentFilter2);
+
         setContentView(R.layout.buddys_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,17 +104,32 @@ public class BuddysActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(listener);
 
-        //buddys_requests
+
+
+
+        setValue();
+
+
+    }
+
+    public void setValue()
+    {
+
         try {
-            FriendList friendList = DAOFactory.getFreindlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-            ExpandableListView listView = (ExpandableListView) this.findViewById(R.id.buddys_buddys);
-            friendList.getFriends();
+        friendList = DAOFactory.getFreindlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+        ListView listViewBuddys = (ListView) this.findViewById(R.id.buddys_buddys);
+        FriendListAdapter adapter = new FriendListAdapter(this,
+                R.layout.buddy_list_row_layout, friendList.getFriends().toArray(new Person[]{}));
+        listViewBuddys.setAdapter(adapter);
+
+        //buddys_requests
+        ListView listViewRequests = (ListView) this.findViewById(R.id.buddys_requests);
+        friendInvitations = DAOFactory.getFriendInvitationDAO(this).getAllFor(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+        FriendInvitationAdapter freindAdapter =new FriendInvitationAdapter(this,  R.layout.buddy_list_row_layout, friendInvitations.toArray(new FriendInvitation[]{}));
+        listViewRequests.setAdapter(freindAdapter);
         } catch (BeerBuddyException e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        //buddys_buddys
-
-
     }
 
     @Override
