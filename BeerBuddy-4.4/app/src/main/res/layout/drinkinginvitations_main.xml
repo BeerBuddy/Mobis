@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/buddys_requests"
+            android:text="@string/drinkinginvitation_invitation"
            />
 
         <ScrollView
@@ -26,27 +26,10 @@
             android:layout_height="wrap_content"
             >
 
-            <ExpandableListView
+            <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/buddys_requests" />
-        </ScrollView>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buddys_buddys"
-            />
-
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <ExpandableListView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/buddys_buddys" />
+                android:id="@+id/drinkinginvitation_invitations" />
         </ScrollView>
 
     </LinearLayout>

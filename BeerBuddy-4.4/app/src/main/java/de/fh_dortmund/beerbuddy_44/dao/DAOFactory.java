@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
@@ -75,6 +76,7 @@ public final class DAOFactory {
         return new FriendInvitationDAOMock(context);
     }
 
-
-
+    public static DrinkingInvitationDAO getDrinkingInvitationDAO(Context context) {
+        return new DrinkingInvitationDAOMock(context);
+    }
 }

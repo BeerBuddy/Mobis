@@ -16,15 +16,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import java.util.List;
+
+import de.fh_dortmund.beerbuddy.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.FriendList;
 import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.adapter.DrinkingInvitationAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
@@ -67,6 +73,14 @@ public class DrinkingInvitationActivity extends AppCompatActivity {
                 finish();
             }
         }, intentFilter);
+        IntentFilter intentFilter2 = new IntentFilter();
+        intentFilter.addAction(DrinkingInvitationAdapter.UPDATE_DRINKING_INVITATIONS);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                setValues();
+            }
+        }, intentFilter);
 
         setContentView(R.layout.drinking_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,6 +99,17 @@ public class DrinkingInvitationActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(listener);
 
 
+        setValues();
+    }
+
+    public void setValues(){
+        try {
+            List<DrinkingInvitation> drinkingInvitations = DAOFactory.getDrinkingInvitationDAO(this).getAllFor(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+            DrinkingInvitationAdapter drinkingInvitationAdapter = new DrinkingInvitationAdapter(this,R.layout.buddy_list_row_layout, drinkingInvitations.toArray(new DrinkingInvitation[]{}));
+            ((ListView)findViewById(R.id.drinkinginvitation_invitations)).setAdapter(drinkingInvitationAdapter);
+        } catch (BeerBuddyException e) {
+            e.printStackTrace();
+        }
 
     }
 
