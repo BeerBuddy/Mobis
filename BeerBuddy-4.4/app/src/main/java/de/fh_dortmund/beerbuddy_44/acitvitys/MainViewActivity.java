@@ -64,25 +64,29 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         try {
             //get current GPS position
             Location location = DAOFactory.getLocationDAO(this).getCurrentLocation();
-            //move the map to current location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 20));
-            List<DrinkingSpot> spots= DAOFactory.getDrinkingSpotDAO(this).getAll(location);
-            Log.i(TAG, "Spots:  "+ spots.size());
-            for(DrinkingSpot ds : spots)
+            if(location != null)
             {
-                createMarker(ds);
-            }
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
-            {
-
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    marker.showInfoWindow();
-                    return true;
+                //move the map to current location
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 20));
+                List<DrinkingSpot> spots= DAOFactory.getDrinkingSpotDAO(this).getAll(location);
+                Log.i(TAG, "Spots:  "+ spots.size());
+                for(DrinkingSpot ds : spots)
+                {
+                    createMarker(ds);
                 }
 
-            });
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+                {
+
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        marker.showInfoWindow();
+                        return true;
+                    }
+
+                });
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Error accured during map initialising ", e);
