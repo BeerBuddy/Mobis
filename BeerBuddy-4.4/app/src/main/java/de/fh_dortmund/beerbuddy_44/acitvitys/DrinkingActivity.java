@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,6 +29,7 @@ import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.adapter.BuddyListAdapter;
+import de.fh_dortmund.beerbuddy_44.adapter.InvitedListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.DrinkingListener;
@@ -66,7 +68,7 @@ public class DrinkingActivity extends AppCompatActivity {
             toggle.syncState();
 
 
-            //register Navigationb Listener
+            //register Navigation Listener
             NavigationListener listener = new NavigationListener(this);
             NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(listener);
@@ -94,6 +96,18 @@ public class DrinkingActivity extends AppCompatActivity {
                 Log.e(TAG, "Error accured during getDrinkingSpot", e);
             }
 
+            View.OnTouchListener otl = new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            };
+
+            ListView lv = (ListView) findViewById(R.id.drinking_buddys);
+            lv.setOnTouchListener(otl);
+            EditText et = (EditText) findViewById(R.id.drinking_description);
+            et.setOnTouchListener(otl);
     }
 
     public void setValue(DrinkingSpot spot) {
@@ -116,7 +130,7 @@ public class DrinkingActivity extends AppCompatActivity {
             int minAge =  Integer.MAX_VALUE;
             int maxAge =-1;
 
-            BuddyListAdapter adapter = new BuddyListAdapter(this,
+            InvitedListAdapter adapter = new InvitedListAdapter(this,
                     R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{}));
             ((ListView)findViewById(R.id.drinking_buddys)).setAdapter(adapter);
 
