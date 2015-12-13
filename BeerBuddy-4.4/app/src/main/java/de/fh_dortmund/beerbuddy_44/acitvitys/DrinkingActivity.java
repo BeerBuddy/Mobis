@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -28,7 +25,6 @@ import de.fh_dortmund.beerbuddy.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
-import de.fh_dortmund.beerbuddy_44.adapter.BuddyListAdapter;
 import de.fh_dortmund.beerbuddy_44.adapter.InvitedListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
@@ -38,6 +34,8 @@ import lombok.Getter;
 
 /**
  * Created by David on 01.11.2015.
+ *
+ * Revised and Updated by Marco on 10.12.2015.
  */
 public class DrinkingActivity extends AppCompatActivity {
     private static final String TAG = "DrinkingActivity";
@@ -67,12 +65,10 @@ public class DrinkingActivity extends AppCompatActivity {
             drawer.setDrawerListener(toggle);
             toggle.syncState();
 
-
             //register Navigation Listener
             NavigationListener listener = new NavigationListener(this);
             NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(listener);
-
 
             DrinkingListener drinkingListener = new DrinkingListener(this);
 
@@ -96,6 +92,7 @@ public class DrinkingActivity extends AppCompatActivity {
                 Log.e(TAG, "Error accured during getDrinkingSpot", e);
             }
 
+            //Listener for Scrolling Elements within ScrollView
             View.OnTouchListener otl = new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
