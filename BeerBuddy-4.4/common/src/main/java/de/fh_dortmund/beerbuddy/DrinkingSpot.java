@@ -35,6 +35,10 @@ public class DrinkingSpot {
 
     @NotBlank
     @ForeignCollectionField(eager = false)
+    Person creator;
+
+    @NotBlank
+    @ForeignCollectionField(eager = false)
     List<Person> persons;
 
     @DatabaseField

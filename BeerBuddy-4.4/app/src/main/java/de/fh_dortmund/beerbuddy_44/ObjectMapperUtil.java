@@ -1,5 +1,9 @@
 package de.fh_dortmund.beerbuddy_44;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.fh_dortmund.beerbuddy.Person;
@@ -22,7 +27,7 @@ import de.fh_dortmund.beerbuddy_44.exceptions.CouldNotParseDateException;
  */
 public final class ObjectMapperUtil {
 
-    private ObjectMapperUtil(){
+    private ObjectMapperUtil() {
         //prevent Objects
     }
 
@@ -52,7 +57,7 @@ public final class ObjectMapperUtil {
             }
             return baos.toByteArray();
         } catch (Exception e) {
-            throw new CouldNotDownloadImageException("Could not download Image from url: " + image.getUrl(),e);
+            throw new CouldNotDownloadImageException("Could not download Image from url: " + image.getUrl(), e);
         } finally {
             if (is != null) {
                 try {
@@ -69,7 +74,6 @@ public final class ObjectMapperUtil {
                 }
             }
         }
-
     }
 
     private static Date parseDate(String birthday) throws CouldNotParseDateException {
@@ -79,17 +83,44 @@ public final class ObjectMapperUtil {
             Date date = format.parse(birthday);
             return date;
         } catch (ParseException e) {
-            throw new CouldNotParseDateException("Birthday could not be parsed: " +birthday +" format: "+ formatString,e);
+            throw new CouldNotParseDateException("Birthday could not be parsed: " + birthday + " format: " + formatString, e);
         }
 
     }
 
-    public static int getAgeFromBirthday(Date d)
-    {
+    public static int getAgeFromBirthday(Date d) {
         long ageInMillis = System.currentTimeMillis() - d.getTime();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(ageInMillis);
         int age = calendar.get(Calendar.YEAR);
         return age;
+    }
+
+    public static LatLng getLatLangFropmGPS(String gps) {
+        String[] split = gps.split(";");
+        LatLng sydney = new LatLng(Double.parseDouble(split[0]), Double.parseDouble(split[1]));
+        return sydney;
+    }
+
+    public static LatLng getLatLngFromLocation(Location l) {
+        if(l != null)
+        {
+            LatLng lng = new LatLng(l.getLatitude(), l.getLongitude());
+            return lng;
+        }
+        return null;
+    }
+
+    public static Location getLocationFromLatLang(LatLng l) {
+        if(l != null)
+        {
+            Location loc = new Location("converted");
+            loc.setLongitude(l.longitude);
+            loc.setLatitude(l.latitude);
+            loc.setTime(0l);
+            return loc;
+        }
+        return null;
+
     }
 }

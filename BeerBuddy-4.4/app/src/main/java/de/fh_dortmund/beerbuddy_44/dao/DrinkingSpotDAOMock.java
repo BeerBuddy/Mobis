@@ -57,6 +57,7 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
     }
 
     private DrinkingSpot createRandomDrinkingSpot(Location l) {
+
         DrinkingSpot sp = new DrinkingSpot();
         sp.setId((long)(Math.random() * Long.MAX_VALUE));
         sp.setAgeFrom((int) (Math.random() * 20) + 16);
@@ -89,24 +90,31 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
     }
 
     private String getLocationRandom(Location location, double radius) {
-        Random random = new Random();
+        if(location != null && radius != 0)
+        {
+            Random random = new Random();
 
-        // Convert radius from meters to degrees
-        double radiusInDegrees = radius / 111000f;
+            // Convert radius from meters to degrees
+            double radiusInDegrees = radius / 111000f;
 
-        double u = random.nextDouble();
-        double v = random.nextDouble();
-        double w = radiusInDegrees * Math.sqrt(u);
-        double t = 2 * Math.PI * v;
-        double x = w * Math.cos(t);
-        double y = w * Math.sin(t);
+            double u = random.nextDouble();
+            double v = random.nextDouble();
+            double w = radiusInDegrees * Math.sqrt(u);
+            double t = 2 * Math.PI * v;
+            double x = w * Math.cos(t);
+            double y = w * Math.sin(t);
 
-        // Adjust the x-coordinate for the shrinking of the east-west distances
-        double new_x = x / Math.cos(location.getLatitude());
+            // Adjust the x-coordinate for the shrinking of the east-west distances
+            double new_x = x / Math.cos(location.getLatitude());
 
-        double foundLongitude = new_x + location.getLongitude();
-        double foundLatitude = y + location.getLatitude();
-        return  foundLongitude + ";" + foundLatitude;
+            double foundLongitude = new_x + location.getLongitude();
+            double foundLatitude = y + location.getLatitude();
+            return   foundLatitude + ";" +foundLongitude;
+        }
+        else{
+            return "51.509981800747084;7.453107833862305";
+        }
+
     }
 
 

@@ -1,103 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:gravity="bottom"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     sothree:umanoPanelHeight="68dp"
     sothree:umanoShadowHeight="4dp"
-    tools:context=".acitvitys.MainViewActivity"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+    tools:context=".acitvitys.MainViewActivity">
 
 
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map"
-            tools:context=".activitys.MainViewActivity"
-            class="com.google.android.gms.maps.SupportMapFragment" />
-
+            tools:context=".activitys.MainViewActivity" />
 
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/mainview_slidingpanel"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="14sp"
-        android:paddingLeft="10dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/dragView">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="left">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_myplaces"
-            />
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
 
             <TextView
-                android:id="@+id/persons"
-                android:layout_height="wrap_content"
+                android:id="@+id/mainview_creatorname"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:text="4 Buddys"/>
+                android:paddingLeft="10dp"
+                android:text="BeerBuddy User"
+                android:textSize="14sp" />
 
+
+            <Button
+                android:id="@+id/mainview_creatorprofil"
+                android:layout_width="@android:dimen/app_icon_size"
+                android:layout_height="@android:dimen/app_icon_size"
+                android:drawableTop="@drawable/ic_account" />
         </LinearLayout>
-        <Button
-            android:id="@+id/view"
+
+
+        <TextView
+            android:id="@+id/mainview_isdrinkingtext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:src="@android:drawable/ic_menu_view"
-            android:text="View"
-            android:gravity="center_vertical"
-           />
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="is Drinking in a Group of x:"
+            android:textSize="14sp" />
 
+        <LinearLayout
+            android:id="@+id/mainview_groupmembers"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <!-- Hier kommen programmatisch die m/w-Icons rein -->
+        </LinearLayout>
 
-
-        <Button
-            android:id="@+id/navigate"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:gravity="right"
-            android:src="@android:drawable/ic_menu_directions"
-            android:text="Navigate"
-
-           />
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/profil_age"
+            android:textSize="14sp" />
 
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/mainview_agefrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:text="24 "
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:text=" - "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/mainview_ageTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:text="34"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/drinking_description"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/mainview_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/drinking_description"
+            android:textSize="14sp" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/mainview_usersjoined"
+            android:textSize="14sp" />
+
+        <ListView
+            android:id="@+id/mainview_mainview_usersjoined"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/minview_navigate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:src="@android:drawable/ic_menu_directions"
+                android:text="Navigate"
+                android:textSize="14sp"
+
+                />
         </LinearLayout>
     </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

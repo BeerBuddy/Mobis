@@ -44,7 +44,7 @@ public class DrinkingInvitationActivity extends AppCompatActivity {
 
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
     private String lastRequestCacheKey;
-    private static final String TAG = "DrinkingInvitationActivity";
+    private static final String TAG = "DrinkingInvitationAct";
 
 
     @Override
@@ -82,7 +82,7 @@ public class DrinkingInvitationActivity extends AppCompatActivity {
             }
         }, intentFilter);
 
-        setContentView(R.layout.drinking_activity_main);
+        setContentView(R.layout.drinkinginvitations_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -109,6 +109,7 @@ public class DrinkingInvitationActivity extends AppCompatActivity {
             ((ListView)findViewById(R.id.drinkinginvitation_invitations)).setAdapter(drinkingInvitationAdapter);
         } catch (BeerBuddyException e) {
             e.printStackTrace();
+            Log.e(TAG,"Error accured during get DrinkingInvitations",e);
         }
 
     }

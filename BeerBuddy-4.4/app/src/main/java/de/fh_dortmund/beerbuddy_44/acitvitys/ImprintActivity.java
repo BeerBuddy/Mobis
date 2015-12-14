@@ -59,7 +59,7 @@ public class ImprintActivity extends AppCompatActivity {
         }, intentFilter);
 
         //FIXME EIgenes Layout erstellen
-        setContentView(R.layout.drinkinginvitations_main);
+        setContentView(R.layout.imprint_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
