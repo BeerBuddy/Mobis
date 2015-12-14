@@ -70,13 +70,18 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
     }
 
     @Override
-    public DrinkingSpot getActiveById(long currentPersonId) throws BeerBuddyException {
+    public DrinkingSpot getActiveByPersonId(long currentPersonId) throws BeerBuddyException {
         return createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
     }
 
     @Override
     public void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
 
+    }
+
+    @Override
+    public DrinkingSpot getById(long dsid) throws BeerBuddyException {
+        return createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
     }
 
 

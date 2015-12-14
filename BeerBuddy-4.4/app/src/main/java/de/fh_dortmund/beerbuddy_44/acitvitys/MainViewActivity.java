@@ -1,23 +1,15 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 
 import android.support.multidex.MultiDex;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,21 +31,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.Person;
-import de.fh_dortmund.beerbuddy.PersonList;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
-import de.fh_dortmund.beerbuddy_44.listener.rest.ListPersonRequestListener;
-import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
 public class MainViewActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
@@ -67,61 +54,83 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         mMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         try {
-            //move the map to current location
-            if(location != null)
-            {
+            //get current GPS position
+            if (location != null) {
+                //move the map to current location
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20));
-            }
+                List<DrinkingSpot> spots = DAOFactory.getDrinkingSpotDAO(this).getAll(ObjectMapperUtil.getLocationFromLatLang(location));
+                Log.i(TAG, "Spots:  " + spots.size());
+                for (DrinkingSpot ds : spots) {
+                    createMarker(ds);
+                }
 
-            List<DrinkingSpot> spots = DAOFactory.getDrinkingSpotDAO(this).getAll(ObjectMapperUtil.getLocationFromLatLang(location));
-            Log.i(TAG, "Spots:  " + spots.size());
-            for (DrinkingSpot ds : spots) {
-                createMarker(ds);
-            }
-            final Context context = this;
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    String drinkingSpotId = marker.getSnippet();
-                    long drinkingId = Long.parseLong(drinkingSpotId);
-                    try {
-                        showDrinkingView(DAOFactory.getDrinkingSpotDAO(context).getActiveById(drinkingId));
-                    } catch (BeerBuddyException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "Error accured during get DrinkingSpot ", e);
+                final Context context = this;
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        try {
+                            long dsid = Long.parseLong(marker.getSnippet());
+                            showDrinkingView(DAOFactory.getDrinkingSpotDAO(context).getById(dsid));
+                            return true;
+                        } catch (BeerBuddyException e) {
+                            e.printStackTrace();
+                        }
                         return false;
                     }
 
-                    return true;
-                }
-
-            });
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    hideDrinkingView();
-                }
-            });
+                });
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
+
             Log.e(TAG, "Error accured during map initialising ", e);
         }
     }
 
     public void hideDrinkingView() {
-        findViewById(R.id.mainview_slidingpanel).setVisibility(View.GONE);
+        ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
     }
 
     public void showDrinkingView(final DrinkingSpot spot) {
-        findViewById(R.id.mainview_slidingpanel).setVisibility(View.VISIBLE);
-        ((TextView) findViewById(R.id.mainview_agefrom)).setText(spot.getAgeFrom());
-        ((TextView) findViewById(R.id.mainview_ageTo)).setText(spot.getAgeTo());
-        ((TextView) findViewById(R.id.mainview_creatorname)).setText(spot.getCreator().getUsername());
-        ((TextView) findViewById(R.id.mainview_description)).setText(spot.getDescription());
+        SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+        slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+                Log.i(TAG, "onPanelExpanded");
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+                Log.i(TAG, "onPanelCollapsed");
+                hideDrinkingView();
+
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+                Log.i(TAG, "onPanelAnchored");
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+                Log.i(TAG, "onPanelHidden");
+            }
+        });
+    /* FIXME uncomment an fix
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_agefrom)).setText(spot.getAgeFrom());
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_ageTo)).setText(spot.getAgeTo());
+       ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_creatorname)).setText(spot.getCreator().getUsername());
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_description)).setText(spot.getDescription());
         final Context context = this;
-        ((Button) findViewById(R.id.mainview_creatorprofil)).setOnClickListener(new View.OnClickListener() {
+        ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_creatorprofil)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //show the profil
@@ -131,7 +140,7 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.mainview_groupmembers);
+        LinearLayout layout = (LinearLayout) slidingUpPanelLayout.findViewById(R.id.mainview_groupmembers);
         for (int i = 0; i < spot.getAmountMaleWithoutBeerBuddy(); i++) {
             ImageView imageView = new ImageView(this);
             //setting image resource
@@ -156,7 +165,8 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         int amount = spot.getAmountMaleWithoutBeerBuddy() +
                 spot.getAmountFemaleWithoutBeerBuddy() +
                 spot.getPersons().size();
-        ((TextView) findViewById(R.id.mainview_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
+        */
     }
 
     private void createMarker(DrinkingSpot ds) {
@@ -185,16 +195,6 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //finish instance on Logout
-       /* IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                finish();
-            }
-        }, intentFilter);
-    */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -226,22 +226,19 @@ public class MainViewActivity extends AppCompatActivity implements OnMapReadyCal
         //TODO check if called with Extra Value long "id" if called show this drinking spot
 
         try {
-        Intent intent = getIntent();
-        if(intent != null && intent.getExtras() != null)
-        {
-            Bundle b = intent.getExtras();
-            long id = b.getLong("id");
-            if (id != 0) {
-                DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getActiveById(id);
-                showDrinkingView(drinkingSpot);
-                location = ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps());
+            Intent intent = getIntent();
+            if (intent != null && intent.getExtras() != null) {
+                Bundle b = intent.getExtras();
+                long id = b.getLong("id");
+                if (id != 0) {
+                    DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getActiveByPersonId(id);
+                    showDrinkingView(drinkingSpot);
+                    location = ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps());
+                }
+            } else {
+                location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());
+                hideDrinkingView();
             }
-        }
-        else {
-            location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());
-            hideDrinkingView();
-        }
-
 
         } catch (BeerBuddyException e) {
             e.printStackTrace();

@@ -15,11 +15,9 @@ import android.widget.Toast;
 
 import de.fh_dortmund.beerbuddy.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
-import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 
@@ -48,7 +46,7 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation>{
 
         try {
             Person p = DAOFactory.getPersonDAO(context).getById(friendInvitation.getEingeladenerId());
-            final DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(context).getActiveById(friendInvitation.getEingeladenerId());
+            final DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(context).getActiveByPersonId(friendInvitation.getEingeladenerId());
             if(p!= null)
             {
                 if(p.getImage() != null && p.getImage().length > 0)

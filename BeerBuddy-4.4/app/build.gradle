@@ -65,7 +65,6 @@ android {
 dependencies {
     //own Projects
     compile project(':common')
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     //Google Api
     //Robo Spice
@@ -80,7 +79,6 @@ dependencies {
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
     compile 'org.projectlombok:lombok:1.16.6'
-    //
 
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.j256.ormlite:ormlite-jdbc:4.48'

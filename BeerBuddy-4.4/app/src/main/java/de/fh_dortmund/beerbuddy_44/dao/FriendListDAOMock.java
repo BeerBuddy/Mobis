@@ -3,7 +3,6 @@ package de.fh_dortmund.beerbuddy_44.dao;
 import android.content.Context;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.fh_dortmund.beerbuddy.FriendList;
@@ -31,7 +30,7 @@ class FriendListDAOMock extends FriendListDAO {
             persons = new FriendList();
             persons.setId(personid);
             persons.setPersonid(personid);
-            persons.setFriends( MockUtil.createRandomPersons(((int)Math.random() * 10)));
+            persons.setFriends( MockUtil.createRandomPersons(((int)(Math.random() * 10))));
             freindlist.put(personid,persons);
         }
 
@@ -53,7 +52,7 @@ class FriendListDAOMock extends FriendListDAO {
             persons = new FriendList();
             persons.setId(personid);
             persons.setPersonid(personid);
-            persons.setFriends( MockUtil.createRandomPersons(((int)Math.random() * 10)));
+            persons.setFriends( MockUtil.createRandomPersons(((int)(Math.random() * 10))));
             freindlist.put(personid,persons);
         }
         return persons;
