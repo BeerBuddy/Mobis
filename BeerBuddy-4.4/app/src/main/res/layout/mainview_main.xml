@@ -11,6 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     sothree:umanoPanelHeight="200dp"
     sothree:umanoShadowHeight="4dp"
+    sothree:umanoOverlay="true"
     sothree:umanoDragView="@+id/mainview_slidingpanel"
     tools:context=".acitvitys.MainViewActivity">
 
@@ -35,6 +36,7 @@
         android:id="@+id/mainview_slidingpanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ffffff"
 
         android:orientation="vertical">
 
