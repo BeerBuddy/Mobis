@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drinkinginvitation_invitation">Invitations</string>
+    <string name="drinkinginvitation_title">Choose your Buddys</string>
+    <string name="button_inviteselected">Invite Selected</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_inviteall">Invite All</string>
 
 </resources>

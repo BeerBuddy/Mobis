@@ -26,7 +26,7 @@ public final class MockUtil {
         List<Person> persons = new ArrayList<Person>();
         for(int i = 0 ; i< size; i++)
         {
-            persons.add(createRandomPerson((long)Math.random() * Long.MAX_VALUE));
+            persons.add(createRandomPerson((long)(Math.random() * 10)));
         }
         return persons;
     }

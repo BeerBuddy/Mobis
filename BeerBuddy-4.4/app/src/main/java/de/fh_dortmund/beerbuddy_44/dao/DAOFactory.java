@@ -65,7 +65,7 @@ public final class DAOFactory {
         return new CurrentPersonDAOLocal(context);
     }
 
-    public static FriendListDAO getFreindlistDAO(Context context) {
+    public static FriendListDAO getFriendlistDAO(Context context) {
             return new FriendListDAOMock(context);
     }
 

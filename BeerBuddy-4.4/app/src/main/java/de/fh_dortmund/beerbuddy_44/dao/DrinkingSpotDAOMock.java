@@ -86,10 +86,10 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
 
 
     private List<Person> createRandomPersons(int spid) {
-        List<Person> list = MockUtil.createRandomPersons((int)(Math.random() *20)+1);
+        List<Person> list = MockUtil.createRandomPersons((int)(Math.random() *10)+1);
         for(Person p : list)
         {
-            p.setId(Long.parseLong(spid + "00" +  p.getId()));
+            p.setId((long)(Math.random() * 10));
         }
         return list;
     }

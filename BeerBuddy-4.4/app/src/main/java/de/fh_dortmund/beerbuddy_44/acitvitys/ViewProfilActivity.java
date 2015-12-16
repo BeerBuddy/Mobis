@@ -92,7 +92,7 @@ public class ViewProfilActivity extends AppCompatActivity {
                 fillValues(p);
 
                 //register ViewProfilListener
-                if(currentPerson == p.getId() &&  DAOFactory.getFreindlistDAO(this).isFriendFromId(currentPerson, p.getId()))
+                if(currentPerson == p.getId() &&  DAOFactory.getFriendlistDAO(this).isFriendFromId(currentPerson, p.getId()))
                 {
                     ViewProfilListener viewListener = new ViewProfilListener(this, p);
                     ((Button) findViewById(R.id.action_profil_send_request)).setOnClickListener(viewListener);

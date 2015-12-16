@@ -19,19 +19,19 @@ class FriendListDAOMock extends FriendListDAO {
         super(context);
     }
 
-    Map<Long, FriendList> freindlist = new HashMap<Long, FriendList>();
+    Map<Long, FriendList> friendlist = new HashMap<Long, FriendList>();
 
 
     @Override
     public boolean isFriendFromId(long personid, long firendid) throws BeerBuddyException {
-        FriendList persons = freindlist.get(personid);
+        FriendList persons = friendlist.get(personid);
         if(persons == null)
         {
             persons = new FriendList();
             persons.setId(personid);
             persons.setPersonid(personid);
             persons.setFriends( MockUtil.createRandomPersons(((int)(Math.random() * 10))));
-            freindlist.put(personid,persons);
+            friendlist.put(personid,persons);
         }
 
         for(Person p :persons.getFriends())
@@ -46,14 +46,14 @@ class FriendListDAOMock extends FriendListDAO {
 
     @Override
     public FriendList getFriendListId(long personid) throws BeerBuddyException {
-        FriendList persons = freindlist.get(personid);
+        FriendList persons = friendlist.get(personid);
         if(persons == null)
         {
             persons = new FriendList();
             persons.setId(personid);
             persons.setPersonid(personid);
             persons.setFriends( MockUtil.createRandomPersons(((int)(Math.random() * 10))));
-            freindlist.put(personid,persons);
+            friendlist.put(personid,persons);
         }
         return persons;
     }

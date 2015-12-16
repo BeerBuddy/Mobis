@@ -116,7 +116,7 @@ public class BuddysActivity extends AppCompatActivity {
     {
 
         try {
-        friendList = DAOFactory.getFreindlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+        friendList = DAOFactory.getFriendlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
         ListView listViewBuddys = (ListView) this.findViewById(R.id.buddys_buddys);
         FriendListAdapter adapter = new FriendListAdapter(this,
                 R.layout.buddy_list_row_layout, friendList.getFriends().toArray(new Person[]{}));
