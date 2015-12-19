@@ -1,16 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.multidex.MultiDex;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,7 +19,6 @@ import de.fh_dortmund.beerbuddy_44.adapter.InvitedListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.DrinkingListener;
-import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import lombok.Getter;
 
 /**
@@ -37,39 +26,18 @@ import lombok.Getter;
  *
  * Revised and Updated by Marco on 10.12.2015.
  */
-public class DrinkingActivity extends AppCompatActivity {
+public class DrinkingActivity extends BeerBuddyActivity {
+    public DrinkingActivity()
+    {
+        super(R.layout.drinking_activity_main,true);
+    }
+
     private static final String TAG = "DrinkingActivity";
     @Getter
     private DrinkingSpot drinkingSpot;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.drinking_activity_main);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            //finish instance on Logout
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
-            registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    finish();
-                }
-            }, intentFilter);
-
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.setDrawerListener(toggle);
-            toggle.syncState();
-
-            //register Navigation Listener
-            NavigationListener listener = new NavigationListener(this);
-            NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(listener);
-
+    public void onFurtherCreate(Bundle savedInstanceState) {
             DrinkingListener drinkingListener = new DrinkingListener(this);
 
             Button save = (Button) findViewById(R.id.drinking_save);
@@ -185,12 +153,5 @@ public class DrinkingActivity extends AppCompatActivity {
         drinkingSpot.setAgeFrom(((NumberPicker) findViewById(R.id.drinking_group_age_from)).getValue());
         drinkingSpot.setAgeTo(((NumberPicker) findViewById(R.id.drinking_group_age_to)).getValue());
         return drinkingSpot;
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-
-        MultiDex.install(this);
     }
 }

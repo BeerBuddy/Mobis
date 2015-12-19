@@ -76,8 +76,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:7.8.0'
     compile 'com.google.android.gms:play-services-gcm:7.8.0'
     compile 'com.google.android.gms:play-services:7.8.0'
-    compile 'com.octo.android.robospice:robospice:1.4.14'
-    compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
+    //compile 'com.octo.android.robospice:robospice:1.4.14'
+   // compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
     compile 'org.projectlombok:lombok:1.16.6'
 
     compile 'com.j256.ormlite:ormlite-android:4.48'

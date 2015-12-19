@@ -1,12 +1,11 @@
 package de.fh_dortmund.beerbuddy_44.requests;
 
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import java.util.Collections;
 
 import de.fh_dortmund.beerbuddy.Person;
 
-public class DeletePersonRequest extends SpringAndroidSpiceRequest<Void> {
+public class DeletePersonRequest {//extends SpringAndroidSpiceRequest<Void> {
 
 
   private final Person person;
@@ -17,13 +16,13 @@ public class DeletePersonRequest extends SpringAndroidSpiceRequest<Void> {
    *
    */
   public DeletePersonRequest(Person person) {
-    super(Void.class);
+   // super(Void.class);
     this.person = person;
   }
 
-  @Override
+  //@Override
   public Void loadDataFromNetwork() throws Exception {
-     getRestTemplate().delete("http://localhost:8080/persons", person);
+    // getRestTemplate().delete("http://localhost:8080/persons", person);
     return null;
   }
 

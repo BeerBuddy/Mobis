@@ -6,8 +6,6 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;

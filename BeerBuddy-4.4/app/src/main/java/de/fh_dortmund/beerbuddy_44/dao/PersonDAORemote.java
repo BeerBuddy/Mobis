@@ -2,8 +2,6 @@ package de.fh_dortmund.beerbuddy_44.dao;
 
 import android.content.Context;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.Person;
@@ -31,18 +29,18 @@ class PersonDAORemote extends PersonDAO {
             PersonList persons = getAllPersonsRequest.loadDataFromNetwork();
             return persons;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to get All Persons",e);
+            throw new DataAccessException("Failed to get All Persons", e);
         }
     }
 
     @Override
     public Person getById(long id) {
-        throw new NotImplementedException("");
+        throw new RuntimeException("NotYet implemented");
     }
 
     @Override
     public Person getByEmail(String mail) {
-        throw new NotImplementedException("");
+        throw new RuntimeException("NotYet implemented");
     }
 
     @Override
@@ -56,7 +54,7 @@ class PersonDAORemote extends PersonDAO {
                 req.loadDataFromNetwork();
             }
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update Person",e);
+            throw new DataAccessException("Failed to insert or update Person", e);
         }
     }
 }

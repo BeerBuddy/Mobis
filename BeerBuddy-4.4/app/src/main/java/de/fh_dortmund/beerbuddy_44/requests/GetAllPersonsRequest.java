@@ -1,13 +1,11 @@
 package de.fh_dortmund.beerbuddy_44.requests;
 
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy.PersonList;
 
 //TODO URL auslagern
 //TODO Versionsnummer in URL
-public class GetAllPersonsRequest extends SpringAndroidSpiceRequest<PersonList> {
+public class GetAllPersonsRequest { /* extends SpringAndroidSpiceRequest<PersonList> {*/
 
 
   private  int size =20;
@@ -15,7 +13,7 @@ public class GetAllPersonsRequest extends SpringAndroidSpiceRequest<PersonList> 
   private  String sort = null;
 
   public GetAllPersonsRequest() {
-    super(PersonList.class);
+   // super(PersonList.class);
   }
 
   /**
@@ -25,7 +23,7 @@ public class GetAllPersonsRequest extends SpringAndroidSpiceRequest<PersonList> 
    *
    */
   public GetAllPersonsRequest(int page, int size) {
-    super(PersonList.class);
+   // super(PersonList.class);
     this.size = size;
     this.page = page;
   }
@@ -38,13 +36,13 @@ public class GetAllPersonsRequest extends SpringAndroidSpiceRequest<PersonList> 
    *
    */
   public GetAllPersonsRequest(int page, int size, String sort) {
-    super(PersonList.class);
+    //super(PersonList.class);
     this.size = size;
     this.page = page;
     this.sort = sort;
   }
 
-  @Override
+ // @Override
   public PersonList loadDataFromNetwork() throws Exception {
     String url = String.format("http://localhost:8080/persons?page=%d,size=%d",page,size);
     if(sort != null)
@@ -53,7 +51,8 @@ public class GetAllPersonsRequest extends SpringAndroidSpiceRequest<PersonList> 
     }
 
 
-    return getRestTemplate().getForObject(url, PersonList.class);
+   // return getRestTemplate().getForObject(url, PersonList.class);
+    return null;
   }
 
   /**
