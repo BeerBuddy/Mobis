@@ -65,6 +65,7 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
         sp.setAgeTo(sp.getAgeFrom() + (int) (Math.random() * 30));
         sp.setBeschreibung(descriptions[(int) Math.random() * descriptions.length]);
         sp.setGps(getLocationRandom(l, Math.random() * 10));
+        sp.setCreator(MockUtil.createRandomPerson(sp.getId()));
         sp.setPersons(createRandomPersons((int) sp.getId()));
         sp.setStartTime(new Date());
         return sp;
@@ -94,10 +95,10 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
             if (ds.getId() == dsid)
                 return ds;
         }
-        DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
-        ds.setId(dsid);
-        spots.add(ds);
-        return ds;
+    DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+    ds.setId(dsid);
+    spots.add(ds);
+    return ds;
     }
 
     @Override
@@ -108,6 +109,7 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
                 return;
             }
         }
+
         throw new DataAccessException("DrinkingSpot with the id: " + dsid + " could not be found.");
     }
 
