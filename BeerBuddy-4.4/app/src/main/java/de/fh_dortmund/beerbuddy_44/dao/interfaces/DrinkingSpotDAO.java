@@ -26,4 +26,6 @@ public abstract class DrinkingSpotDAO {
     public abstract void insertOrUpdate(DrinkingSpot drinkingSpot)throws BeerBuddyException;
 
     public abstract DrinkingSpot getById(long dsid) throws BeerBuddyException;
+
+    public abstract void join(long dsid, long currentPersonId) throws BeerBuddyException;
 }

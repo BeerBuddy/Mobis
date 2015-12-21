@@ -59,8 +59,15 @@ public class DrinkingSpot {
 
     String description;
 
-   int amountMaleWithoutBeerBuddy;
-   int amountFemaleWithoutBeerBuddy;
+    @DatabaseField
+    int amountMaleWithoutBeerBuddy;
+
+    @DatabaseField
+    int amountFemaleWithoutBeerBuddy;
+
+    public int getTotalAmount() {
+        return persons.size() + amountFemaleWithoutBeerBuddy + amountMaleWithoutBeerBuddy;
+    }
 
 
 }

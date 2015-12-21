@@ -16,6 +16,7 @@ import android.widget.Toast;
 import de.fh_dortmund.beerbuddy.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
@@ -55,15 +56,7 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation>{
                     ((ImageView)rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
                 }
                 ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
-                rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //show the DrinkingSpot
-                        Intent i = new Intent(context, MainViewActivity.class);
-                        i.putExtra("id", drinkingSpot.getId());
-                        context.startActivity(i);
-                    }
-                });
+                rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, drinkingSpot.getId()));
                 rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

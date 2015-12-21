@@ -38,65 +38,90 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
             "I feel sorry for people who don't drink. When they wake up in the morning, that's as good as they're going to feel all day."
     };
 
-
+    List<DrinkingSpot> spots = new ArrayList<DrinkingSpot>();
 
     public DrinkingSpotDAOMock(Context context) {
         super(context);
+
     }
 
 
     @Override
     public List<DrinkingSpot> getAll(Location l) throws BeerBuddyException {
-        List<DrinkingSpot> spots = new ArrayList<DrinkingSpot>();
-        for(int i = 0 ; i< 20; i++)
-        {
-            spots.add(createRandomDrinkingSpot(l));
+        if (spots.isEmpty()) {
+            for (int i = 0; i < 20; i++) {
+                spots.add(createRandomDrinkingSpot(l));
+            }
         }
-
         return spots;
+
     }
 
     private DrinkingSpot createRandomDrinkingSpot(Location l) {
 
         DrinkingSpot sp = new DrinkingSpot();
-        sp.setId((long)(Math.random() * Long.MAX_VALUE));
+        sp.setId((long) (Math.random() * Long.MAX_VALUE));
         sp.setAgeFrom((int) (Math.random() * 20) + 16);
         sp.setAgeTo(sp.getAgeFrom() + (int) (Math.random() * 30));
         sp.setBeschreibung(descriptions[(int) Math.random() * descriptions.length]);
         sp.setGps(getLocationRandom(l, Math.random() * 10));
-        sp.setPersons(createRandomPersons((int)sp.getId()));
+        sp.setPersons(createRandomPersons((int) sp.getId()));
         sp.setStartTime(new Date());
         return sp;
     }
 
     @Override
     public DrinkingSpot getActiveByPersonId(long currentPersonId) throws BeerBuddyException {
-        return createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+        for (DrinkingSpot ds : spots) {
+            if (ds.getCreator().getId() == currentPersonId)
+                return ds;
+        }
+
+        DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+        ds.getCreator().setId(currentPersonId);
+        spots.add(ds);
+        return ds;
     }
 
     @Override
     public void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
-
+        spots.add(drinkingSpot);
     }
 
     @Override
     public DrinkingSpot getById(long dsid) throws BeerBuddyException {
-        return createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+        for (DrinkingSpot ds : spots) {
+            if (ds.getId() == dsid)
+                return ds;
+        }
+        DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+        ds.setId(dsid);
+        spots.add(ds);
+        return ds;
+    }
+
+    @Override
+    public void join(long dsid, long currentPersonId) throws BeerBuddyException {
+        for (DrinkingSpot ds : spots) {
+            if (ds.getId() == dsid) {
+                ds.getPersons().add(DAOFactory.getPersonDAO(context).getById(currentPersonId));
+                return;
+            }
+        }
+        throw new DataAccessException("DrinkingSpot with the id: " + dsid + " could not be found.");
     }
 
 
     private List<Person> createRandomPersons(int spid) {
-        List<Person> list = MockUtil.createRandomPersons((int)(Math.random() *10)+1);
-        for(Person p : list)
-        {
-            p.setId((long)(Math.random() * 10));
+        List<Person> list = MockUtil.createRandomPersons((int) (Math.random() * 10) + 1);
+        for (Person p : list) {
+            p.setId((long) (Math.random() * 10));
         }
         return list;
     }
 
     private String getLocationRandom(Location location, double radius) {
-        if(location != null && radius != 0)
-        {
+        if (location != null && radius != 0) {
             Random random = new Random();
 
             // Convert radius from meters to degrees
@@ -114,15 +139,12 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
 
             double foundLongitude = new_x + location.getLongitude();
             double foundLatitude = y + location.getLatitude();
-            return   foundLatitude + ";" +foundLongitude;
-        }
-        else{
+            return foundLatitude + ";" + foundLongitude;
+        } else {
             return "51.509981800747084;7.453107833862305";
         }
 
     }
-
-
 
 
 }

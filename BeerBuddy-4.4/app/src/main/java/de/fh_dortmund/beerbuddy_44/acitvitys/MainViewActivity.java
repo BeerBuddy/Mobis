@@ -3,9 +3,15 @@ package de.fh_dortmund.beerbuddy_44.acitvitys;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +25,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
@@ -79,6 +86,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
     public void showDrinkingView(final DrinkingSpot spot) {
         SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -95,7 +103,6 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
             public void onPanelCollapsed(View panel) {
                 Log.i(TAG, "onPanelCollapsed");
                 hideDrinkingView();
-
             }
 
             @Override
@@ -108,49 +115,11 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
                 Log.i(TAG, "onPanelHidden");
             }
         });
-    /* FIXME uncomment an fix
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_agefrom)).setText(spot.getAgeFrom());
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_ageTo)).setText(spot.getAgeTo());
-       ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_creatorname)).setText(spot.getCreator().getUsername());
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_description)).setText(spot.getDescription());
         final Context context = this;
-        ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_creatorprofil)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //show the profil
-                Intent i = new Intent(context, ViewProfilActivity.class);
-                i.putExtra("id", spot.getCreator().getId());
-                startActivity(i);
-            }
-        });
-
-        LinearLayout layout = (LinearLayout) slidingUpPanelLayout.findViewById(R.id.mainview_groupmembers);
-        for (int i = 0; i < spot.getAmountMaleWithoutBeerBuddy(); i++) {
-            ImageView imageView = new ImageView(this);
-            //setting image resource
-            imageView.setImageResource(R.drawable.ic_human_male);
-            //setting image position
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-            layout.addView(imageView);
-        }
-
-        for (int i = 0; i < spot.getAmountFemaleWithoutBeerBuddy(); i++) {
-            ImageView imageView = new ImageView(this);
-            //setting image resource
-            imageView.setImageResource(R.drawable.ic_human_male);
-            //setting image position
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-            layout.addView(imageView);
-        }
-        int amount = spot.getAmountMaleWithoutBeerBuddy() +
-                spot.getAmountFemaleWithoutBeerBuddy() +
-                spot.getPersons().size();
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
-        */
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(spot.getTotalAmount() + "/ " + spot.getAgeFrom() + " - " + spot.getAgeTo());
+        ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_view)).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId()));
+        ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
+//FIXME        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
     }
 
     private void createMarker(DrinkingSpot ds) {
@@ -187,7 +156,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
                 Bundle b = intent.getExtras();
                 long id = b.getLong("id");
                 if (id != 0) {
-                    DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getActiveByPersonId(id);
+                    DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getById(id);
                     showDrinkingView(drinkingSpot);
                     location = ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps());
                 }

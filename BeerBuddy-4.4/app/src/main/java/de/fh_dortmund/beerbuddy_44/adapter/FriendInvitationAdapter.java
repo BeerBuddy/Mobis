@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import de.fh_dortmund.beerbuddy.FriendInvitation;
 import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
@@ -53,15 +54,7 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation>{
                     ((ImageView)rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
                 }
                 ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
-                rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //show the profil
-                        Intent i = new Intent(context, ViewProfilActivity.class);
-                        i.putExtra("id", friendInvitation.getEinladerId());
-                        context.startActivity(i);
-                    }
-                });
+                rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowProfilListener(context, friendInvitation.getEinladerId()));
                 rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
