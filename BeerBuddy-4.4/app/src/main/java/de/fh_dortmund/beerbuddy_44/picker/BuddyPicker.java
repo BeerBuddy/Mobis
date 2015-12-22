@@ -2,7 +2,6 @@ package de.fh_dortmund.beerbuddy_44.picker;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 
 import java.util.List;
 
@@ -103,11 +102,9 @@ public class BuddyPicker {
     private static boolean invite(List<Person> invitedPersons, Person person){
         for (Person ip : invitedPersons){
             if(person.getId() == ip.getId()) {
-                Log.d("NOOOOOOO", person.getId() + " vs. " + ip.getId());
                 return false;
             }
         }
-        Log.d("YEEEEEEES", person.getId() + "");
         return true;
     }
 }
