@@ -27,7 +27,6 @@
                 android:id="@+id/drinking_view_creatorname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:paddingLeft="10dp"
                 android:text="BeerBuddy User"
                 android:textSize="14sp" />
@@ -45,7 +44,6 @@
             android:id="@+id/drinking_view_isdrinkingtext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="is Drinking in a Group of x:"
             android:textSize="14sp" />
@@ -62,7 +60,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/profil_age"
             android:textSize="14sp" />
@@ -72,7 +69,6 @@
             android:id="@+id/drinking_view_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="24 "
             android:textSize="14sp" />
@@ -80,7 +76,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/drinking_description"
             android:textSize="14sp" />
@@ -89,7 +84,6 @@
             android:id="@+id/drinking_view_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/drinking_description"
             android:textSize="14sp" />
@@ -98,7 +92,6 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/mainview_usersjoined"
             android:textSize="14sp" />

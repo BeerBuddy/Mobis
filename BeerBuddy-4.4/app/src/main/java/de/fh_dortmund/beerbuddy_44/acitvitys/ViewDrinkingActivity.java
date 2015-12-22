@@ -69,7 +69,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity {
     public void setValue(final DrinkingSpot spot) {
 
         ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() +" - " +spot.getAgeTo());
-//  FIXME      ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
+      ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
         ((TextView) findViewById(R.id.drinking_view_description)).setText(spot.getDescription());
         final Context context = this;
 
@@ -102,7 +102,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity {
         ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
 
         ((ListView) findViewById(R.id.drinking_view_usersjoined)).setAdapter(new BuddyListAdapter(context, R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{})));
-//FIXME        ((Button) findViewById(R.id.drinking_view_creatorprofil)).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
+        ((Button) findViewById(R.id.drinking_view_creatorprofil)).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
         ((Button) findViewById(R.id.drinking_view_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
         ((Button) findViewById(R.id.drinking_view_showonmap)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnMapListener(context, spot.getId()));
         ((Button) findViewById(R.id.drinking_view_join)).setOnClickListener(new View.OnClickListener() {
