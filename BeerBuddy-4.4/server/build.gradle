@@ -27,6 +27,7 @@ buildscript {
 // Set our project variables
 project.ext {
     dropwizardVersion = '0.9.1'
+    h2Version = '1.4.190'
 }
 
 repositories {
@@ -36,8 +37,13 @@ repositories {
 dependencies {
     compile project(':common')
     compile (
-       'io.dropwizard:dropwizard-core:' + dropwizardVersion
+        'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-db:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-jdbi:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-migrations:' + dropwizardVersion
     )
+    compile('com.h2database:h2:' + h2Version)
 }
 
 // Configure the oneJar task
