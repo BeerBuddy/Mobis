@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.listener.android.LoginListener;
 import lombok.Getter;
@@ -39,10 +40,10 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     //protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
 
-    public de.fh_dortmund.beerbuddy.Person getPerson() {
+    public Person getPerson() {
         String email = ((EditText) findViewById(R.id.login_email)).getText().toString();
         String password = ((EditText) findViewById(R.id.login_password)).getText().toString();
-        de.fh_dortmund.beerbuddy.Person p = new de.fh_dortmund.beerbuddy.Person();
+        Person p = new Person();
         p.setPassword(password);
         p.setEmail(email);
         return p;

@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.fh_dortmund.beerbuddy.FriendInvitation;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by David on 30.11.2015.

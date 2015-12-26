@@ -2,9 +2,11 @@ package de.fh_dortmund.beerbuddy.resources;
 
 import com.codahale.metrics.annotation.Timed;
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy.persistence.*;
 import io.dropwizard.hibernate.UnitOfWork;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -25,8 +27,8 @@ public class PersonResource {
     @Path("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Person getPerson(@PathParam("id") long id) {
-        return personDAO.findById(id).get();
+    public Person getPerson(@PathParam("id") long id) throws BeerBuddyException {
+        return personDAO.getById(id);
     }
 
     @GET
@@ -35,7 +37,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Person removePerson(@PathParam("id") long id) {
-        return personDAO.remove(id);
+        throw new NotImplementedException();
     }
 
     @GET
@@ -43,8 +45,8 @@ public class PersonResource {
     @Path("/all")
     @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Person> getPersons() {
-        return personDAO.findAll();
+    public List<Person> getPersons() throws BeerBuddyException {
+        return personDAO.getAll();
     }
 
     @POST
@@ -53,7 +55,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
     @UnitOfWork
-    public Person addPerson(Person person) {
-        return personDAO.create(person);
+    public void addPerson(Person person) throws BeerBuddyException {
+        personDAO.insertOrUpdate(person);
     }
 }

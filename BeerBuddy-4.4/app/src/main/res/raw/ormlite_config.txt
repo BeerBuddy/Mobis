@@ -2,7 +2,7 @@
 # generated on 2015/11/30 03:11:59
 #
 # --table-start--
-dataClass=de.fh_dortmund.beerbuddy.Person
+dataClass=de.fh_dortmund.beerbuddy.de.fh_dortmund.beerbuddy.entity.Person
 tableName=person
 # --table-fields-start--
 # --field-start--
@@ -40,7 +40,7 @@ fieldName=prefers
 # --table-end--
 #################################
 # --table-start--
-dataClass=de.fh_dortmund.beerbuddy.FriendList
+dataClass=de.fh_dortmund.beerbuddy.de.fh_dortmund.beerbuddy.entity.FriendList
 tableName=friendlist
 # --table-fields-start--
 # --field-start--

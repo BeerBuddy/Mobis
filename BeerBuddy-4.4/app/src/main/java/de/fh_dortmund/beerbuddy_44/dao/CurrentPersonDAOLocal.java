@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
-import de.fh_dortmund.beerbuddy_44.dao.util.DatabaseHelper;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.IdNotSetException;
 
 /**

@@ -1,9 +1,12 @@
-package de.fh_dortmund.beerbuddy;
+package de.fh_dortmund.beerbuddy.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,31 +16,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by David on 25.11.2015.
- */
+
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FriendInvitation {
-
-
+public class FriendList {
     @Id
     @GeneratedValue
     long id;
 
     @NotBlank
     @DatabaseField(canBeNull = false, index=true)
-    long einladerId;
-
+    long personid;
 
     @NotBlank
-    @DatabaseField(canBeNull = false, index=true)
-    long eingeladenerId;
-
-    @DatabaseField
-    String freitext;
+    @ForeignCollectionField(eager = false)
+    List<Person> friends;
 
 }

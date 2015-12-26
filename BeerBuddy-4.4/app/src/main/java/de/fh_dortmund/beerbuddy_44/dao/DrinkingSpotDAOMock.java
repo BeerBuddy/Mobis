@@ -3,24 +3,16 @@ package de.fh_dortmund.beerbuddy_44.dao;
 import android.content.Context;
 import android.location.Location;
 
-import com.j256.ormlite.dao.Dao;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.FriendList;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
-import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
-import de.fh_dortmund.beerbuddy_44.dao.util.DatabaseHelper;
 import de.fh_dortmund.beerbuddy_44.dao.util.MockUtil;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
 /**

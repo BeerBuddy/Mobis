@@ -6,7 +6,6 @@ import de.fh_dortmund.beerbuddy.resources.PersonResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
-import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -17,7 +16,7 @@ public class ServerApplication extends Application<ServerConfig> {
 		new ServerApplication().run(args);
 	}
 
-	private final HibernateBundle<ServerConfig> hibernateBundle = new HibernateBundle<ServerConfig>(Person.class) {
+	private final HibernateBundle<ServerConfig> hibernateBundle = new HibernateBundle<ServerConfig>(de.fh_dortmund.beerbuddy.entities.Person.class) {
 		@Override
 		public PooledDataSourceFactory getDataSourceFactory(ServerConfig configuration) {
 			return configuration.getDataSourceFactory();

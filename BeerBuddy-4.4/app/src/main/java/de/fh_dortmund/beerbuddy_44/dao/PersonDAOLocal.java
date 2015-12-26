@@ -5,10 +5,10 @@ import android.content.Context;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.DatabaseHelper;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
 

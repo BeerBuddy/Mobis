@@ -5,13 +5,13 @@ import android.content.DialogInterface;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.FriendList;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by David on 02.12.2015.

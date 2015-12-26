@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.MockUtil;
 

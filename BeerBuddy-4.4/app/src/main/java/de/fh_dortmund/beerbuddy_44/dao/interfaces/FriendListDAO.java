@@ -2,21 +2,19 @@ package de.fh_dortmund.beerbuddy_44.dao.interfaces;
 
 import android.content.Context;
 
-import java.util.List;
-
-import de.fh_dortmund.beerbuddy.FriendList;
-import de.fh_dortmund.beerbuddy.Person;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.interfaces.IFriendListDAO;
 
 /**
  * Created by David on 19.11.2015.
  */
-public abstract class FriendListDAO {
+public abstract class FriendListDAO implements IFriendListDAO {
 
     protected Context context;
 
-    public FriendListDAO(Context context){
-        this.context =context;
+    public FriendListDAO(Context context) {
+        this.context = context;
     }
 
     public abstract boolean isFriendFromId(long personid, long firendid) throws BeerBuddyException;

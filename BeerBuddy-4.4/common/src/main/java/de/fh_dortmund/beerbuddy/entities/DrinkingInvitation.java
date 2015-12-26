@@ -1,4 +1,4 @@
-package de.fh_dortmund.beerbuddy;
+package de.fh_dortmund.beerbuddy.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DatabaseField;

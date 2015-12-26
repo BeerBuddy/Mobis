@@ -3,7 +3,7 @@ package de.fh_dortmund.beerbuddy_44.test;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import de.fh_dortmund.beerbuddy.PersonList;
+import de.fh_dortmund.beerbuddy.entities.PersonList;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
 /**

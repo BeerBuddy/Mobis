@@ -1,7 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.requests;
 
-import de.fh_dortmund.beerbuddy.Person;
-import de.fh_dortmund.beerbuddy.PersonList;
+import de.fh_dortmund.beerbuddy.entities.PersonList;
 
 //TODO URL auslagern
 //TODO Versionsnummer in URL

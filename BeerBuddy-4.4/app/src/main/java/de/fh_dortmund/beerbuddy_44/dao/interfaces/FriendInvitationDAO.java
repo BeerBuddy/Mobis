@@ -4,18 +4,19 @@ import android.content.Context;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.FriendInvitation;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.interfaces.IFriendInvitationDAO;
 
 /**
  * Created by David on 30.11.2015.
  */
-public abstract class FriendInvitationDAO {
+public abstract class FriendInvitationDAO implements IFriendInvitationDAO {
 
     protected Context context;
 
-    public FriendInvitationDAO(Context context){
-        this.context =context;
+    public FriendInvitationDAO(Context context) {
+        this.context = context;
     }
 
     public abstract void insertOrUpdate(FriendInvitation i);

@@ -1,7 +1,7 @@
 package de.fh_dortmund.beerbuddy_44.requests;
 
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
 
 public class UpdatePersonRequest {//extends SpringAndroidSpiceRequest<Person> {
 

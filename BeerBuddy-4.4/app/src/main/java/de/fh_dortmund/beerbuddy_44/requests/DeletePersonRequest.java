@@ -1,9 +1,7 @@
 package de.fh_dortmund.beerbuddy_44.requests;
 
 
-import java.util.Collections;
-
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
 
 public class DeletePersonRequest {//extends SpringAndroidSpiceRequest<Void> {
 

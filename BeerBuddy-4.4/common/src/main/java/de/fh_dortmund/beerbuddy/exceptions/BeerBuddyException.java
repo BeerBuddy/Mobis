@@ -1,4 +1,4 @@
-package de.fh_dortmund.beerbuddy_44.exceptions;
+package de.fh_dortmund.beerbuddy.exceptions;
 
 /**
  * Created by David on 19.11.2015.

@@ -6,35 +6,35 @@ import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.interfaces.IPersonDAO;
 import io.dropwizard.hibernate.AbstractDAO;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by Andreas on 17.12.2015.
  */
-public class PersonDAO extends AbstractDAO<Person> {
+public class PersonDAO extends AbstractDAO<Person> implements IPersonDAO {
     public PersonDAO(SessionFactory factory) {
         super(factory);
     }
 
-    public Optional<Person> findById(Long id) {
-        return Optional.fromNullable(get(id));
-    }
 
-    public List<Person> findAll() {
+    public List<Person> getAll() throws BeerBuddyException {
         List<Person> persons = super.currentSession().createQuery("FROM Person").list();
         return persons;
     }
 
-    public Person create(Person person) {
-        return persist(person);
+    public Person getById(long id) throws BeerBuddyException {
+        return Optional.fromNullable(get(id)).get();
     }
 
-    public Person remove(Long id) {
-        Person person = findById(id).get();
-        if (person != null) {
-            currentSession().delete(person);
-        }
-        return person;
+    public Person getByEmail(String mail) throws BeerBuddyException {
+        throw new NotImplementedException();
+    }
+
+    public void insertOrUpdate(Person p) throws BeerBuddyException {
+        persist(p);
     }
 }

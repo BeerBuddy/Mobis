@@ -19,7 +19,7 @@ import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.LoginActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by David on 19.11.2015.
@@ -53,8 +53,8 @@ public class LoginListener implements
 
     private void loginRegisterClicked() {
         try {
-            de.fh_dortmund.beerbuddy.Person p = activity.getPerson();
-            de.fh_dortmund.beerbuddy.Person pFromDb = DAOFactory.getPersonDAO(activity).getByEmail(p.getEmail());
+            de.fh_dortmund.beerbuddy.entities.Person p = activity.getPerson();
+            de.fh_dortmund.beerbuddy.entities.Person pFromDb = DAOFactory.getPersonDAO(activity).getByEmail(p.getEmail());
             if(pFromDb == null){
                 //insert Person first Login
                 DAOFactory.getPersonDAO(activity).insertOrUpdate(p);
@@ -112,7 +112,7 @@ public class LoginListener implements
         Person currentPerson = Plus.PeopleApi.getCurrentPerson(activity.getMGoogleApiClient());
         if (currentPerson != null) {
             try {
-                de.fh_dortmund.beerbuddy.Person person = ObjectMapperUtil.toPerson(currentPerson);
+                de.fh_dortmund.beerbuddy.entities.Person person = ObjectMapperUtil.toPerson(currentPerson);
                 DAOFactory.getPersonDAO(activity).insertOrUpdate(person);
                 DAOFactory.getCurrentPersonDAO(activity).insertCurrentPersonId(person.getId());
                 //end this activity
