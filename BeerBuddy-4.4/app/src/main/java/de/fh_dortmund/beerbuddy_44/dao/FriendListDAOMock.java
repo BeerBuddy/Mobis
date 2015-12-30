@@ -23,7 +23,7 @@ class FriendListDAOMock extends FriendListDAO {
 
 
     @Override
-    public boolean isFriendFromId(long personid, long firendid) throws BeerBuddyException {
+    public boolean isFriendFromId(long personid, long friendid) throws BeerBuddyException {
         FriendList persons = friendlist.get(personid);
         if(persons == null)
         {

@@ -6,12 +6,12 @@ import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
-import de.fh_dortmund.beerbuddy.interfaces.IFriendInvitationDAO;
+import de.fh_dortmund.beerbuddy.interfaces.IInvitationDAO;
 
 /**
  * Created by David on 30.11.2015.
  */
-public abstract class FriendInvitationDAO implements IFriendInvitationDAO {
+public abstract class FriendInvitationDAO implements IInvitationDAO<FriendInvitation> {
 
     protected Context context;
 

@@ -8,10 +8,13 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Created by David on 25.11.2015.
@@ -27,14 +30,14 @@ public class DrinkingInvitation {
     @GeneratedValue
     long id;
 
-    @NotBlank
-    @DatabaseField(canBeNull = false, index=true)
-    long einladerId;
+    @NotNull
+    @DatabaseField(canBeNull = false, index = true)
+    Long einladerId;
 
 
-    @NotBlank
-    @DatabaseField(canBeNull = false, index=true)
-    long eingeladenerId;
+    @NotNull
+    @DatabaseField(canBeNull = false, index = true)
+    Long eingeladenerId;
 
     @DatabaseField
     String freitext;

@@ -1,7 +1,13 @@
 package de.fh_dortmund.beerbuddy;
 
+import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.health.PersonHealthCheck;
+import de.fh_dortmund.beerbuddy.persistence.DrinkingInvitationDAO;
+import de.fh_dortmund.beerbuddy.persistence.FriendInvitationDAO;
 import de.fh_dortmund.beerbuddy.persistence.PersonDAO;
+import de.fh_dortmund.beerbuddy.resources.DrinkingInvitationResource;
+import de.fh_dortmund.beerbuddy.resources.FriendInvitationResource;
 import de.fh_dortmund.beerbuddy.resources.PersonResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -11,40 +17,46 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class ServerApplication extends Application<ServerConfig> {
-	
-	public static void main(String[] args) throws Exception {
-		new ServerApplication().run(args);
-	}
 
-	private final HibernateBundle<ServerConfig> hibernateBundle = new HibernateBundle<ServerConfig>(de.fh_dortmund.beerbuddy.entities.Person.class) {
-		@Override
-		public PooledDataSourceFactory getDataSourceFactory(ServerConfig configuration) {
-			return configuration.getDataSourceFactory();
-		}
-	};
+    public static void main(String[] args) throws Exception {
+        new ServerApplication().run(args);
+    }
 
-	@Override
-	public void initialize(Bootstrap<ServerConfig> bootstrap) {
-		bootstrap.addBundle(new MigrationsBundle<ServerConfig>() {
-			@Override
-			public PooledDataSourceFactory getDataSourceFactory(ServerConfig configuration) {
-				return configuration.getDataSourceFactory();
-			}
-		});
-		bootstrap.addBundle(hibernateBundle);
-	}
+    private final HibernateBundle<ServerConfig> hibernateBundle = new HibernateBundle<ServerConfig>(de.fh_dortmund.beerbuddy.entities.Person.class, DrinkingInvitation.class, FriendInvitation.class) {
+        @Override
+        public PooledDataSourceFactory getDataSourceFactory(ServerConfig configuration) {
+            return configuration.getDataSourceFactory();
+        }
+    };
 
-	@Override
-	public String getName() {
-		return "#BeerBuddy Server";
-	}
+    @Override
+    public void initialize(Bootstrap<ServerConfig> bootstrap) {
+        bootstrap.addBundle(new MigrationsBundle<ServerConfig>() {
+            @Override
+            public PooledDataSourceFactory getDataSourceFactory(ServerConfig configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
+        bootstrap.addBundle(hibernateBundle);
+    }
 
-	@Override
-	public void run(ServerConfig config, Environment env) throws Exception {
-		final PersonDAO personDAO = new PersonDAO(hibernateBundle.getSessionFactory());
-		env.jersey().register(new PersonResource(personDAO));
+    @Override
+    public String getName() {
+        return "#BeerBuddy Server";
+    }
 
-		final PersonHealthCheck personHealthCheck = new PersonHealthCheck(config.getVersion());
-		env.healthChecks().register("personHealthCheck", personHealthCheck);
-	}
+    @Override
+    public void run(ServerConfig config, Environment env) throws Exception {
+        final PersonDAO personDAO = new PersonDAO(hibernateBundle.getSessionFactory());
+        env.jersey().register(new PersonResource(personDAO));
+
+        final FriendInvitationDAO friendInvitationDAO = new FriendInvitationDAO(hibernateBundle.getSessionFactory());
+        env.jersey().register(new FriendInvitationResource(friendInvitationDAO));
+
+        final DrinkingInvitationDAO drinkingInvitationDAO = new DrinkingInvitationDAO(hibernateBundle.getSessionFactory());
+        env.jersey().register(new DrinkingInvitationResource(drinkingInvitationDAO));
+
+        final PersonHealthCheck personHealthCheck = new PersonHealthCheck(config.getVersion());
+        env.healthChecks().register("personHealthCheck", personHealthCheck);
+    }
 }

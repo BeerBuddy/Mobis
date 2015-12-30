@@ -22,8 +22,7 @@ public class PersonDAO extends AbstractDAO<Person> implements IPersonDAO {
 
 
     public List<Person> getAll() throws BeerBuddyException {
-        List<Person> persons = super.currentSession().createQuery("FROM Person").list();
-        return persons;
+        return super.currentSession().createQuery("FROM Person").list();
     }
 
     public Person getById(long id) throws BeerBuddyException {

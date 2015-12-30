@@ -26,9 +26,9 @@ class FriendListDAOLocal extends FriendListDAO {
     }
 
     @Override
-    public boolean isFriendFromId(long personid, long firendid) throws DataAccessException {
+    public boolean isFriendFromId(long personid, long friendid) throws DataAccessException {
         Person p = new Person();
-        p.setId(firendid);
+        p.setId(friendid);
         return getFriendListId(personid).getFriends().contains(p);
     }
 

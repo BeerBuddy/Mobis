@@ -3,7 +3,7 @@ package de.fh_dortmund.beerbuddy.exceptions;
 /**
  * Created by David on 19.11.2015.
  */
-public abstract class BeerBuddyException extends Exception{
+public class BeerBuddyException extends Exception{
 
     public BeerBuddyException(String msg)
     {

@@ -11,4 +11,5 @@
                 "email":"test@test.de"
             }
          * Anfragen kann man gut mit dem Tool Postman durchführen https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop
+            * Projekt mit vorgefertigten Requests https://www.getpostman.com/collections/d1df5f3c789353537430
       

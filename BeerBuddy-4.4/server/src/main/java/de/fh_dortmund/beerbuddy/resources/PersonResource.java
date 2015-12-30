@@ -31,6 +31,7 @@ public class PersonResource {
         return personDAO.getById(id);
     }
 
+    /*
     @GET
     @Timed
     @Path("/remove/{id}")
@@ -39,6 +40,7 @@ public class PersonResource {
     public Person removePerson(@PathParam("id") long id) {
         throw new NotImplementedException();
     }
+    */
 
     @GET
     @Timed

@@ -17,7 +17,7 @@ public abstract class FriendListDAO implements IFriendListDAO {
         this.context = context;
     }
 
-    public abstract boolean isFriendFromId(long personid, long firendid) throws BeerBuddyException;
+    public abstract boolean isFriendFromId(long personid, long friendid) throws BeerBuddyException;
 
     public abstract FriendList getFriendListId(long personid) throws BeerBuddyException;
 
