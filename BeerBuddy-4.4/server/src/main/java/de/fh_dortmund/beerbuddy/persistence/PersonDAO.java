@@ -16,6 +16,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * Created by Andreas on 17.12.2015.
  */
 public class PersonDAO extends AbstractDAO<Person> implements IPersonDAO {
+
     public PersonDAO(SessionFactory factory) {
         super(factory);
     }

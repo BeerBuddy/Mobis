@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -33,12 +34,13 @@ public class DrinkingSpot {
     @GeneratedValue
     long id;
 
-    @NotBlank
     @ForeignCollectionField(eager = false)
+    @OneToOne(fetch = FetchType.EAGER)
     Person creator;
 
-    @NotBlank
+
     @ForeignCollectionField(eager = false)
+    @ManyToMany(fetch = FetchType.EAGER)
     List<Person> persons;
 
     @DatabaseField
@@ -56,8 +58,6 @@ public class DrinkingSpot {
 
     @DatabaseField
     String gps;
-
-    String description;
 
     @DatabaseField
     int amountMaleWithoutBeerBuddy;

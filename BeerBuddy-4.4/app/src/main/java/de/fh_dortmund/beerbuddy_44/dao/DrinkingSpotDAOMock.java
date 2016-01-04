@@ -10,9 +10,9 @@ import java.util.Random;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.MockUtil;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
 /**
@@ -20,6 +20,7 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
  */
 class DrinkingSpotDAOMock extends DrinkingSpotDAO {
 
+    List<DrinkingSpot> spots = new ArrayList<DrinkingSpot>();
     private String[] descriptions = new String[]{
             "Im drinking here with my friends come and join",
             "Only alcoholics drink alone. My friends say im one, proof them wrong",
@@ -30,8 +31,6 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
             "I feel sorry for people who don't drink. When they wake up in the morning, that's as good as they're going to feel all day."
     };
 
-    List<DrinkingSpot> spots = new ArrayList<DrinkingSpot>();
-
     public DrinkingSpotDAOMock(Context context) {
         super(context);
 
@@ -40,13 +39,20 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
 
     @Override
     public List<DrinkingSpot> getAll(Location l) throws BeerBuddyException {
+        // TODO: Andi:"Diese Methode wird doch nur zum random generieren der DrinkingSpots genutzt.
+        // Bei der REST Schnittstelle wird man keine Location übergeben können.
+        // Dies löst die Dependencie Probleme"
         if (spots.isEmpty()) {
             for (int i = 0; i < 20; i++) {
                 spots.add(createRandomDrinkingSpot(l));
             }
         }
         return spots;
+    }
 
+    @Override
+    public List<DrinkingSpot> getAll() throws BeerBuddyException {
+        return spots;
     }
 
     private DrinkingSpot createRandomDrinkingSpot(Location l) {
@@ -64,14 +70,14 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
     }
 
     @Override
-    public DrinkingSpot getActiveByPersonId(long currentPersonId) throws BeerBuddyException {
+    public DrinkingSpot getActiveByPersonId(long personId) throws BeerBuddyException {
         for (DrinkingSpot ds : spots) {
-            if (ds.getCreator().getId() == currentPersonId)
+            if (ds.getCreator().getId() == personId)
                 return ds;
         }
 
         DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
-        ds.getCreator().setId(currentPersonId);
+        ds.getCreator().setId(personId);
         spots.add(ds);
         return ds;
     }
@@ -87,17 +93,17 @@ class DrinkingSpotDAOMock extends DrinkingSpotDAO {
             if (ds.getId() == dsid)
                 return ds;
         }
-    DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
-    ds.setId(dsid);
-    spots.add(ds);
-    return ds;
+        DrinkingSpot ds = createRandomDrinkingSpot(DAOFactory.getLocationDAO(context).getCurrentLocation());
+        ds.setId(dsid);
+        spots.add(ds);
+        return ds;
     }
 
     @Override
-    public void join(long dsid, long currentPersonId) throws BeerBuddyException {
+    public void join(long dsid, long personId) throws BeerBuddyException {
         for (DrinkingSpot ds : spots) {
             if (ds.getId() == dsid) {
-                ds.getPersons().add(DAOFactory.getPersonDAO(context).getById(currentPersonId));
+                ds.getPersons().add(DAOFactory.getPersonDAO(context).getById(personId));
                 return;
             }
         }

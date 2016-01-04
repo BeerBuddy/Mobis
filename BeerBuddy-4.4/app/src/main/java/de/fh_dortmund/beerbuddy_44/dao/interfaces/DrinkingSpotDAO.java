@@ -7,11 +7,12 @@ import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.interfaces.IDrinkingSpotDAO;
 
 /**
  * Created by David on 26.11.2015.
  */
-public abstract class DrinkingSpotDAO {
+public abstract class DrinkingSpotDAO implements IDrinkingSpotDAO {
 
     protected Context context;
 
@@ -21,11 +22,13 @@ public abstract class DrinkingSpotDAO {
 
     public abstract List<DrinkingSpot> getAll(Location l) throws BeerBuddyException;
 
-    public abstract DrinkingSpot getActiveByPersonId(long currentPersonId) throws BeerBuddyException;
+    public abstract List<DrinkingSpot> getAll() throws BeerBuddyException;
+
+    public abstract DrinkingSpot getActiveByPersonId(long personId) throws BeerBuddyException;
 
     public abstract void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException;
 
     public abstract DrinkingSpot getById(long dsid) throws BeerBuddyException;
 
-    public abstract void join(long dsid, long currentPersonId) throws BeerBuddyException;
+    public abstract void join(long dsid, long personId) throws BeerBuddyException;
 }
