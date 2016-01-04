@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,12 +27,11 @@ public class FriendList {
     @GeneratedValue
     long id;
 
-    @NotBlank
-    @DatabaseField(canBeNull = false, index=true)
+    @DatabaseField(canBeNull = false, index = true)
     long personid;
 
-    @NotBlank
-    @ForeignCollectionField(eager = false)
+    @ForeignCollectionField(eager = true)
+    @OneToMany(fetch = FetchType.EAGER)
     List<Person> friends;
 
 }

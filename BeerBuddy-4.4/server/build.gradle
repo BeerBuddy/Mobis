@@ -28,6 +28,7 @@ buildscript {
 project.ext {
     dropwizardVersion = '0.9.1'
     h2Version = '1.4.190'
+    jpaVersion = 'hibernate-jpa-2.1-api:1.0.0.Final'
 }
 
 repositories {
@@ -36,6 +37,7 @@ repositories {
 
 dependencies {
     compile project(':common')
+    compile('org.hibernate.javax.persistence:' + jpaVersion)
     compile (
         'io.dropwizard:dropwizard-core:' + dropwizardVersion,
         'io.dropwizard:dropwizard-db:' + dropwizardVersion,

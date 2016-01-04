@@ -2,12 +2,15 @@ package de.fh_dortmund.beerbuddy;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
+import de.fh_dortmund.beerbuddy.entities.FriendList;
 import de.fh_dortmund.beerbuddy.health.PersonHealthCheck;
 import de.fh_dortmund.beerbuddy.persistence.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy.persistence.FriendInvitationDAO;
+import de.fh_dortmund.beerbuddy.persistence.FriendListDAO;
 import de.fh_dortmund.beerbuddy.persistence.PersonDAO;
 import de.fh_dortmund.beerbuddy.resources.DrinkingInvitationResource;
 import de.fh_dortmund.beerbuddy.resources.FriendInvitationResource;
+import de.fh_dortmund.beerbuddy.resources.FriendListResource;
 import de.fh_dortmund.beerbuddy.resources.PersonResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -18,16 +21,16 @@ import io.dropwizard.setup.Environment;
 
 public class ServerApplication extends Application<ServerConfig> {
 
-    public static void main(String[] args) throws Exception {
-        new ServerApplication().run(args);
-    }
-
-    private final HibernateBundle<ServerConfig> hibernateBundle = new HibernateBundle<ServerConfig>(de.fh_dortmund.beerbuddy.entities.Person.class, DrinkingInvitation.class, FriendInvitation.class) {
+    private final HibernateBundle<ServerConfig> hibernateBundle = new HibernateBundle<ServerConfig>(de.fh_dortmund.beerbuddy.entities.Person.class, DrinkingInvitation.class, FriendInvitation.class, FriendList.class) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ServerConfig configuration) {
             return configuration.getDataSourceFactory();
         }
     };
+
+    public static void main(String[] args) throws Exception {
+        new ServerApplication().run(args);
+    }
 
     @Override
     public void initialize(Bootstrap<ServerConfig> bootstrap) {
@@ -55,6 +58,9 @@ public class ServerApplication extends Application<ServerConfig> {
 
         final DrinkingInvitationDAO drinkingInvitationDAO = new DrinkingInvitationDAO(hibernateBundle.getSessionFactory());
         env.jersey().register(new DrinkingInvitationResource(drinkingInvitationDAO));
+
+        final FriendListDAO friendListDAO = new FriendListDAO(hibernateBundle.getSessionFactory());
+        env.jersey().register(new FriendListResource(friendListDAO));
 
         final PersonHealthCheck personHealthCheck = new PersonHealthCheck(config.getVersion());
         env.healthChecks().register("personHealthCheck", personHealthCheck);

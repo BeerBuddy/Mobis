@@ -9,5 +9,7 @@ import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 public interface IFriendListDAO {
     boolean isFriendFromId(long personid, long friendid) throws BeerBuddyException;
 
-    FriendList getFriendListId(long personid) throws BeerBuddyException;
+    FriendList getFriendList(long personid) throws BeerBuddyException;
+
+    void insertOrUpdate(FriendList friendList) throws BeerBuddyException;
 }

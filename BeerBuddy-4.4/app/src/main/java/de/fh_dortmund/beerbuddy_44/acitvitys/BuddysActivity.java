@@ -13,11 +13,11 @@ import java.util.List;
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.entities.FriendList;
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.adapter.FriendInvitationAdapter;
 import de.fh_dortmund.beerbuddy_44.adapter.FriendListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 public class BuddysActivity extends BeerBuddyActivity {
 
@@ -47,7 +47,7 @@ public class BuddysActivity extends BeerBuddyActivity {
     {
 
         try {
-        friendList = DAOFactory.getFriendlistDAO(this).getFriendListId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+            friendList = DAOFactory.getFriendlistDAO(this).getFriendList(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
         ListView listViewBuddys = (ListView) this.findViewById(R.id.buddys_buddys);
         FriendListAdapter adapter = new FriendListAdapter(this,
                 R.layout.buddy_list_row_layout, friendList.getFriends().toArray(new Person[]{}));

@@ -1,7 +1,5 @@
 package de.fh_dortmund.beerbuddy_44.dao.util;
 
-import java.sql.SQLException;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -11,6 +9,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+
+import java.sql.SQLException;
 
 import de.fh_dortmund.beerbuddy.entities.FriendList;
 import de.fh_dortmund.beerbuddy.entities.Person;
@@ -29,7 +29,7 @@ public final class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	// the DAO object we use to access the SimpleData table
 	private Dao<Person, Long> simpleDao = null;
-	private Dao<FriendList, Long> freindListDao = null;
+	private Dao<FriendList, Long> friendListDao = null;
 	private RuntimeExceptionDao<Person, Long> simpleRuntimeDao = null;
 
 	public DatabaseHelper(Context context) {
@@ -82,11 +82,11 @@ public final class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		return simpleDao;
 	}
 
-	public Dao<FriendList, Long> getFreindListDao() throws SQLException {
-		if (freindListDao == null) {
-			freindListDao = getDao(FriendList.class);
+	public Dao<FriendList, Long> getFriendListDao() throws SQLException {
+		if (friendListDao == null) {
+			friendListDao = getDao(FriendList.class);
 		}
-		return freindListDao;
+		return friendListDao;
 	}
 
 	/**
