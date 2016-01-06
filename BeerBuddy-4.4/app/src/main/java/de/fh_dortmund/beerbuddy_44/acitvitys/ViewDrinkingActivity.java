@@ -16,6 +16,14 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
+
+import java.util.List;
+
 import de.fh_dortmund.beerbuddy.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.Person;
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
@@ -34,17 +42,36 @@ import lombok.Getter;
  * <p/>
  * Revised and Updated by Marco on 10.12.2015.
  */
-public class ViewDrinkingActivity extends BeerBuddyActivity {
+public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapReadyCallback{
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        googleMap.setMyLocationEnabled(true);
+            //get current GPS position
+            if (drinkingSpot != null) {
+                //move the map to current location
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 20));
+                createMarker(drinkingSpot,googleMap);
+            }
+
+    }
+
     public ViewDrinkingActivity() {
         super(R.layout.view_drinking_activity_main, true);
     }
 
+    private GoogleMap mMap;
     private static final String TAG = "ViewDrinkingAct";
     @Getter
     private DrinkingSpot drinkingSpot;
 
     @Override
     public void onFurtherCreate(Bundle savedInstanceState) {
+
+        //Get the Map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         Bundle b = getIntent().getExtras();
         long id = b.getLong("id");
         try {

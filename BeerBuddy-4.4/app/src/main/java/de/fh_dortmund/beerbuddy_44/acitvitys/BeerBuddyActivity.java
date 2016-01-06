@@ -15,6 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 
@@ -119,6 +126,12 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
 
         MultiDex.install(this);
     }
+
+    protected void createMarker(DrinkingSpot ds, GoogleMap mMap) {
+        LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
+        mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(ds.getPersons().get(0).getUsername() + " is drinking with " + ds.getPersons().size() + " others."));
+    }
+
 
 
 }

@@ -36,27 +36,25 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         super(R.layout.mainview_activity_main, false);
     }
 
-    private GoogleMap mMap;
     private static final String TAG = "MainViewActivity";
     private LatLng location;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         try {
             //get current GPS position
             if (location != null) {
                 //move the map to current location
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20));
                 List<DrinkingSpot> spots = DAOFactory.getDrinkingSpotDAO(this).getAll(ObjectMapperUtil.getLocationFromLatLang(location));
                 Log.i(TAG, "Spots:  " + spots.size());
                 for (DrinkingSpot ds : spots) {
-                    createMarker(ds);
+                    createMarker(ds,googleMap);
                 }
 
                 final Context context = this;
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         try {
@@ -122,10 +120,6 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
 //FIXME        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
     }
 
-    private void createMarker(DrinkingSpot ds) {
-        LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
-        mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(ds.getPersons().get(0).getUsername() + " is drinking with " + ds.getPersons().size() + " others."));
-    }
 
 
     @Override
