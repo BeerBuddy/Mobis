@@ -7,8 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -29,9 +32,11 @@ public class DrinkingSpot implements Serializable {
     @Id
     @GeneratedValue
     long id;
+
+    @OneToOne(fetch = FetchType.EAGER)
     Person creator;
 
-
+    @ManyToMany(fetch = FetchType.EAGER)
     List<Person> persons;
 
     String beschreibung;
@@ -49,11 +54,11 @@ public class DrinkingSpot implements Serializable {
 
     int amountFemaleWithoutBeerBuddy;
 
-    boolean active;
+    boolean active = true;
+
+    long version;
 
     public int getTotalAmount() {
         return persons.size() + amountFemaleWithoutBeerBuddy + amountMaleWithoutBeerBuddy;
     }
-
-
 }

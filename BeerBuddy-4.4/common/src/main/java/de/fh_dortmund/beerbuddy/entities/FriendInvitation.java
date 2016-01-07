@@ -35,4 +35,6 @@ public class FriendInvitation implements Serializable{
     Long eingeladenerId;
 
     String freitext;
+
+    long version;
 }

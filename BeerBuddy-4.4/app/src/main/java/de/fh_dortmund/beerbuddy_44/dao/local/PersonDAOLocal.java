@@ -112,17 +112,17 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
     @Override
-    public void insertOrUpdate(Person p) throws DataAccessException {
+    public Person insertOrUpdate(Person p) throws DataAccessException {
         if(getById(p.getId())!= null)
         {
-            update(p);
+           return update(p);
         }else
         {
-            insert(p);
+           return insert(p);
         }
     }
 
-    private void insert(Person p) throws DataAccessException {
+    private Person insert(Person p) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -138,7 +138,9 @@ public class PersonDAOLocal extends PersonDAO {
             }
             stmt.bindString(7, p.getInterests());
             stmt.bindString(8, p.getPrefers());
-            stmt.executeInsert();
+            long l = stmt.executeInsert();
+            p.setId(l);
+            return p;
         } catch (Exception e) {
             throw new DataAccessException("Failed to accept DrinkingInvitation", e);
         } finally {
@@ -147,7 +149,7 @@ public class PersonDAOLocal extends PersonDAO {
         }
     }
 
-    private void update(Person p) throws DataAccessException {
+    private Person update(Person p) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -165,12 +167,14 @@ public class PersonDAOLocal extends PersonDAO {
             stmt.bindString(8, p.getPrefers());
             stmt.bindLong(9,p.getId());
             stmt.executeInsert();
+            return p;
         } catch (Exception e) {
             throw new DataAccessException("Failed to accept DrinkingInvitation", e);
         } finally {
             database.endTransaction();
             database.close();
         }
+
     }
 
 

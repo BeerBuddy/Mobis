@@ -47,10 +47,27 @@ public class DrinkingInvitationResource {
     @POST
     @Timed
     @Path("/save")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
     @UnitOfWork
     public void addDrinkingInvitation(DrinkingInvitation drinkingInvitation) throws BeerBuddyException {
         invitationDAO.insertOrUpdate(drinkingInvitation);
+    }
+
+    @POST
+    @Timed
+    @Path("/accept")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @UnitOfWork
+    public void accept(DrinkingInvitation drinkingInvitation) throws BeerBuddyException {
+        invitationDAO.accept(drinkingInvitation);
+    }
+
+    @POST
+    @Timed
+    @Path("/decline")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @UnitOfWork
+    public void decline(DrinkingInvitation drinkingInvitation) throws BeerBuddyException {
+        invitationDAO.decline(drinkingInvitation);
     }
 }

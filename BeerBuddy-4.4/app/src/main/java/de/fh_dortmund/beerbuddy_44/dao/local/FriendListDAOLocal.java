@@ -97,18 +97,18 @@ public class FriendListDAOLocal extends FriendListDAO {
     }
 
     @Override
-    public void insertOrUpdate(FriendList friendList) throws DataAccessException {
+    public FriendList insertOrUpdate(FriendList friendList) throws DataAccessException {
         if(getFriendListById(friendList.getId())!= null)
         {
-            update(friendList);
+            return update(friendList);
         }
         else
         {
-            insert(friendList);
+            return insert(friendList);
         }
     }
 
-    public void insert(FriendList i) throws DataAccessException {
+    public FriendList insert(FriendList i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -116,6 +116,8 @@ public class FriendListDAOLocal extends FriendListDAO {
             stmt.bindLong(1, i.getPersonid());
             long l = stmt.executeInsert();
             friendListPersonDAOLocal.saveAll(l, i.getFriends());
+            i.setId(l);
+            return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -124,7 +126,7 @@ public class FriendListDAOLocal extends FriendListDAO {
         }
     }
 
-    public void update(FriendList i) throws DataAccessException {
+    public FriendList update(FriendList i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -134,6 +136,7 @@ public class FriendListDAOLocal extends FriendListDAO {
             stmt.executeInsert();
             friendListPersonDAOLocal.deleteAll(i.getId());
             friendListPersonDAOLocal.saveAll(i.getId(), i.getFriends());
+            return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {

@@ -21,7 +21,6 @@ public class PersonDAO extends AbstractDAO<Person> implements IPersonDAO {
         super(factory);
     }
 
-
     public List<Person> getAll() throws BeerBuddyException {
         return super.currentSession().createQuery("FROM Person").list();
     }
@@ -31,10 +30,16 @@ public class PersonDAO extends AbstractDAO<Person> implements IPersonDAO {
     }
 
     public Person getByEmail(String mail) throws BeerBuddyException {
-        throw new NotImplementedException();
+        List persons = super.currentSession().createQuery("FROM Person p WHERE p.email LIKE '" + mail + "'").list();
+        if(persons.isEmpty()){
+            return null;
+        }
+        return (Person)persons.get(0);
     }
 
-    public void insertOrUpdate(Person p) throws BeerBuddyException {
-        persist(p);
+    public Person insertOrUpdate(Person p) throws BeerBuddyException {
+        long version = p.getVersion();
+        p.setVersion(++version);
+        return persist(p);
     }
 }

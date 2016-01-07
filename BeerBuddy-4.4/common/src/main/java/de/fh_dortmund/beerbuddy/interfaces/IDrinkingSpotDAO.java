@@ -14,9 +14,11 @@ public interface IDrinkingSpotDAO {
 
     DrinkingSpot getActiveByPersonId(long personId) throws BeerBuddyException;
 
-    void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException;
+    DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException;
 
     DrinkingSpot getById(long dsid) throws BeerBuddyException;
 
     void join(long dsid, long personId) throws BeerBuddyException;
+
+    void deactivate(long dsid) throws BeerBuddyException;
 }

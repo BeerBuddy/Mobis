@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -27,15 +28,15 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
     }
 
     @Override
-    public void insertOrUpdate(DrinkingInvitation i) throws DataAccessException {
+    public DrinkingInvitation insertOrUpdate(DrinkingInvitation i) throws DataAccessException {
         if (getById(i.getId()) != null) {
-            update(i);
+            return update(i);
         } else {
-            insert(i);
+            return insert(i);
         }
     }
 
-    public void insert(DrinkingInvitation i) throws DataAccessException {
+    public DrinkingInvitation insert(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             SQLiteStatement stmt = database.compileStatement("INSERT INTO drinkinginvitation (einladerId,drinkingSpotId,eingeladenerId,freitext) VALUES (?,?,?,?)");
@@ -43,7 +44,8 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             stmt.bindLong(2, i.getDrinkingSpotId());
             stmt.bindLong(3, i.getEingeladenerId());
             stmt.bindString(4, i.getFreitext());
-            stmt.executeInsert();
+            i.setId(stmt.executeInsert());
+            return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -51,7 +53,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         }
     }
 
-    public void update(DrinkingInvitation i) throws DataAccessException {
+    public DrinkingInvitation update(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             SQLiteStatement stmt = database.compileStatement("UPDATE  drinkinginvitation SET einladerId = ? , drinkingSpotId = ?, eingeladenerId=?,freitext=?) WHERE id = ?  ");
@@ -61,6 +63,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             stmt.bindLong(3, i.getId());
             stmt.bindString(4, i.getFreitext());
             stmt.executeInsert();
+            return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -168,6 +171,23 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             database.close();
         }
 
+    }
+
+    @Override
+    public void decline(DrinkingInvitation invitation) throws BeerBuddyException {
+        SQLiteDatabase database = dbHelper.getDatabase();
+        database.beginTransaction();
+        try {
+            //löschen der Einladung
+            SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkinginvitation WHERE id = ? ");
+            stmt.bindLong(1, invitation.getId());
+            stmt.executeInsert();
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to accept DrinkingInvitation", e);
+        } finally {
+            database.endTransaction();
+            database.close();
+        }
     }
 
 

@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -28,22 +29,24 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     }
 
     @Override
-    public void insertOrUpdate(FriendInvitation i) throws DataAccessException {
+    public FriendInvitation insertOrUpdate(FriendInvitation i) throws DataAccessException {
         if (getById(i.getId()) != null) {
-            update(i);
+           return update(i);
         } else {
-            insert(i);
+            return insert(i);
         }
     }
 
-    public void insert(FriendInvitation i) throws DataAccessException {
+    public FriendInvitation insert(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             SQLiteStatement stmt = database.compileStatement("INSERT INTO friendinvitation (einladerId,eingeladenerId,freitext) VALUES (?,?,?)");
             stmt.bindLong(1, i.getEinladerId());
             stmt.bindLong(2, i.getEingeladenerId());
             stmt.bindString(3, i.getFreitext());
-            stmt.executeInsert();
+            long l = stmt.executeInsert();
+            i.setId(l);
+            return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -51,7 +54,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         }
     }
 
-    public void update(FriendInvitation i) throws DataAccessException {
+    public FriendInvitation update(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             SQLiteStatement stmt = database.compileStatement("UPDATE  friendinvitation SET einladerId = ? ,  eingeladenerId=?,freitext=?) WHERE id = ?  ");
@@ -60,6 +63,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             stmt.bindString(3, i.getFreitext());
             stmt.bindLong(2, i.getId());
             stmt.executeInsert();
+            return  i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -183,6 +187,11 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             throw new DataAccessException("Failed to accept FriendInvitation",e);
         }
 
+    }
+
+    @Override
+    public void decline(FriendInvitation invitation) throws BeerBuddyException {
+        //FIXME
     }
 
 

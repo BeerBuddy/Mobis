@@ -38,8 +38,10 @@ public class DrinkingSpotDAO extends AbstractDAO<DrinkingSpot> implements IDrink
         throw new BeerBuddyException("No DrinkingSpot found for personId: " + personId);
     }
 
-    public void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
-        persist(drinkingSpot);
+    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
+        long version = drinkingSpot.getVersion();
+        drinkingSpot.setVersion(++version);
+        return persist(drinkingSpot);
     }
 
     public DrinkingSpot getById(long dsid) throws BeerBuddyException {
@@ -48,9 +50,16 @@ public class DrinkingSpotDAO extends AbstractDAO<DrinkingSpot> implements IDrink
 
     public void join(long dsid, long personId) throws BeerBuddyException {
         DrinkingSpot drinkingSpot = getById(dsid);
-        Collection<Person> persons = drinkingSpot.getPersons();
+        List<Person> persons = drinkingSpot.getPersons();
         persons.add(personDAO.getById(personId));
         drinkingSpot.setPersons(persons);
-        persist(drinkingSpot);
+        insertOrUpdate(drinkingSpot);
+    }
+
+    @Override
+    public void deactivate(long dsid) throws BeerBuddyException {
+        DrinkingSpot drinkingSpot = get(dsid);
+        drinkingSpot.setActive(false);
+        insertOrUpdate(drinkingSpot);
     }
 }

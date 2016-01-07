@@ -6,8 +6,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +28,8 @@ public class FriendList implements Serializable {
 
     long personid;
 
+    @ManyToMany(fetch = FetchType.EAGER)
     List<Person> friends;
 
+    long version;
 }

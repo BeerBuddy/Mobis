@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 import de.fh_dortmund.beerbuddy_44.requests.GetActiveForDrinkingSpotRequest;
@@ -47,10 +48,10 @@ public class DrinkingSpotDAORemote extends DrinkingSpotDAO {
     }
 
     @Override
-    public void insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
+    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
         try {
             SaveDrinkingSpotRequest req = new SaveDrinkingSpotRequest(drinkingSpot);
-            req.loadDataFromNetwork();
+           return req.loadDataFromNetwork();
         } catch (Exception e) {
             throw new DataAccessException("Failed to insertOrUpdate DrinkingSpot", e);
         }
@@ -74,6 +75,11 @@ public class DrinkingSpotDAORemote extends DrinkingSpotDAO {
         } catch (Exception e) {
             throw new DataAccessException("Failed to join DrinkingSpot", e);
         }
+    }
+
+    @Override
+    public void deactivate(long dsid) throws BeerBuddyException {
+        //FIXME
     }
 
 }

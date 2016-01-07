@@ -60,6 +60,8 @@ public class Person implements Serializable{
 
     String prefers;
 
+    long version;
+
     public static class Gender
     {
         public static final int MALE = 0;

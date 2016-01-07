@@ -58,7 +58,8 @@ public class FriendListDAOMock extends FriendListDAO {
     }
 
     @Override
-    public void insertOrUpdate(FriendList friendList) throws BeerBuddyException {
+    public FriendList insertOrUpdate(FriendList friendList) throws BeerBuddyException {
         //TODO: Implementation for David!
+        return null;
     }
 }

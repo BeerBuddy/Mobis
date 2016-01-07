@@ -84,8 +84,9 @@ public class DrinkingSpotDAOMock extends DrinkingSpotDAO {
     }
 
     @Override
-    public void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
+    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
         spots.add(drinkingSpot);
+        return drinkingSpot;
     }
 
     @Override
@@ -110,6 +111,13 @@ public class DrinkingSpotDAOMock extends DrinkingSpotDAO {
         }
 
         throw new DataAccessException("DrinkingSpot with the id: " + dsid + " could not be found.");
+    }
+
+    @Override
+    public void deactivate(long dsid) throws BeerBuddyException {
+        DrinkingSpot drinkingSpot = getById(dsid);
+        drinkingSpot.setActive(false);
+        insertOrUpdate(drinkingSpot);
     }
 
 

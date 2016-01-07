@@ -31,6 +31,15 @@ public class PersonResource {
         return personDAO.getById(id);
     }
 
+    @GET
+    @Timed
+    @Path("/getbyemail/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public Person getPerson(@PathParam("email") String email) throws BeerBuddyException {
+        return personDAO.getByEmail(email);
+    }
+
     /*
     @GET
     @Timed

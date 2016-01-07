@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy.interfaces.IInvitationDAO;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -15,12 +16,17 @@ import io.dropwizard.hibernate.AbstractDAO;
  */
 public class DrinkingInvitationDAO extends AbstractDAO<DrinkingInvitation> implements IInvitationDAO<DrinkingInvitation> {
 
-    public DrinkingInvitationDAO(SessionFactory factory) {
+    private final DrinkingSpotDAO drinkingSpotDAO;
+
+    public DrinkingInvitationDAO(SessionFactory factory, DrinkingSpotDAO drinkingSpotDAO) {
         super(factory);
+        this.drinkingSpotDAO = drinkingSpotDAO;
     }
 
-    public void insertOrUpdate(DrinkingInvitation i) {
-        persist(i);
+    public DrinkingInvitation insertOrUpdate(DrinkingInvitation i) {
+        long version = i.getVersion();
+        i.setVersion(++version);
+        return persist(i);
     }
 
     public List<DrinkingInvitation> getAllFor(long personid) throws BeerBuddyException {
@@ -32,6 +38,17 @@ public class DrinkingInvitationDAO extends AbstractDAO<DrinkingInvitation> imple
     }
 
     public void accept(DrinkingInvitation invitation) throws BeerBuddyException {
-        persist(invitation);
+        Long einladerId = invitation.getEinladerId();
+        Long eingeladenerId = invitation.getEingeladenerId();
+        Long drinkingSpotId = invitation.getDrinkingSpotId();
+
+        // join dem drinkingSpot
+        drinkingSpotDAO.join(drinkingSpotId, eingeladenerId);
+
+        super.currentSession().delete(invitation);
+    }
+
+    public void decline(DrinkingInvitation invitation) throws BeerBuddyException {
+        super.currentSession().delete(invitation);
     }
 }

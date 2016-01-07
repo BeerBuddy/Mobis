@@ -9,7 +9,7 @@ import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.ServerUtil;
 
-public class SaveDrinkingInvitationRequest extends SpringAndroidSpiceRequest<Void> {
+public class SaveDrinkingInvitationRequest extends SpringAndroidSpiceRequest<DrinkingInvitation> {
 
 
   private final DrinkingInvitation person;
@@ -20,13 +20,13 @@ public class SaveDrinkingInvitationRequest extends SpringAndroidSpiceRequest<Voi
    *
    */
   public SaveDrinkingInvitationRequest(DrinkingInvitation person) {
-    super(Void.class);
+    super(DrinkingInvitation.class);
     this.person = person;
   }
 
   @Override
-  public Void loadDataFromNetwork() throws Exception {
-     getRestTemplate().postForObject(ServerUtil.getHost()+"/drinkinginvitation/save", person, Void.class, Collections.EMPTY_MAP);
+  public DrinkingInvitation loadDataFromNetwork() throws Exception {
+     getRestTemplate().postForObject(ServerUtil.getHost()+"/drinkinginvitation/save", person, DrinkingInvitation.class, Collections.EMPTY_MAP);
     return null;
   }
 

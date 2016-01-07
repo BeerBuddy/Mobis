@@ -33,9 +33,10 @@ public class DrinkingInvitation implements Serializable {
     @NotNull
     Long drinkingSpotId;
 
-
     @NotNull
     Long eingeladenerId;
 
     String freitext;
+
+    long version;
 }

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -94,16 +95,16 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
 
 
     @Override
-    public void insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
+    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
         if (getById(drinkingSpot.getId()) != null) {
-            update(drinkingSpot);
+            return update(drinkingSpot);
         } else {
-            insert(drinkingSpot);
+            return insert(drinkingSpot);
         }
 
     }
 
-    public void insert(DrinkingSpot drinkingSpot) throws DataAccessException {
+    public DrinkingSpot insert(DrinkingSpot drinkingSpot) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -122,6 +123,8 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             stmt.bindLong(9, drinkingSpot.isActive() ? BeerBuddyDbHelper.BOOLEAN_TRUE : BeerBuddyDbHelper.BOOLEAN_FALSE);
             long dsid = stmt.executeInsert();
             drinkingSpotPersonDAO.saveAll(dsid, drinkingSpot.getPersons());
+            drinkingSpot.setId(dsid);
+            return drinkingSpot;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -130,7 +133,7 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         }
     }
 
-    public void update(DrinkingSpot drinkingSpot) throws DataAccessException {
+    public DrinkingSpot update(DrinkingSpot drinkingSpot) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -146,6 +149,7 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             stmt.executeInsert();
             drinkingSpotPersonDAO.deleteAll(drinkingSpot.getId());
             drinkingSpotPersonDAO.saveAll(drinkingSpot.getId(), drinkingSpot.getPersons());
+            return drinkingSpot;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
@@ -180,6 +184,13 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
     public void join(long dsid, long personId) throws DataAccessException {
         DrinkingSpot drinkingSpot = getById(dsid);
         drinkingSpot.getPersons().add(new PersonDAOLocal(context).getById(personId));
+        insertOrUpdate(drinkingSpot);
+    }
+
+    @Override
+    public void deactivate(long dsid) throws BeerBuddyException {
+        DrinkingSpot drinkingSpot = getById(dsid);
+        drinkingSpot.setActive(false);
         insertOrUpdate(drinkingSpot);
     }
 
