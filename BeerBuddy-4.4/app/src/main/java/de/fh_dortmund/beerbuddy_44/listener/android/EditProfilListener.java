@@ -62,7 +62,7 @@ public class EditProfilListener implements View.OnClickListener {
                 instance.set(Calendar.MONTH, monthOfYear);
                 instance.set(Calendar.YEAR, year);
                 context.getPerson().setDateOfBirth(instance.getTime());
-                context.setValues();
+                context.setValues(context.getPerson());
             }
         });
         newFragment.show(context.getFragmentManager(),"datePicker");

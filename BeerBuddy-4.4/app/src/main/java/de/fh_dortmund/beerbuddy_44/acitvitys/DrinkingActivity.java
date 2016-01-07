@@ -42,7 +42,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
     @Override
     public void onFurtherCreate(Bundle savedInstanceState) {
             DrinkingListener drinkingListener = new DrinkingListener(this);
-
             Button save = (Button) findViewById(R.id.drinking_save);
             Button invite = (Button) findViewById(R.id.drinking_invite);
             RadioButton alone = (RadioButton) findViewById(R.id.drinking_alone);
@@ -86,6 +85,15 @@ public class DrinkingActivity extends BeerBuddyActivity {
             lv.setOnTouchListener(otl);
             EditText et = (EditText) findViewById(R.id.drinking_description);
             et.setOnTouchListener(otl);
+
+            NumberPicker np1 = (NumberPicker) findViewById(R.id.drinking_group_amount_male);
+            np1.setMinValue(0);
+            np1.setMaxValue(20);
+            np1.setWrapSelectorWheel(false);
+            NumberPicker np2 = (NumberPicker) findViewById(R.id.drinking_group_amount_female);
+            np2.setMinValue(0);
+            np2.setMaxValue(20);
+            np2.setWrapSelectorWheel(false);
     }
 
     public void setValue(DrinkingSpot spot) {
@@ -147,8 +155,8 @@ public class DrinkingActivity extends BeerBuddyActivity {
             ((NumberPicker)findViewById(R.id.drinking_group_amount_female)).setValue(spot.getAmountFemaleWithoutBeerBuddy());
             ((NumberPicker)findViewById(R.id.drinking_group_amount_male)).setValue(spot.getAmountMaleWithoutBeerBuddy());
 
-            ((NumberPicker)findViewById(R.id.drinking_group_age_from)).setValue(minAge);
-            ((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(maxAge);
+            //((NumberPicker)findViewById(R.id.drinking_group_age_from)).setValue(minAge);
+            //((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(maxAge);
 
 
         }

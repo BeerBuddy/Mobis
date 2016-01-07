@@ -21,6 +21,7 @@ import de.fh_dortmund.beerbuddy_44.dao.remote.FriendInvitationDAORemote;
 import de.fh_dortmund.beerbuddy_44.dao.remote.FriendListDAORemote;
 import de.fh_dortmund.beerbuddy_44.dao.remote.PersonDAORemote;
 
+
 /**
  * Created by David on 11.11.2015.
  */
@@ -54,7 +55,6 @@ public final class DAOFactory {
 
     public static PersonDAO getPersonDAO(BeerBuddyActivity context){
         return new PersonDAORemote(context);
-    }
 
     public static CurrentPersonDAO getCurrentPersonDAO(Context context){
         return new CurrentPersonDAOLocal(context);

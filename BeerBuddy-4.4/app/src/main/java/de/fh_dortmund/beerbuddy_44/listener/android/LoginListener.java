@@ -2,8 +2,6 @@ package de.fh_dortmund.beerbuddy_44.listener.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -12,13 +10,13 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
-import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.R;
-import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.LoginActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 
 /**
  * Created by David on 19.11.2015.
@@ -27,14 +25,21 @@ public class LoginListener implements
         View.OnClickListener {
 
     private LoginActivity activity;
+    private CurrentPersonDAO currentPersonDAO;
+    private PersonDAO personDAO;
     private static final String TAG = "LoginListener";
+
 
     public LoginListener(LoginActivity activity) {
         this.activity = activity;
+        currentPersonDAO = DAOFactory.getCurrentPersonDAO(activity);
+        personDAO = DAOFactory.getPersonDAO(activity);
     }
 
 
+
     @Override
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_login:
@@ -59,7 +64,7 @@ public class LoginListener implements
             public void onRequestSuccess(Person person) {
                 if (person == null) {
                     //insert Person first Login
-                    DAOFactory.getPersonDAO(activity).insertOrUpdate(p, new RequestListener<Person>() {
+                    personDAO.insertOrUpdate(p, new RequestListener<Person>() {
                         @Override
                         public void onRequestFailure(SpiceException spiceException) {
 
@@ -68,9 +73,9 @@ public class LoginListener implements
                         @Override
                         public void onRequestSuccess(Person person) {
                             try {
-                                DAOFactory.getCurrentPersonDAO(activity).insertCurrentPersonId(p.getId());
-                                activity.setResult(Activity.RESULT_OK, new Intent(activity, EditProfilActivity.class));
-                                activity.finish();//dead code ahead
+                                currentPersonDAO.insertCurrentPersonId(p.getId());
+                                Intent i = new Intent(activity, MainViewActivity.class);
+                                activity.startActivity(i);
                                 return;
                             } catch (BeerBuddyException e) {
                                 e.printStackTrace();
@@ -80,7 +85,7 @@ public class LoginListener implements
                 } else if (person.getPassword().equals(p.getPassword())) {
                     try {
                         //Login successfull close this activity
-                        DAOFactory.getCurrentPersonDAO(activity).insertCurrentPersonId(person.getId());
+                        currentPersonDAO.insertCurrentPersonId(person.getId());
                         activity.setResult(Activity.RESULT_OK, new Intent(activity, MainViewActivity.class));
                         activity.finish();//dead code ahead
                         return;

@@ -44,13 +44,13 @@ public class EditProfilActivity extends BeerBuddyActivity {
            DAOFactory.getPersonDAO(this).getById(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<Person>() {
                 @Override
                 public void onRequestFailure(SpiceException spiceException) {
-
+                    spiceException.printStackTrace();
                 }
 
                 @Override
                 public void onRequestSuccess(Person p) {
                     person =p;
-                    setValues();
+                    setValues(p);
                 }
             });
 
@@ -73,7 +73,7 @@ public class EditProfilActivity extends BeerBuddyActivity {
 
 
 
-    public void setValues() {
+    public void setValues(Person p) {
         if(person.getImage() != null && person.getImage().length > 0)
         {
             Bitmap bitmap = BitmapFactory.decodeByteArray(person.getImage(), 0, person.getImage().length);
@@ -112,7 +112,7 @@ public class EditProfilActivity extends BeerBuddyActivity {
             case PICK_IMAGE_ID:
                 Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 person.setImage( getByteArrayFromImage(bitmap));
-                setValues();
+                setValues(person);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
