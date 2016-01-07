@@ -9,18 +9,32 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".acitvitys.Imprin">
 
-    <LinearLayout
-        android:orientation="vertical" android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:measureWithLargestChild="true">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
 
-
-        <TextView
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:orientation="vertical" android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Imprint TBD"
-           />
+            android:measureWithLargestChild="true"
+            android:weightSum="1">
 
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:text="@string/imprint_text"
+                android:id="@+id/imprint_text"
+                android:elegantTextHeight="true"
+                android:autoText="false"
+                android:enabled="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_weight="2.37" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

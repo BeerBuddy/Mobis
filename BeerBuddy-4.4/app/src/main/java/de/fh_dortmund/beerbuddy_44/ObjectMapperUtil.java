@@ -5,20 +5,15 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.fh_dortmund.beerbuddy.Person;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.CouldNotDownloadImageException;
 import de.fh_dortmund.beerbuddy_44.exceptions.CouldNotParseDateException;
 
@@ -31,7 +26,7 @@ public final class ObjectMapperUtil {
         //prevent Objects
     }
 
-    public static Person toPerson(com.google.android.gms.plus.model.people.Person p) throws BeerBuddyException {
+ /*   public static Person toPerson(com.google.android.gms.plus.model.people.Person p) throws BeerBuddyException {
         Person returnPerson = new Person();
         returnPerson.setDateOfBirth(parseDate(p.getBirthday()));
         returnPerson.setImage(convertImage(p.getImage()));
@@ -75,7 +70,7 @@ public final class ObjectMapperUtil {
             }
         }
     }
-
+*/
     private static Date parseDate(String birthday) throws CouldNotParseDateException {
         String formatString = "MMMM d, yyyy";
         try {

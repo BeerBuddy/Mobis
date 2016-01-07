@@ -11,13 +11,13 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.adapter.InvitedListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.listener.android.DrinkingListener;
 import lombok.Getter;
 
@@ -140,14 +140,14 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
         }
 
-        ((EditText)findViewById(R.id.drinking_description)).setText(spot.getDescription());
+        ((EditText)findViewById(R.id.drinking_description)).setText(spot.getBeschreibung());
 
 
     }
 
     public DrinkingSpot getValue() {
 
-        drinkingSpot.setDescription(((EditText) findViewById(R.id.drinking_description)).getText().toString());
+        drinkingSpot.setBeschreibung(((EditText) findViewById(R.id.drinking_description)).getText().toString());
         drinkingSpot.setAmountFemaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_female)).getValue());
         drinkingSpot.setAmountMaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_male)).getValue());
         drinkingSpot.setAgeFrom(((NumberPicker) findViewById(R.id.drinking_group_age_from)).getValue());

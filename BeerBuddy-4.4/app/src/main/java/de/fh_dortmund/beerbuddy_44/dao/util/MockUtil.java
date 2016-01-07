@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
 
 /**
  * Created by David on 30.11.2015.
@@ -22,8 +22,8 @@ public final class MockUtil {
     {
     }
 
-    public static List<Person> createRandomPersons(int size) {
-        List<Person> persons = new ArrayList<Person>();
+    public static ArrayList<Person> createRandomPersons(int size) {
+        ArrayList<Person> persons = new ArrayList<Person>();
         for(int i = 0 ; i< size; i++)
         {
             persons.add(createRandomPerson((long)(Math.random() * 10)));

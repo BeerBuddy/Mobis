@@ -5,8 +5,11 @@ import java.sql.SQLException;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
 
-import de.fh_dortmund.beerbuddy.FriendList;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
+import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.entities.Person;
 
 /**
  * DatabaseConfigUtl writes a configuration file to avoid using annotation processing in runtime which is very slow
@@ -18,7 +21,7 @@ import de.fh_dortmund.beerbuddy.Person;
 public final class DatabaseConfigUtil extends OrmLiteConfigUtil {
 
 	private static final Class<?>[] classes = new Class[] {
-			Person.class, FriendList.class
+			Person.class, FriendList.class, FriendInvitation.class, DrinkingSpot.class, DrinkingInvitation.class
 	};
 
 	public static void main(String[] args) throws SQLException, IOException {

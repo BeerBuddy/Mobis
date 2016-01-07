@@ -6,11 +6,11 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.adapter.DrinkingInvitationAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by David on 01.12.2015.

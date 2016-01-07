@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.ViewDrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;

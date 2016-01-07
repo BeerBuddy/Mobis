@@ -2,8 +2,11 @@ package de.fh_dortmund.beerbuddy_44.test;
 
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 
-import de.fh_dortmund.beerbuddy.PersonList;
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 
 /**
@@ -18,11 +21,16 @@ public class RequestAllPersonsTest extends InstrumentationTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         request = new GetAllPersonsRequest();
+        JacksonSpringAndroidSpiceService service = new JacksonSpringAndroidSpiceService();
+        request.setRestTemplate(service.createRestTemplate());
     }
 
     public void test_loadDataFromNetwork() throws Exception {
-        PersonList persons = request.loadDataFromNetwork();
-        System.out.println(persons);
-        assertEquals(0,persons.size());
+        Person[] persons = request.loadDataFromNetwork();
+        for(Person p:persons){
+            Log.i("BuddysActivity",p.toString());
+        }
+
+        assertTrue( persons.length > 0);
     }
 }
