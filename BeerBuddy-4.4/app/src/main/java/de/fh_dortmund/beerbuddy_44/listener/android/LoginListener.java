@@ -57,17 +57,19 @@ public class LoginListener implements
         DAOFactory.getPersonDAO(activity).getByEmail(p.getEmail(), new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                spiceException.printStackTrace();
             }
 
             @Override
             public void onRequestSuccess(Person person) {
+                Log.d("BuddysActivity", "recieved Person: "+person);
                 if (person == null) {
                     //insert Person first Login
+                    Log.d("BuddysActivity", "trying to save Person: "+p);
                     personDAO.insertOrUpdate(p, new RequestListener<Person>() {
                         @Override
                         public void onRequestFailure(SpiceException spiceException) {
-
+                            spiceException.printStackTrace();
                         }
 
                         @Override

@@ -23,11 +23,11 @@ public class GetByEmailPersonRequest extends SpringAndroidSpiceRequest<Person> {
 
   @Override
   public Person loadDataFromNetwork() throws Exception {
-    return getRestTemplate().getForObject(ServerUtil.getHost() + "/person/get/"+person, Person.class);
+    return getRestTemplate().getForObject(ServerUtil.getHost() + "/person/getbyemail/"+person, Person.class);
   }
 
   public String createCacheKey() {
-      return "/person/get/"+person;
+      return "/person/getbyemail/"+person;
   }
 
 

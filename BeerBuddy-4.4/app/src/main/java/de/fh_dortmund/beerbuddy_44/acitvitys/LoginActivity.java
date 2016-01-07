@@ -28,7 +28,7 @@ public class LoginActivity extends BeerBuddyActivity {
     @Setter
     private boolean mShouldResolve = false;
 
-    public LoginActivity(int layout, boolean finishOnLogout, boolean toolbar) {
+    public LoginActivity() {
         super(R.layout.login_activity_main, false, false);
     }
 
