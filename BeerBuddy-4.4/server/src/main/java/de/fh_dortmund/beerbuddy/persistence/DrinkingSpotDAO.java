@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 
 import org.hibernate.SessionFactory;
 
+import java.util.Collection;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
@@ -47,7 +48,7 @@ public class DrinkingSpotDAO extends AbstractDAO<DrinkingSpot> implements IDrink
 
     public void join(long dsid, long personId) throws BeerBuddyException {
         DrinkingSpot drinkingSpot = getById(dsid);
-        List<Person> persons = drinkingSpot.getPersons();
+        Collection<Person> persons = drinkingSpot.getPersons();
         persons.add(personDAO.getById(personId));
         drinkingSpot.setPersons(persons);
         persist(drinkingSpot);

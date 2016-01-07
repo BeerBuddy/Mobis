@@ -130,7 +130,7 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
 
     protected void createMarker(DrinkingSpot ds, GoogleMap mMap) {
         LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
-        mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(ds.getPersons().get(0).getUsername() + " is drinking with " + ds.getPersons().size() + " others."));
+        mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(ds.getCreator().getUsername() + " is drinking with " + ds.getPersons().size() + " others."));
     }
 
 

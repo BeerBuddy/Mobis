@@ -28,7 +28,7 @@ public final class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "beerBuddy.db";
 	// any time you make changes to your database objects, you may have to increase the database version
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	// the DAO object we use to access the SimpleData table
 	private Dao<Person, Long> simpleDao = null;
@@ -51,6 +51,10 @@ public final class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onCreate");
 			TableUtils.createTable(connectionSource, Person.class);
+			TableUtils.createTable(connectionSource, DrinkingInvitation.class);
+			TableUtils.createTable(connectionSource, DrinkingSpot.class);
+			TableUtils.createTable(connectionSource, FriendInvitation.class);
+			TableUtils.createTable(connectionSource, FriendList.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -69,6 +73,10 @@ public final class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, Person.class, true);
+			TableUtils.dropTable(connectionSource, DrinkingInvitation.class, true);
+			TableUtils.dropTable(connectionSource, DrinkingSpot.class, true);
+			TableUtils.dropTable(connectionSource, FriendInvitation.class, true);
+			TableUtils.dropTable(connectionSource, FriendList.class, true);
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {

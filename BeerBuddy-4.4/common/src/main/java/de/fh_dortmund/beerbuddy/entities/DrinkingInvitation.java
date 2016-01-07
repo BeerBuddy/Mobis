@@ -2,8 +2,11 @@ package de.fh_dortmund.beerbuddy.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,12 +22,13 @@ import lombok.RequiredArgsConstructor;
 /**
  * Created by David on 25.11.2015.
  */
+@DatabaseTable(tableName = "drinkinginvitation")
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DrinkingInvitation {
+public class DrinkingInvitation implements Serializable {
 
     @Id
     @GeneratedValue

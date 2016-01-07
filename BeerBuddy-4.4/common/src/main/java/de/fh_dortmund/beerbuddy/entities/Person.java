@@ -3,11 +3,13 @@ package de.fh_dortmund.beerbuddy.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -24,13 +26,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 
+@DatabaseTable(tableName = "person")
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @RequiredArgsConstructor(suppressConstructorProperties = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Person {
+public class Person implements Serializable{
 
     @Id
     @GeneratedValue

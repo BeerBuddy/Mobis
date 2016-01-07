@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -18,12 +22,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
+@DatabaseTable(tableName = "friendlist")
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FriendList {
+public class FriendList implements Serializable {
     @Id
     @GeneratedValue
     long id;
@@ -31,7 +36,7 @@ public class FriendList {
     @DatabaseField(canBeNull = false, index = true)
     long personid;
 
-    @DatabaseField(dataType = DataType.SERIALIZABLE)
-    List<Person> friends;
+    @DatabaseField(dataType=DataType.SERIALIZABLE)
+    ArrayList<Person> friends;
 
 }
