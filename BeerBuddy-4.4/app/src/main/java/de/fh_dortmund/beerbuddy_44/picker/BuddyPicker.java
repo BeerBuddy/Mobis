@@ -2,17 +2,16 @@ package de.fh_dortmund.beerbuddy_44.picker;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.FriendList;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
 
 /**
  * Created by David on 02.12.2015.
@@ -26,7 +25,7 @@ public class BuddyPicker {
         try {
 
             //Using AlertDialog
-            final FriendList friendList = DAOFactory.getFriendlistDAO(context).getFriendListId(DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId());
+            final FriendList friendList = DAOFactory.getFriendlistDAO(context).getFriendList(DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId());
             final DrinkingSpot spot = context.getDrinkingSpot();
             final AlertDialog.Builder b = new AlertDialog.Builder(context);
             final CharSequence[] s = new CharSequence[friendList.getFriends().size()];
@@ -103,11 +102,9 @@ public class BuddyPicker {
     private static boolean invite(List<Person> invitedPersons, Person person){
         for (Person ip : invitedPersons){
             if(person.getId() == ip.getId()) {
-                Log.d("NOOOOOOO", person.getId() + " vs. " + ip.getId());
                 return false;
             }
         }
-        Log.d("YEEEEEEES", person.getId() + "");
         return true;
     }
 }

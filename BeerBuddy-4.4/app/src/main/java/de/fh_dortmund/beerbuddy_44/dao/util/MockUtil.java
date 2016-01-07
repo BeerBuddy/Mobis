@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.Person;
 
 /**
  * Created by David on 30.11.2015.

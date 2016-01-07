@@ -4,12 +4,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import de.fh_dortmund.beerbuddy.FriendInvitation;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by David on 19.11.2015.

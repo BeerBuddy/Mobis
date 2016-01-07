@@ -19,8 +19,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
@@ -40,7 +42,7 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
         this.finishOnLogout =finishOnLogout;
     }
 
-    //protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+    protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +85,12 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-      //  spiceManager.start(this);
+        spiceManager.start(this);
     }
 
     @Override
     protected void onStop() {
-       // spiceManager.shouldStop();
+        spiceManager.shouldStop();
         super.onStop();
     }
 
@@ -123,7 +125,6 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-
         MultiDex.install(this);
     }
 

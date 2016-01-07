@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:measureWithLargestChild="true"
             android:orientation="vertical">
 
@@ -134,7 +134,8 @@
                 android:textSize="18sp"
                 android:foregroundGravity="top|bottom"
                 android:paddingRight="30dp"
-                android:enabled="true" />
+                android:enabled="true"
+                android:inputType="none" />
 
 
             <LinearLayout

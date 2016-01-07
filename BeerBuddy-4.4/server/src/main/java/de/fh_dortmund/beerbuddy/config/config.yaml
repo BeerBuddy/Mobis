@@ -6,5 +6,22 @@ server:
   - type: http
     port: 9000
   adminConnectors:
-  - type: http
-    port: 9001
+   - type: http
+     port: 9001
+
+# Database settings.
+database:
+  # the name of your JDBC driver
+  driverClass: org.h2.Driver
+  # the username
+  user: sa
+  # the password
+  password: sa
+  # the JDBC URL
+  url: jdbc:h2:~/test
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.H2Dialect
+    hibernate.hbm2ddl.auto: create
+    # the SQL query to run when validating a connection's liveness
+    validationQuery: "/* MyApplication Health Check */ SELECT 1"

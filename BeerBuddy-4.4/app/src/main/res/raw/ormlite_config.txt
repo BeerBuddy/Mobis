@@ -1,8 +1,8 @@
 #
-# generated on 2015/11/30 03:11:59
+# generated on 2016/01/07 07:32:41
 #
 # --table-start--
-dataClass=de.fh_dortmund.beerbuddy.Person
+dataClass=de.fh_dortmund.beerbuddy.entities.Person
 tableName=person
 # --table-fields-start--
 # --field-start--
@@ -40,7 +40,7 @@ fieldName=prefers
 # --table-end--
 #################################
 # --table-start--
-dataClass=de.fh_dortmund.beerbuddy.FriendList
+dataClass=de.fh_dortmund.beerbuddy.entities.FriendList
 tableName=friendlist
 # --table-fields-start--
 # --field-start--
@@ -57,6 +57,108 @@ indexName=friendlist_personid_idx
 # --field-start--
 fieldName=friends
 foreignCollection=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=de.fh_dortmund.beerbuddy.entities.FriendInvitation
+tableName=friendinvitation
+# --table-fields-start--
+# --field-start--
+fieldName=id
+dataPersister=LONG
+generatedId=true
+useGetSet=true
+# --field-end--
+# --field-start--
+fieldName=einladerId
+canBeNull=false
+indexName=friendinvitation_einladerId_idx
+# --field-end--
+# --field-start--
+fieldName=eingeladenerId
+canBeNull=false
+indexName=friendinvitation_eingeladenerId_idx
+# --field-end--
+# --field-start--
+fieldName=freitext
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=de.fh_dortmund.beerbuddy.entities.DrinkingSpot
+tableName=drinkingspot
+# --table-fields-start--
+# --field-start--
+fieldName=id
+dataPersister=LONG
+generatedId=true
+useGetSet=true
+# --field-end--
+# --field-start--
+fieldName=creator
+foreign=true
+# --field-end--
+# --field-start--
+fieldName=persons
+foreignCollection=true
+# --field-end--
+# --field-start--
+fieldName=beschreibung
+# --field-end--
+# --field-start--
+fieldName=startTime
+# --field-end--
+# --field-start--
+fieldName=ageFrom
+# --field-end--
+# --field-start--
+fieldName=ageTo
+# --field-end--
+# --field-start--
+fieldName=gps
+# --field-end--
+# --field-start--
+fieldName=amountMaleWithoutBeerBuddy
+# --field-end--
+# --field-start--
+fieldName=amountFemaleWithoutBeerBuddy
+# --field-end--
+# --field-start--
+fieldName=active
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=de.fh_dortmund.beerbuddy.entities.DrinkingInvitation
+tableName=drinkinginvitation
+# --table-fields-start--
+# --field-start--
+fieldName=id
+dataPersister=LONG
+generatedId=true
+useGetSet=true
+# --field-end--
+# --field-start--
+fieldName=einladerId
+canBeNull=false
+indexName=drinkinginvitation_einladerId_idx
+# --field-end--
+# --field-start--
+fieldName=drinkingSpotId
+canBeNull=false
+indexName=drinkinginvitation_drinkingSpotId_idx
+# --field-end--
+# --field-start--
+fieldName=eingeladenerId
+canBeNull=false
+indexName=drinkinginvitation_eingeladenerId_idx
+# --field-end--
+# --field-start--
+fieldName=freitext
 # --field-end--
 # --table-fields-end--
 # --table-end--

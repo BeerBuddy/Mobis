@@ -1,12 +1,9 @@
 package de.fh_dortmund.beerbuddy_44.dao;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
-import de.fh_dortmund.beerbuddy_44.acitvitys.ViewProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
@@ -14,7 +11,14 @@ import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.LocationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.dao.local.CurrentPersonDAOLocal;
+import de.fh_dortmund.beerbuddy_44.dao.local.LocationDAOLocal;
+import de.fh_dortmund.beerbuddy_44.dao.mock.DrinkingInvitationDAOMock;
+import de.fh_dortmund.beerbuddy_44.dao.mock.DrinkingSpotDAOMock;
+import de.fh_dortmund.beerbuddy_44.dao.mock.FriendInvitationDAOMock;
+import de.fh_dortmund.beerbuddy_44.dao.mock.FriendListDAOMock;
+import de.fh_dortmund.beerbuddy_44.dao.mock.PersonDAOMock;
 
 /**
  * Created by David on 11.11.2015.

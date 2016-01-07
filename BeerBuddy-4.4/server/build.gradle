@@ -7,6 +7,8 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
+defaultTasks 'clean', 'build', 'oneJar'
+
 // UTF-8 should be standard by now. So use it!
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -27,6 +29,8 @@ buildscript {
 // Set our project variables
 project.ext {
     dropwizardVersion = '0.9.1'
+    h2Version = '1.4.190'
+    jpaVersion = 'hibernate-jpa-2.1-api:1.0.0.Final'
 }
 
 repositories {
@@ -35,9 +39,15 @@ repositories {
 
 dependencies {
     compile project(':common')
+    compile('org.hibernate.javax.persistence:' + jpaVersion)
     compile (
-       'io.dropwizard:dropwizard-core:' + dropwizardVersion
+        'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-db:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-jdbi:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+        'io.dropwizard:dropwizard-migrations:' + dropwizardVersion
     )
+    compile('com.h2database:h2:' + h2Version)
 }
 
 // Configure the oneJar task

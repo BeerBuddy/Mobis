@@ -17,7 +17,7 @@ import de.fh_dortmund.beerbuddy_44.acitvitys.ImprintActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.LoginActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

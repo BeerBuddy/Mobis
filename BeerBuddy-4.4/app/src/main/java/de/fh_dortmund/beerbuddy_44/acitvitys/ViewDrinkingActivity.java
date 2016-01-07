@@ -1,19 +1,13 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,17 +18,16 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
-import de.fh_dortmund.beerbuddy.Person;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.Person;
+
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.adapter.BuddyListAdapter;
-import de.fh_dortmund.beerbuddy_44.adapter.InvitedListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.MissingParameterExcetion;
-import de.fh_dortmund.beerbuddy_44.listener.android.DrinkingListener;
 import lombok.Getter;
 
 /**
@@ -96,8 +89,8 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
     public void setValue(final DrinkingSpot spot) {
 
         ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() +" - " +spot.getAgeTo());
-//  FIXME      ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
-        ((TextView) findViewById(R.id.drinking_view_description)).setText(spot.getDescription());
+      ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
+        ((TextView) findViewById(R.id.drinking_view_description)).setText(spot.getBeschreibung());
         final Context context = this;
 
 
@@ -129,7 +122,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
         ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
 
         ((ListView) findViewById(R.id.drinking_view_usersjoined)).setAdapter(new BuddyListAdapter(context, R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{})));
-//FIXME        ((Button) findViewById(R.id.drinking_view_creatorprofil)).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
+       ((Button) findViewById(R.id.drinking_view_creatorprofil)).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
         ((Button) findViewById(R.id.drinking_view_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
         ((Button) findViewById(R.id.drinking_view_showonmap)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnMapListener(context, spot.getId()));
         ((Button) findViewById(R.id.drinking_view_join)).setOnClickListener(new View.OnClickListener() {

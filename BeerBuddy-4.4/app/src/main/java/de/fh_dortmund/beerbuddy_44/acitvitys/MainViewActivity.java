@@ -3,14 +3,10 @@ package de.fh_dortmund.beerbuddy_44.acitvitys;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,12 +20,12 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCallback {
     public MainViewActivity() {
@@ -43,31 +39,32 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
         try {
+            List<DrinkingSpot> spots = DAOFactory.getDrinkingSpotDAO(this).getAll();
+            Log.i(TAG, "Spots:  " + spots.size());
+            for (DrinkingSpot ds : spots) {
+                createMarker(ds,googleMap);
+            }
+
+            final Context context = this;
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    try {
+                        long dsid = Long.parseLong(marker.getSnippet());
+                        showDrinkingView(DAOFactory.getDrinkingSpotDAO(context).getById(dsid));
+                        return true;
+                    } catch (BeerBuddyException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+
+            });
+
             //get current GPS position
             if (location != null) {
                 //move the map to current location
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20));
-                List<DrinkingSpot> spots = DAOFactory.getDrinkingSpotDAO(this).getAll(ObjectMapperUtil.getLocationFromLatLang(location));
-                Log.i(TAG, "Spots:  " + spots.size());
-                for (DrinkingSpot ds : spots) {
-                    createMarker(ds,googleMap);
-                }
-
-                final Context context = this;
-                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        try {
-                            long dsid = Long.parseLong(marker.getSnippet());
-                            showDrinkingView(DAOFactory.getDrinkingSpotDAO(context).getById(dsid));
-                            return true;
-                        } catch (BeerBuddyException e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    }
-
-                });
             }
 
         } catch (Exception e) {
@@ -117,7 +114,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(spot.getTotalAmount() + "/ " + spot.getAgeFrom() + " - " + spot.getAgeTo());
         ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_view)).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId()));
         ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
-//FIXME        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
     }
 
 

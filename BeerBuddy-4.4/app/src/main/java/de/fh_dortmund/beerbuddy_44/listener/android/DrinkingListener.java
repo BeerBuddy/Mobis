@@ -2,16 +2,14 @@ package de.fh_dortmund.beerbuddy_44.listener.android;
 
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import de.fh_dortmund.beerbuddy.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
-import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy_44.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.picker.BuddyPicker;
 
 /**
