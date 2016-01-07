@@ -3,6 +3,6 @@
     <string name="action_profil">Profil</string>
     <string name="action_freundesliste">Buddys</string>
     <string name="action_logout">Ausloggen</string>
-    <string name="action_login">Anmelden // Regestrieren</string>
+    <string name="action_login">Anmelden // Registrieren</string>
     <string name="action_impressum">Impressum</string>
 </resources>

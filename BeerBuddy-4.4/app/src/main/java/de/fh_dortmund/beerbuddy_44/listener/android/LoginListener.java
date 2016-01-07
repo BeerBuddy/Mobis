@@ -2,19 +2,18 @@ package de.fh_dortmund.beerbuddy_44.listener.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.LoginActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 
 /**
  * Created by David on 19.11.2015.
@@ -23,10 +22,14 @@ public class LoginListener implements
         View.OnClickListener  {
 
     private LoginActivity activity;
+    private CurrentPersonDAO currentPersonDAO;
+    private PersonDAO personDAO;
     private static final String TAG = "LoginListener";
 
    public LoginListener(LoginActivity activity){
-        this.activity = activity;
+       this.activity = activity;
+       currentPersonDAO= DAOFactory.getCurrentPersonDAO(activity);
+       personDAO = DAOFactory.getPersonDAO(activity);
    }
 
 
@@ -45,22 +48,26 @@ public class LoginListener implements
     private void loginRegisterClicked() {
         try {
             de.fh_dortmund.beerbuddy.entities.Person p = activity.getPerson();
-            de.fh_dortmund.beerbuddy.entities.Person pFromDb = DAOFactory.getPersonDAO(activity).getByEmail(p.getEmail());
+            de.fh_dortmund.beerbuddy.entities.Person pFromDb = personDAO.getByEmail(p.getEmail());
             if(pFromDb == null){
+                Log.w(TAG , "HELP, A NEWBIE!");
                 //insert Person first Login
-                DAOFactory.getPersonDAO(activity).insertOrUpdate(p);
-                p = DAOFactory.getPersonDAO(activity).getByEmail(p.getEmail());
+                personDAO.insertOrUpdate(p);
+                p = personDAO.getByEmail(p.getEmail());
                 //Register successfull close this activity and open EditProfil
-                DAOFactory.getCurrentPersonDAO(activity).insertCurrentPersonId(p.getId());
+                currentPersonDAO.insertCurrentPersonId(p.getId());
                 activity.setResult(Activity.RESULT_OK, new Intent(activity, EditProfilActivity.class));
                 activity.finish();//dead code ahead
+                Intent i = new Intent(activity, MainViewActivity.class);
+                activity.startActivity(i);
                 return;
             }
             else
             if(pFromDb.getPassword().equals(p.getPassword()))
             {
                 //Login successfull close this activity
-                DAOFactory.getCurrentPersonDAO(activity).insertCurrentPersonId(pFromDb.getId());
+                Log.w(TAG, "I KNOW YOU!");
+                currentPersonDAO.insertCurrentPersonId(pFromDb.getId());
                 activity.setResult(Activity.RESULT_OK, new Intent(activity, MainViewActivity.class));
                 activity.finish();//dead code ahead
                 return;

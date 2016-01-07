@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
@@ -27,6 +30,7 @@ public final class DAOFactory {
 
     //singelton
     private static LocationDAO locationDAO= null;
+    private static Map<Context,PersonDAOMock> personDao = new HashMap<Context,PersonDAOMock>();
 
 
     private DAOFactory(){
@@ -62,7 +66,11 @@ public final class DAOFactory {
             return new PersonDAORemote(context);
         }
         */
-        return new PersonDAOMock(context);
+        if(personDao.get(context) == null)
+        {
+            personDao.put(context,new PersonDAOMock(context));
+        }
+        return personDao.get(context);
     }
 
     public static CurrentPersonDAO getCurrentPersonDAO(Context context){
