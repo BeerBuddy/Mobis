@@ -24,6 +24,7 @@ import com.octo.android.robospice.SpiceManager;
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.dao.remote.JsonSpiceService;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import lombok.Getter;
 
@@ -50,7 +51,7 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
         this.toolbar = toolbar;
     }
 
-    protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+    protected SpiceManager spiceManager = new SpiceManager(JsonSpiceService.class);
 
     public SpiceManager getSpiceManager() {
         return spiceManager;

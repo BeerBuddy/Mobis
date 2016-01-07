@@ -90,7 +90,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <service
-            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
+            android:name="de.fh_dortmund.beerbuddy_44.dao.remote.JsonSpiceService"
             android:exported="false" />
     </application>
 
