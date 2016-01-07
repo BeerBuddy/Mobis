@@ -44,4 +44,7 @@ public class FriendInvitation implements Serializable{
 
     @DatabaseField
     String freitext;
+
+    @DatabaseField
+    long version;
 }

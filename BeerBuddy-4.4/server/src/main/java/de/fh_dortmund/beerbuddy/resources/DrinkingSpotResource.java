@@ -74,6 +74,14 @@ public class DrinkingSpotResource {
     @UnitOfWork
     public void join(@PathParam("dsid") long dsid, @PathParam("personid") long personId) throws BeerBuddyException {
         drinkingSpotDAO.join(dsid, personId);
+    }
 
+    @GET
+    @Timed
+    @Path("/deactivate/{dsid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public void deactivate(@PathParam("dsid") long dsid) throws BeerBuddyException {
+        drinkingSpotDAO.deactivate(dsid);
     }
 }

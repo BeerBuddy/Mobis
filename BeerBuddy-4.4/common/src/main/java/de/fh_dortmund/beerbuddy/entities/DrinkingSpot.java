@@ -41,11 +41,12 @@ public class DrinkingSpot implements Serializable {
     long id;
 
     @DatabaseField(foreign = true)
+    @OneToOne(fetch = FetchType.EAGER)
     Person creator;
 
-
     @DatabaseField(dataType=DataType.SERIALIZABLE)
-    ArrayList<Person> persons;
+    @ManyToMany(fetch = FetchType.EAGER)
+    List<Person> persons;
 
     @DatabaseField
     String beschreibung;
@@ -70,11 +71,12 @@ public class DrinkingSpot implements Serializable {
     int amountFemaleWithoutBeerBuddy;
 
     @DatabaseField
-    boolean active;
+    boolean active = true;
+
+    @DatabaseField
+    long version;
 
     public int getTotalAmount() {
         return persons.size() + amountFemaleWithoutBeerBuddy + amountMaleWithoutBeerBuddy;
     }
-
-
 }

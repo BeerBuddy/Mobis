@@ -2,6 +2,7 @@ package de.fh_dortmund.beerbuddy.persistence;
 
 import org.hibernate.SessionFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendList;
@@ -29,12 +30,35 @@ public class FriendListDAO extends AbstractDAO<FriendList> implements IFriendLis
         return false;
     }
 
-    public FriendList getFriendList(long personid) throws BeerBuddyException {
-        return getFriendLists(personid).get(0);
+    public void addPersonToFriendList(long personId, long friendId) throws BeerBuddyException{
+        FriendList friendList = getFriendList(personId);
+        List<Person> friends = friendList.getFriends();
+
+        //Personen Objekt mit der ID des neuen Freundes anlegen
+        Person newFriend = new Person();
+        newFriend.setId(friendId);
+
+        friends.add(newFriend);
+
+        friendList.setFriends(friends); // noetig? Wir haben doch call by reference
+        insertOrUpdate(friendList);
     }
 
-    public void insertOrUpdate(FriendList friendList) throws BeerBuddyException {
-        persist(friendList);
+    public FriendList getFriendList(long personid) throws BeerBuddyException {
+        List<FriendList> friendList = getFriendLists(personid);
+        if(friendList.isEmpty()){
+            // Falls eine Person noch keine Freundesliste hat, erstellen wir eine.
+            FriendList newFriendList = new FriendList();
+            newFriendList.setPersonid(personid);
+            friendList.add(insertOrUpdate(newFriendList));
+        }
+        return friendList.get(0);
+    }
+
+    public FriendList insertOrUpdate(FriendList friendList) throws BeerBuddyException {
+        long version = friendList.getVersion();
+        friendList.setVersion(++version);
+        return persist(friendList);
     }
 
     /**

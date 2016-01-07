@@ -42,11 +42,13 @@ public class DrinkingInvitation implements Serializable {
     @DatabaseField(canBeNull = false, index = true)
     Long drinkingSpotId;
 
-
     @NotNull
     @DatabaseField(canBeNull = false, index = true)
     Long eingeladenerId;
 
     @DatabaseField
     String freitext;
+
+    @DatabaseField
+    long version;
 }

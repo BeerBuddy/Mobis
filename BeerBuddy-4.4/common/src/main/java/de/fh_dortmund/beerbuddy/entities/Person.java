@@ -72,6 +72,9 @@ public class Person implements Serializable{
     @DatabaseField
     String prefers;
 
+    @DatabaseField
+    long version;
+
     public static class Gender
     {
         public static final int MALE = 0;

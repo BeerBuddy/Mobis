@@ -17,5 +17,5 @@ public interface IPersonDAO {
 
     Person getByEmail(String mail) throws BeerBuddyException;
 
-    void insertOrUpdate(Person p) throws BeerBuddyException;
+    Person insertOrUpdate(Person p) throws BeerBuddyException;
 }

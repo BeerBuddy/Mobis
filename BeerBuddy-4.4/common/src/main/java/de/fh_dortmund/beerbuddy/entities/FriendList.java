@@ -37,6 +37,9 @@ public class FriendList implements Serializable {
     long personid;
 
     @DatabaseField(dataType=DataType.SERIALIZABLE)
-    ArrayList<Person> friends;
+    @ManyToMany(fetch = FetchType.EAGER)
+    List<Person> friends;
 
+    @DatabaseField
+    long version;
 }

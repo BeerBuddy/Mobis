@@ -15,12 +15,17 @@ import io.dropwizard.hibernate.AbstractDAO;
  */
 public class FriendInvitationDAO extends AbstractDAO<FriendInvitation> implements IInvitationDAO<FriendInvitation> {
 
-    public FriendInvitationDAO(SessionFactory factory) {
+    private final FriendListDAO friendListDAO;
+
+    public FriendInvitationDAO(SessionFactory factory, FriendListDAO friendListDAO) {
         super(factory);
+        this.friendListDAO = friendListDAO;
     }
 
-    public void insertOrUpdate(FriendInvitation i) {
-        persist(i);
+    public FriendInvitation insertOrUpdate(FriendInvitation i) {
+        long version = i.getVersion();
+        i.setVersion(++version);
+        return persist(i);
     }
 
     public List<FriendInvitation> getAllFor(long personid) throws BeerBuddyException {
@@ -32,6 +37,18 @@ public class FriendInvitationDAO extends AbstractDAO<FriendInvitation> implement
     }
 
     public void accept(FriendInvitation invitation) throws BeerBuddyException {
-        persist(invitation);
+        // Nach dem akzeptieren werden beide in die Freundesliste des jeweils anderen geschrieben und die Invitation gelöscht
+        Long einladerId = invitation.getEinladerId();
+        Long eingeladenerId = invitation.getEingeladenerId();
+
+        friendListDAO.addPersonToFriendList(einladerId, eingeladenerId);
+        friendListDAO.addPersonToFriendList(eingeladenerId, einladerId);
+
+        super.currentSession().delete(invitation);
+    }
+
+    @Override
+    public void decline(FriendInvitation invitation) throws BeerBuddyException {
+        super.currentSession().delete(invitation);
     }
 }

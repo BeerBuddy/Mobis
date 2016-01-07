@@ -60,17 +60,17 @@ public class ServerApplication extends Application<ServerConfig> {
         final PersonDAO personDAO = new PersonDAO(hibernateBundle.getSessionFactory());
         env.jersey().register(new PersonResource(personDAO));
 
-        final FriendInvitationDAO friendInvitationDAO = new FriendInvitationDAO(hibernateBundle.getSessionFactory());
-        env.jersey().register(new FriendInvitationResource(friendInvitationDAO));
-
-        final DrinkingInvitationDAO drinkingInvitationDAO = new DrinkingInvitationDAO(hibernateBundle.getSessionFactory());
-        env.jersey().register(new DrinkingInvitationResource(drinkingInvitationDAO));
-
         final FriendListDAO friendListDAO = new FriendListDAO(hibernateBundle.getSessionFactory());
         env.jersey().register(new FriendListResource(friendListDAO));
 
+        final FriendInvitationDAO friendInvitationDAO = new FriendInvitationDAO(hibernateBundle.getSessionFactory(), friendListDAO);
+        env.jersey().register(new FriendInvitationResource(friendInvitationDAO));
+
         final DrinkingSpotDAO drinkingSpotDAO = new DrinkingSpotDAO(hibernateBundle.getSessionFactory(), personDAO);
         env.jersey().register(new DrinkingSpotResource(drinkingSpotDAO));
+
+        final DrinkingInvitationDAO drinkingInvitationDAO = new DrinkingInvitationDAO(hibernateBundle.getSessionFactory(), drinkingSpotDAO);
+        env.jersey().register(new DrinkingInvitationResource(drinkingInvitationDAO));
 
         final PersonHealthCheck personHealthCheck = new PersonHealthCheck(config.getVersion());
         env.healthChecks().register("personHealthCheck", personHealthCheck);

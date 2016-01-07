@@ -12,5 +12,5 @@ public interface IFriendListDAO {
 
     FriendList getFriendList(long personid) throws BeerBuddyException;
 
-    void insertOrUpdate(FriendList friendList) throws BeerBuddyException;
+    FriendList insertOrUpdate(FriendList friendList) throws BeerBuddyException;
 }
