@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.Arrays;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
@@ -39,32 +43,55 @@ public class BuddysActivity extends BeerBuddyActivity {
                 setValue();
             }
         }, intentFilter);
-
         setValue();
     }
 
-    public void setValue()
-    {
-
+    public void setValue() {
         try {
-            friendList = DAOFactory.getFriendlistDAO(this).getFriendList(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-        ListView listViewBuddys = (ListView) this.findViewById(R.id.buddys_buddys);
-        FriendListAdapter adapter = new FriendListAdapter(this,
-                R.layout.buddy_list_row_layout, friendList.getFriends().toArray(new Person[]{}));
-        listViewBuddys.setAdapter(adapter);
+            DAOFactory.getFriendlistDAO(this).getFriendList(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<FriendList>() {
+                @Override
+                public void onRequestFailure(SpiceException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
 
-        //buddys_requests
-        ListView listViewRequests = (ListView) this.findViewById(R.id.buddys_requests);
-        friendInvitations = DAOFactory.getFriendInvitationDAO(this).getAllFor(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-        FriendInvitationAdapter freindAdapter =new FriendInvitationAdapter(this,  R.layout.buddy_list_row_layout, friendInvitations.toArray(new FriendInvitation[]{}));
-        listViewRequests.setAdapter(freindAdapter);
+                @Override
+                public void onRequestSuccess(FriendList fl) {
+                    friendList = fl;
+                    setValueFL();
+                }
+            });
+
+            DAOFactory.getFriendInvitationDAO(this).getAllFor(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<FriendInvitation[]>() {
+
+                @Override
+                public void onRequestFailure(SpiceException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+
+                @Override
+                public void onRequestSuccess(FriendInvitation[] fi) {
+                    friendInvitations = Arrays.asList(fi);
+                    setValueFI();
+                }
+            });
         } catch (BeerBuddyException e) {
             Log.e(TAG, e.getMessage(), e);
         }
     }
 
+    public void setValueFL() {
+        ListView listViewBuddys = (ListView) this.findViewById(R.id.buddys_buddys);
+        FriendListAdapter adapter = new FriendListAdapter(this,
+                R.layout.buddy_list_row_layout, friendList.getFriends().toArray(new Person[]{}));
+        listViewBuddys.setAdapter(adapter);
+    }
 
+    public void setValueFI() {
+        ListView listViewRequests = (ListView) this.findViewById(R.id.buddys_requests);
+        FriendInvitationAdapter freindAdapter = new FriendInvitationAdapter(this, R.layout.buddy_list_row_layout, friendInvitations.toArray(new FriendInvitation[]{}));
+        listViewRequests.setAdapter(freindAdapter);
 
+    }
 
 
 }

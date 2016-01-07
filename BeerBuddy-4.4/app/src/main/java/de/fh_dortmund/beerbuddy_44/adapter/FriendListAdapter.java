@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 
 /**
  * Created by grimm on 01.12.2015.
@@ -13,7 +14,7 @@ import de.fh_dortmund.beerbuddy_44.R;
 public class FriendListAdapter extends BuddyListAdapter {
     private static final String TAG = "FriendListAdapter";
 
-    public FriendListAdapter(Context context, int resource, Person[] objects) {
+    public FriendListAdapter(BeerBuddyActivity context, int resource, Person[] objects) {
         super(context, resource, objects);
     }
 

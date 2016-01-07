@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
@@ -25,29 +29,53 @@ public class ViewProfilActivity extends BeerBuddyActivity {
     private static final String TAG = "ViewProfilActivity";
 
     @Override
-    protected void onFurtherCreate(Bundle savedInstanceState) {
+    protected void onFurtherCreate(Bundle savedInstanceState)  {
         Bundle b = getIntent().getExtras();
         long id = b.getLong("id");
-        try {
-            if (id != 0) {
-                Person p = DAOFactory.getPersonDAO(this).getById(id);
-                long currentPerson = DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId();
-                fillValues(p);
 
-                //register ViewProfilListener
-                if (currentPerson == p.getId() && DAOFactory.getFriendlistDAO(this).isFriendFromId(currentPerson, p.getId())) {
-                    ViewProfilListener viewListener = new ViewProfilListener(this, p);
-                    ((Button) findViewById(R.id.action_profil_send_request)).setOnClickListener(viewListener);
-                } else {
-                    //hide the Button
-                    ((Button) findViewById(R.id.action_profil_send_request)).setVisibility(View.INVISIBLE);
+        final ViewProfilActivity context = this;
+        if (id != 0) {
+            DAOFactory.getPersonDAO(this).getById(id, new RequestListener<Person>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+
                 }
 
-            } else {
-                throw new MissingParameterExcetion("Expected a Parameter: long id when calling ViewProfil");
-            }
-        } catch (BeerBuddyException e) {
-            e.printStackTrace();
+                @Override
+                public void onRequestSuccess(final Person person) {
+                    try {
+                        fillValues(person);
+                        final long currentPerson = DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId();
+
+
+                        //register ViewProfilListener
+                        DAOFactory.getFriendlistDAO(context).isFriendFromId(currentPerson, person.getId(), new RequestListener<Boolean>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+
+                            }
+
+                            @Override
+                            public void onRequestSuccess(Boolean aBoolean) {
+                                if (currentPerson == person.getId() && aBoolean) {
+                                    ViewProfilListener viewListener = new ViewProfilListener(context, person);
+                                    ((Button) findViewById(R.id.action_profil_send_request)).setOnClickListener(viewListener);
+                                } else {
+                                    //hide the Button
+                                    ((Button) findViewById(R.id.action_profil_send_request)).setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        });
+
+                    } catch (BeerBuddyException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+        } else {
+            throw new RuntimeException("Expected a Parameter: long id when calling ViewProfil");
         }
 
 

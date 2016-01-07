@@ -2,13 +2,18 @@ package de.fh_dortmund.beerbuddy_44.dao.remote;
 
 import android.content.Context;
 
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.util.Arrays;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
+import de.fh_dortmund.beerbuddy_44.requests.DeactivateDrinkingSpotRequest;
 import de.fh_dortmund.beerbuddy_44.requests.GetActiveForDrinkingSpotRequest;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllDrinkingSpotsRequest;
 import de.fh_dortmund.beerbuddy_44.requests.GetByIDDrinkingSpotRequest;
@@ -21,65 +26,46 @@ import de.fh_dortmund.beerbuddy_44.requests.SaveDrinkingSpotRequest;
 public class DrinkingSpotDAORemote extends DrinkingSpotDAO {
 
 
-    public DrinkingSpotDAORemote(Context context) {
-        super(context);
+
+    public DrinkingSpotDAORemote(BeerBuddyActivity context) {
+      super(context);
     }
 
     @Override
-    public List<DrinkingSpot> getAll() throws DataAccessException {
-        try {
+    public void getAll(RequestListener<DrinkingSpot[]> listener)  {
             GetAllDrinkingSpotsRequest req = new GetAllDrinkingSpotsRequest();
-            DrinkingSpot[] drinkingSpots = req.loadDataFromNetwork();
-            return Arrays.asList(drinkingSpots);
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to get All DrinkingSpot", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
-
     @Override
-    public DrinkingSpot getActiveByPersonId(long personId) throws DataAccessException {
-        try {
+
+    public void getActiveByPersonId(long personId,RequestListener<DrinkingSpot> listener)  {
             GetActiveForDrinkingSpotRequest req = new GetActiveForDrinkingSpotRequest(personId);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to getActiveByPersonId DrinkingSpot", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
-
     @Override
-    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
-        try {
+    public void insertOrUpdate(DrinkingSpot drinkingSpot,RequestListener<DrinkingSpot> listener)  {
             SaveDrinkingSpotRequest req = new SaveDrinkingSpotRequest(drinkingSpot);
-           return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to insertOrUpdate DrinkingSpot", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
     @Override
-    public DrinkingSpot getById(long dsid) throws DataAccessException {
-        try {
+    public void getById(long dsid,RequestListener<DrinkingSpot> listener)  {
             GetByIDDrinkingSpotRequest req = new GetByIDDrinkingSpotRequest(dsid);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to getActiveByPersonId DrinkingSpot", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
+
     @Override
-    public void join(long dsid, long personId) throws DataAccessException {
-        try {
+    public void join(long dsid, long personId,RequestListener<Void> listener)  {
             JoinDrinkingSpotRequest req = new JoinDrinkingSpotRequest(dsid, personId);
-            req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to join DrinkingSpot", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
     @Override
-    public void deactivate(long dsid) throws BeerBuddyException {
-        //FIXME
+    public void deactivate(long dsid,RequestListener<Void> listener)  {
+        DeactivateDrinkingSpotRequest req = new DeactivateDrinkingSpotRequest(dsid);
+        context.getSpiceManager().execute(req, listener);
     }
 
 }

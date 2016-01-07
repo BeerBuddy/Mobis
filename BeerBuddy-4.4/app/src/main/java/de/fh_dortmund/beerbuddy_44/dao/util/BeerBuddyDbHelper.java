@@ -9,41 +9,40 @@ import java.text.SimpleDateFormat;
 public class BeerBuddyDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int BOOLEAN_TRUE = 0;
-    public static final int BOOLEAN_FALSE= 1;
-    public static final SimpleDateFormat DATE_FORMAT= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    public static final int DATABASE_VERSION = 1;
+    public static final int BOOLEAN_FALSE = 1;
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "BeerBuddy.db";
-    public static String SQL_DELETE_ENTRIES =
-            "DROP TABLE friendlistperson;" +
-                    "DROP TABLE friendinvitation;" +
-                    "DROP TABLE drinkinginvitation;" +
-                    "DROP TABLE drinkingspotperson;" +
-                    "DROP TABLE drinkingspot;" +
-                    "DROP TABLE friendlist;" +
-                    "DROP TABLE person;";
+    public static String SQL_DELETE_friendlistperson = "DROP TABLE friendlistperson;";
+    public static String SQL_DELETE_friendinvitation = "DROP TABLE friendinvitation;";
+    public static String SQL_DELETE_drinkinginvitation = "DROP TABLE drinkinginvitation;";
+    public static String SQL_DELETE_drinkingspotperson = "DROP TABLE drinkingspotperson;";
+    public static String SQL_DELETE_drinkingspot = "DROP TABLE drinkingspot;";
+    public static String SQL_DELETE_friendlist = "DROP TABLE friendlist;";
+    public static String SQL_DELETE_person = "DROP TABLE person;";
 
 
     public static String SQL_CREATE_PERSON =
             "CREATE TABLE person (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "email TEXT," +
                     "username TEXT," +
                     "image BLOB," +
-                    "password TEXT" +
-                    "gender INTEGER" +
-                    "dateOfBirth TEXT" +
-                    "interests TEXT" +
+                    "password TEXT," +
+                    "gender INTEGER," +
+                    "dateOfBirth TEXT," +
+                    "interests TEXT," +
                     "prefers TEXT" +
                     " );";
     public static String SQL_CREATE_FriendList =
             "CREATE TABLE friendlist (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "personid REAL," +
                     "FOREIGN KEY(id) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_FriendListPerson =
             "CREATE TABLE friendlistperson (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "friendlistid REAL," +
                     "personid REAL," +
                     "FOREIGN KEY(personid) REFERENCES person(id)," +
@@ -51,7 +50,7 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     " );";
     public static String SQL_CREATE_FriendInvitation =
             "CREATE TABLE friendinvitation (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "einladerId REAL," +
                     "eingeladenerId REAL," +
                     "freitext TEXT," +
@@ -60,18 +59,18 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     " );";
     public static String SQL_CREATE_DrinkingInvitation =
             "CREATE TABLE drinkinginvitation (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "einladerId REAL," +
                     "eingeladenerId REAL," +
                     "drinkingSpotId REAL," +
                     "freitext TEXT," +
                     "FOREIGN KEY(einladerId) REFERENCES person(id)," +
-                    "FOREIGN KEY(eingeladenerId) REFERENCES person(id)" +
+                    "FOREIGN KEY(eingeladenerId) REFERENCES person(id)," +
                     "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingSpot =
             "CREATE TABLE drinkingspot (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "creatorid REAL," +
                     "beschreibung TEXT," +
                     "startTime TEXT," +
@@ -85,7 +84,7 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     " );";
     public static String SQL_CREATE_DrinkingSpotPerson =
             "CREATE TABLE drinkingspotperson (" +
-                    "id REAL PRIMARY KEY AUTOINCREMENT," +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "drinkingSpotId REAL," +
                     "personid REAL," +
                     "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)," +
@@ -111,7 +110,13 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL(SQL_DELETE_friendlistperson);
+        db.execSQL(SQL_DELETE_friendinvitation);
+        db.execSQL(SQL_DELETE_drinkinginvitation);
+        db.execSQL(SQL_DELETE_drinkingspotperson);
+        db.execSQL(SQL_DELETE_drinkingspot);
+        db.execSQL(SQL_DELETE_friendlist);
+        db.execSQL(SQL_DELETE_person);
         onCreate(db);
     }
 

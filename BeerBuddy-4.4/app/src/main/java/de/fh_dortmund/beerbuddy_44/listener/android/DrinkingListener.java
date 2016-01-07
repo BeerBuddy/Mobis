@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
@@ -46,14 +49,19 @@ public class DrinkingListener implements View.OnClickListener {
     }
 
     private void saveDrinkingSpot() {
-        try {
             DrinkingSpot drinkingSpot = context.getValue();
-            DAOFactory.getDrinkingSpotDAO(context).insertOrUpdate(drinkingSpot);
-            Toast.makeText(context, context.getString(R.string.drinking_saved), Toast.LENGTH_SHORT).show();
-        } catch (BeerBuddyException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error during save of DrinkingSpot " ,e );
-        }
+            DAOFactory.getDrinkingSpotDAO(context).insertOrUpdate(drinkingSpot, new RequestListener<DrinkingSpot>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Log.e(TAG, "Error during save of DrinkingSpot " ,spiceException );
+                }
+
+                @Override
+                public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                    Toast.makeText(context, context.getString(R.string.drinking_saved), Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
     }
 

@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.util.Calendar;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
@@ -73,12 +76,17 @@ public class EditProfilListener implements View.OnClickListener {
     private void saveProfil() {
 
         Person p =  context.getValues();
-        try {
-            DAOFactory.getPersonDAO(context).insertOrUpdate(p);
-            Toast.makeText(context, context.getString(R.string.profil_saved), Toast.LENGTH_SHORT).show();
-        } catch (BeerBuddyException e) {
-            Log.e(TAG, "Error accured during save: " ,e);
-            e.printStackTrace();
-        }
+            DAOFactory.getPersonDAO(context).insertOrUpdate(p, new RequestListener<Person>() {
+                @Override
+                public void onRequestFailure(SpiceException e) {
+                    Log.e(TAG, "Error accured during save: " ,e);
+                }
+
+                @Override
+                public void onRequestSuccess(Person person) {
+                    Toast.makeText(context, context.getString(R.string.profil_saved), Toast.LENGTH_SHORT).show();
+                }
+            });
+
     }
 }

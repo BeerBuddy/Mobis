@@ -26,8 +26,7 @@ public class SaveFriendInvitationRequest extends SpringAndroidSpiceRequest<Frien
 
   @Override
   public FriendInvitation loadDataFromNetwork() throws Exception {
-    getRestTemplate().postForObject(ServerUtil.getHost()+"/friendinvitation/save", person, FriendInvitation.class, Collections.EMPTY_MAP);
-    return null;
+    return getRestTemplate().postForObject(ServerUtil.getHost()+"/friendinvitation/save", person, FriendInvitation.class);
   }
 
   public String createCacheKey() {

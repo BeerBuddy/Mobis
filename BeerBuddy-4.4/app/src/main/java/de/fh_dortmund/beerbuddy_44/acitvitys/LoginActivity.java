@@ -15,7 +15,7 @@ import de.fh_dortmund.beerbuddy_44.listener.android.LoginListener;
 import lombok.Getter;
 import lombok.Setter;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BeerBuddyActivity {
     /* Request code used to invoke sign in user interactions. */
     private static final String TAG = "LoginActivity";
     /* Is there a ConnectionResult resolution in progress? */
@@ -27,6 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     @Getter
     @Setter
     private boolean mShouldResolve = false;
+
+    public LoginActivity(int layout, boolean finishOnLogout, boolean toolbar) {
+        super(R.layout.login_activity_main, false, false);
+    }
 
     public Person getPerson() {
         String email = ((EditText) findViewById(R.id.login_email)).getText().toString();
@@ -53,12 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+    protected void onFurtherCreate(Bundle savedInstanceState) {
         LoginListener loginListener = new LoginListener(this);
 
         //register Google Login Listener

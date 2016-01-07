@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
@@ -26,6 +25,7 @@ import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
+import lombok.Getter;
 
 /**
  * Created by David on 19.12.2015.
@@ -35,21 +35,32 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
 
     private final int layout;
     private final boolean finishOnLogout;
+    private final boolean toolbar;
 
-    public BeerBuddyActivity(int layout, boolean finishOnLogout)
-    {
+    public BeerBuddyActivity(int layout, boolean finishOnLogout) {
         this.layout = layout;
-        this.finishOnLogout =finishOnLogout;
+        this.finishOnLogout = finishOnLogout;
+        this.toolbar = true;
+    }
+
+
+    public BeerBuddyActivity(int layout, boolean finishOnLogout, boolean toolbar) {
+        this.layout = layout;
+        this.finishOnLogout = finishOnLogout;
+        this.toolbar = toolbar;
     }
 
     protected SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
+
+    public SpiceManager getSpiceManager() {
+        return spiceManager;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(finishOnLogout)
-        {
+        if (finishOnLogout) {
             //finish instance on Logout
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
@@ -62,20 +73,24 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
         }
 
         setContentView(layout);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (this.toolbar) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
+            //register Navigationb Listener
+            NavigationListener listener = new NavigationListener(this);
+            NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(listener);
+        }
 
-        //register Navigationb Listener
-        NavigationListener listener = new NavigationListener(this);
-        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(listener);
 
         onFurtherCreate(savedInstanceState);
     }
@@ -132,7 +147,6 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
         LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
         mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(ds.getCreator().getUsername() + " is drinking with " + ds.getPersons().size() + " others."));
     }
-
 
 
 }

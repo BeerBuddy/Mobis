@@ -1,18 +1,15 @@
 package de.fh_dortmund.beerbuddy_44.dao.remote;
 
-import android.content.Context;
-
-import java.util.Arrays;
-import java.util.List;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
-import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
-import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
+import de.fh_dortmund.beerbuddy_44.requests.AcceptDrinkingInvitationRequest;
+import de.fh_dortmund.beerbuddy_44.requests.DeclineDrinkingInvitationRequest;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllForDrinkingInvitationRequest;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllFromDrinkingInvitationRequest;
-import de.fh_dortmund.beerbuddy_44.requests.JoinDrinkingSpotRequest;
 import de.fh_dortmund.beerbuddy_44.requests.SaveDrinkingInvitationRequest;
 
 /**
@@ -20,67 +17,38 @@ import de.fh_dortmund.beerbuddy_44.requests.SaveDrinkingInvitationRequest;
  */
 public class DrinkingInvitationDAORemote extends DrinkingInvitationDAO {
 
-    BeerBuddyDbHelper dbHelper;
-
-    public DrinkingInvitationDAORemote(Context context) {
+    public DrinkingInvitationDAORemote(BeerBuddyActivity context) {
         super(context);
-        dbHelper = new BeerBuddyDbHelper(context);
     }
 
     @Override
-    public DrinkingInvitation insertOrUpdate(DrinkingInvitation i) throws DataAccessException {
-        try {
+    public void insertOrUpdate(DrinkingInvitation i, RequestListener<DrinkingInvitation> listener)  {
             SaveDrinkingInvitationRequest req = new SaveDrinkingInvitationRequest(i);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to insertOrUpdate DrinkingInvitation",e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
     @Override
-    public List<DrinkingInvitation> getAllFor(long personid) throws DataAccessException {
-        try {
+    public void getAllFor(long personid, RequestListener<DrinkingInvitation[]> listener)  {
             GetAllForDrinkingInvitationRequest req = new GetAllForDrinkingInvitationRequest(personid);
-            DrinkingInvitation[] drinkingInvitations = req.loadDataFromNetwork();
-            return Arrays.asList(drinkingInvitations);
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update FriendInvitation",e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
-
     @Override
-    public List<DrinkingInvitation> getAllFrom(long personid) throws DataAccessException {
-        try {
+    public void getAllFrom(long personid, RequestListener<DrinkingInvitation[]> listener)  {
             GetAllFromDrinkingInvitationRequest req = new GetAllFromDrinkingInvitationRequest(personid);
-            DrinkingInvitation[] drinkingInvitations = req.loadDataFromNetwork();
-            return Arrays.asList(drinkingInvitations);   } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update FriendInvitation",e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 
     @Override
-    public void accept(DrinkingInvitation friendInvitation) throws DataAccessException {
-        try {
-            //Eingeladener joined dem drinking Spot
-            JoinDrinkingSpotRequest req = new JoinDrinkingSpotRequest(friendInvitation.getEingeladenerId(), friendInvitation.getDrinkingSpotId());
-            req.loadDataFromNetwork();
-
-            //FIXME wirklich löschen
-            //löschen der Einladung
-            friendInvitation.setEingeladenerId(0l);
-            friendInvitation.setDrinkingSpotId(0l);
-            friendInvitation.setEinladerId(0l);
-            insertOrUpdate(friendInvitation);
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to accept DrinkingInvitation",e);
-        }
-
+    public void accept(DrinkingInvitation friendInvitation, RequestListener<Void> listener)  {
+       AcceptDrinkingInvitationRequest req = new AcceptDrinkingInvitationRequest(friendInvitation);
+        context.getSpiceManager().execute(req, listener);
     }
 
     @Override
-    public void decline(DrinkingInvitation invitation) throws BeerBuddyException {
-        //FIXME asdasd
+    public void decline(DrinkingInvitation invitation, RequestListener<Void> listener) {
+        DeclineDrinkingInvitationRequest req = new DeclineDrinkingInvitationRequest(invitation);
+        context.getSpiceManager().execute(req, listener);
     }
 
 

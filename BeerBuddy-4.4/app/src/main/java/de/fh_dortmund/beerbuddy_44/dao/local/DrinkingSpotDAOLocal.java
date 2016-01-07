@@ -6,12 +6,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -25,15 +31,15 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
     DrinkingSpotPersonDAO drinkingSpotPersonDAO;
     PersonDAOLocal personDAOLocal;
 
-    public DrinkingSpotDAOLocal(Context context) {
+    public DrinkingSpotDAOLocal(BeerBuddyActivity context) {
         super(context);
         dbHelper = new BeerBuddyDbHelper(context);
-        drinkingSpotPersonDAO= new DrinkingSpotPersonDAO(context);
+        drinkingSpotPersonDAO = new DrinkingSpotPersonDAO(context);
         personDAOLocal = new PersonDAOLocal(context);
     }
 
     @Override
-    public List<DrinkingSpot> getAll() throws DataAccessException {
+    public void getAll(RequestListener<DrinkingSpot[]> listener) {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
         try {
@@ -43,9 +49,9 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
                 DrinkingSpot di = getDrinkingSpot(dbCursor);
                 list.add(di);
             }
-            return list;
+            listener.onRequestSuccess(list.toArray(new DrinkingSpot[]{}));
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -54,12 +60,11 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         }
     }
 
-    @NonNull
     private DrinkingSpot getDrinkingSpot(Cursor dbCursor) throws DataAccessException, ParseException {
         DrinkingSpot di = new DrinkingSpot();
         di.setId(dbCursor.getLong(dbCursor.getColumnIndex("id")));
         di.setPersons(drinkingSpotPersonDAO.getByDsId(di.getId()));
-        di.setCreator(personDAOLocal.getById(dbCursor.getLong(dbCursor.getColumnIndex("creatorId"))));
+        di.setCreator(personDAOLocal.getById(di.getId()));
         di.setBeschreibung(dbCursor.getString(dbCursor.getColumnIndex("beschreibung")));
         di.setStartTime(BeerBuddyDbHelper.DATE_FORMAT.parse(dbCursor.getString(dbCursor.getColumnIndex("startTime"))));
         di.setAgeFrom(dbCursor.getInt(dbCursor.getColumnIndex("ageFrom")));
@@ -73,18 +78,16 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
 
 
     @Override
-    public DrinkingSpot getActiveByPersonId(long personId) throws DataAccessException {
+    public void getActiveByPersonId(long personId, RequestListener<DrinkingSpot> listener) {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
         try {
-            dbCursor = database.query("drinkingspot", new String[]{"id", "creatorId", "beschreibung", "startTime", "ageFrom", "ageTo", "gps", "amountMaleWithoutBeerBuddy", "amountFemaleWithoutBeerBuddy", "active"}, "active=? and personid=?", new String[]{BeerBuddyDbHelper.BOOLEAN_TRUE+"", personId+""}, null, null, null);
-            List<DrinkingSpot> list = new LinkedList<DrinkingSpot>();
+            dbCursor = database.query("drinkingspot", new String[]{"id", "creatorId", "beschreibung", "startTime", "ageFrom", "ageTo", "gps", "amountMaleWithoutBeerBuddy", "amountFemaleWithoutBeerBuddy", "active"}, "active=? and personid=?", new String[]{BeerBuddyDbHelper.BOOLEAN_TRUE + "", personId + ""}, null, null, null);
             while (dbCursor.moveToNext()) {
-               return getDrinkingSpot(dbCursor);
+                listener.onRequestSuccess(getDrinkingSpot(dbCursor));
             }
-            return null;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -95,24 +98,29 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
 
 
     @Override
-    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
-        if (getById(drinkingSpot.getId()) != null) {
-            return update(drinkingSpot);
-        } else {
-            return insert(drinkingSpot);
+    public void insertOrUpdate(final DrinkingSpot drinkingSpot, final RequestListener<DrinkingSpot> listener) {
+        try {
+            if (drinkingSpot.getId() != 0) {
+                listener.onRequestSuccess(update(drinkingSpot));
+            } else {
+                listener.onRequestSuccess(insert(drinkingSpot));
+            }
+        } catch (DataAccessException e) {
+            listener.onRequestFailure(new SpiceException(e));
         }
+
 
     }
 
-    public DrinkingSpot insert(DrinkingSpot drinkingSpot) throws DataAccessException {
+    private DrinkingSpot insert(DrinkingSpot drinkingSpot) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
             SQLiteStatement stmt = database.compileStatement("INSERT INTO drinkingspot (creatorId,beschreibung,startTime,ageFrom,ageTo,gps,amountMaleWithoutBeerBuddy,amountFemaleWithoutBeerBuddy,active) VALUES (?,?,?,?,?,?,?,?,?)");
+
             stmt.bindLong(1, drinkingSpot.getCreator().getId());
             stmt.bindString(2, drinkingSpot.getBeschreibung());
-            if(drinkingSpot.getStartTime() != null)
-            {
+            if (drinkingSpot.getStartTime() != null) {
                 stmt.bindString(3, BeerBuddyDbHelper.DATE_FORMAT.format(drinkingSpot.getStartTime()));
             }
             stmt.bindLong(4, drinkingSpot.getAgeFrom());
@@ -133,7 +141,7 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         }
     }
 
-    public DrinkingSpot update(DrinkingSpot drinkingSpot) throws DataAccessException {
+    private DrinkingSpot update(DrinkingSpot drinkingSpot) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
@@ -160,11 +168,84 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
     }
 
     @Override
-    public DrinkingSpot getById(long dsid) throws DataAccessException {
+    public void getById(long dsid, RequestListener<DrinkingSpot> listener) {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
         try {
-            dbCursor = database.query("drinkingspot", new String[]{"id", "creatorId", "beschreibung", "startTime", "ageFrom", "ageTo", "gps", "amountMaleWithoutBeerBuddy", "amountFemaleWithoutBeerBuddy", "active"}, "id=?", new String[]{dsid+""}, null, null, null);
+            dbCursor = database.query("drinkingspot", new String[]{"id", "creatorId", "beschreibung", "startTime", "ageFrom", "ageTo", "gps", "amountMaleWithoutBeerBuddy", "amountFemaleWithoutBeerBuddy", "active"}, "id=?", new String[]{dsid + ""}, null, null, null);
+            List<DrinkingSpot> list = new LinkedList<DrinkingSpot>();
+            while (dbCursor.moveToNext()) {
+                listener.onRequestSuccess(getDrinkingSpot(dbCursor));
+                return;
+            }
+        } catch (Exception e) {
+            listener.onRequestFailure(new SpiceException(e));
+        } finally {
+            if (dbCursor != null) {
+                dbCursor.close();
+            }
+            database.close();
+        }
+    }
+
+    @Override
+    public void join(long dsid, final long personId, final RequestListener<Void> listener) {
+        getById(dsid, new RequestListener<DrinkingSpot>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                listener.onRequestFailure(spiceException);
+            }
+
+            @Override
+            public void onRequestSuccess(final DrinkingSpot drinkingSpot) {
+                new PersonDAOLocal(context).getById(personId, new RequestListener<Person>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        listener.onRequestFailure(spiceException);
+                    }
+
+                    @Override
+                    public void onRequestSuccess(Person person) {
+                        drinkingSpot.getPersons().add(person);
+                        insertOrUpdate(drinkingSpot, new RequestListener<DrinkingSpot>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                listener.onRequestFailure(spiceException);
+                            }
+
+                            @Override
+                            public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                                listener.onRequestSuccess(null);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    public void join(long dsid, long personId) throws DataAccessException {
+        DrinkingSpot drinkingSpot = getById(dsid);
+        drinkingSpot.getPersons().add(new PersonDAOLocal(context).getById(personId));
+        insertOrUpdate(drinkingSpot);
+    }
+
+    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws DataAccessException {
+        if (drinkingSpot.getId() != 0) {
+            return update(drinkingSpot);
+        } else {
+            return insert(drinkingSpot);
+        }
+
+    }
+
+    private DrinkingSpot getById(long dsid) throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
+        Cursor dbCursor = null;
+        try {
+            dbCursor = database.query("drinkingspot", new String[]{"id", "creatorId", "beschreibung", "startTime", "ageFrom", "ageTo", "gps", "amountMaleWithoutBeerBuddy", "amountFemaleWithoutBeerBuddy", "active"}, "id=?", new String[]{dsid + ""}, null, null, null);
             List<DrinkingSpot> list = new LinkedList<DrinkingSpot>();
             while (dbCursor.moveToNext()) {
                 return getDrinkingSpot(dbCursor);
@@ -181,18 +262,30 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
     }
 
     @Override
-    public void join(long dsid, long personId) throws DataAccessException {
-        DrinkingSpot drinkingSpot = getById(dsid);
-        drinkingSpot.getPersons().add(new PersonDAOLocal(context).getById(personId));
-        insertOrUpdate(drinkingSpot);
-    }
+    public void deactivate(long dsid, final RequestListener<Void> listener) {
+        getById(dsid, new RequestListener<DrinkingSpot>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                listener.onRequestFailure(spiceException);
+            }
 
-    @Override
-    public void deactivate(long dsid) throws BeerBuddyException {
-        DrinkingSpot drinkingSpot = getById(dsid);
-        drinkingSpot.setActive(false);
-        insertOrUpdate(drinkingSpot);
-    }
+            @Override
+            public void onRequestSuccess(final DrinkingSpot drinkingSpot) {
+                drinkingSpot.setActive(false);
+                insertOrUpdate(drinkingSpot, new RequestListener<DrinkingSpot>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        listener.onRequestFailure(spiceException);
+                    }
 
+                    @Override
+                    public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                        listener.onRequestSuccess(null);
+                    }
+                });
+            }
+        });
+
+    }
 
 }

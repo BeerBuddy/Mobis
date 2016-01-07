@@ -16,6 +16,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
@@ -29,37 +31,54 @@ import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCallback {
     public MainViewActivity() {
-        super(R.layout.mainview_activity_main, false);
+        super(R.layout.mainview_activity_main, true);
     }
 
     private static final String TAG = "MainViewActivity";
     private LatLng location;
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
         try {
-            List<DrinkingSpot> spots = DAOFactory.getDrinkingSpotDAO(this).getAll();
-            Log.i(TAG, "Spots:  " + spots.size());
-            for (DrinkingSpot ds : spots) {
-                createMarker(ds,googleMap);
-            }
-
-            final Context context = this;
-            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            final BeerBuddyActivity context = this;
+            DAOFactory.getDrinkingSpotDAO(this).getAll(new RequestListener<DrinkingSpot[]>() {
                 @Override
-                public boolean onMarkerClick(Marker marker) {
-                    try {
-                        long dsid = Long.parseLong(marker.getSnippet());
-                        showDrinkingView(DAOFactory.getDrinkingSpotDAO(context).getById(dsid));
-                        return true;
-                    } catch (BeerBuddyException e) {
-                        e.printStackTrace();
-                    }
-                    return false;
+                public void onRequestFailure(SpiceException spiceException) {
+
                 }
 
+                @Override
+                public void onRequestSuccess(DrinkingSpot[] drinkingSpots) {
+                    Log.i(TAG, "Spots:  " + drinkingSpots.length);
+                    for (DrinkingSpot ds : drinkingSpots) {
+                        createMarker(ds, googleMap);
+                    }
+
+
+                    googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(Marker marker) {
+                            long dsid = Long.parseLong(marker.getSnippet());
+                            DAOFactory.getDrinkingSpotDAO(context).getById(dsid, new RequestListener<DrinkingSpot>() {
+                                @Override
+                                public void onRequestFailure(SpiceException spiceException) {
+
+                                }
+
+                                @Override
+                                public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                                    showDrinkingView(drinkingSpot);
+                                }
+                            });
+                            return true;
+                        }
+
+                    });
+
+                }
             });
+
 
             //get current GPS position
             if (location != null) {
@@ -114,9 +133,8 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(spot.getTotalAmount() + "/ " + spot.getAgeFrom() + " - " + spot.getAgeTo());
         ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_view)).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId()));
         ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
-       ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
     }
-
 
 
     @Override
@@ -147,9 +165,18 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
                 Bundle b = intent.getExtras();
                 long id = b.getLong("id");
                 if (id != 0) {
-                    DrinkingSpot drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getById(id);
-                    showDrinkingView(drinkingSpot);
-                    location = ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps());
+                   DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+
+                        }
+
+                        @Override
+                        public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                            showDrinkingView(drinkingSpot);
+                            location = ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps());
+                        }
+                    });
                 }
             } else {
                 location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());

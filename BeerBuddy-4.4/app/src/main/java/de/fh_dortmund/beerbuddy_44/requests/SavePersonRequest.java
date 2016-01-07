@@ -25,8 +25,7 @@ public class SavePersonRequest extends SpringAndroidSpiceRequest<Person> {
 
   @Override
   public Person loadDataFromNetwork() throws Exception {
-     getRestTemplate().postForObject(ServerUtil.getHost()+"/person/save", person, Person.class, Collections.EMPTY_MAP);
-    return null;
+    return getRestTemplate().postForObject(ServerUtil.getHost()+"/person/save", person, Person.class);
   }
 
   public String createCacheKey() {

@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -38,8 +41,19 @@ public class EditProfilActivity extends BeerBuddyActivity {
     protected void onFurtherCreate(Bundle savedInstanceState) {
         //getProfil
         try {
-            person = DAOFactory.getPersonDAO(this).getById(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-            setValues();
+           DAOFactory.getPersonDAO(this).getById(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<Person>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+
+                }
+
+                @Override
+                public void onRequestSuccess(Person p) {
+                    person =p;
+                    setValues();
+                }
+            });
+
 
            //register Listeners
             EditProfilListener profilSaveListener = new EditProfilListener(this);

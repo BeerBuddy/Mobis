@@ -5,11 +5,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -22,14 +26,14 @@ public class PersonDAOLocal extends PersonDAO {
 
     BeerBuddyDbHelper dbHelper;
 
-    public PersonDAOLocal(Context context) {
+    public PersonDAOLocal(BeerBuddyActivity context) {
         super(context);
         dbHelper = new BeerBuddyDbHelper(context);
     }
 
 
     @Override
-    public List<Person> getAll() throws DataAccessException {
+    public void getAll(RequestListener<Person[]> listener) {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
@@ -40,9 +44,9 @@ public class PersonDAOLocal extends PersonDAO {
                 Person di = getPerson(dbCursor);
                 list.add(di);
             }
-            return list;
+            listener.onRequestSuccess(list.toArray(new Person[]{}));
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -65,21 +69,20 @@ public class PersonDAOLocal extends PersonDAO {
         return p;
     }
 
-    @Override
-    public Person getById(long id) throws DataAccessException {
+    public void getById(long id, RequestListener<Person> listener) {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, "id=?", new String[]{id+""}, null, null, null);
+            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, "id=?", new String[]{id + ""}, null, null, null);
             List<Person> list = new LinkedList<Person>();
             while (dbCursor.moveToNext()) {
                 Person di = getPerson(dbCursor);
-                return di;
+                listener.onRequestSuccess(di);
+                return;
             }
-             return null;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -89,7 +92,7 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
     @Override
-    public Person getByEmail(String mail) throws DataAccessException {
+    public void getByEmail(String mail, RequestListener<Person> listener) {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
@@ -98,11 +101,10 @@ public class PersonDAOLocal extends PersonDAO {
             List<Person> list = new LinkedList<Person>();
             while (dbCursor.moveToNext()) {
                 Person di = getPerson(dbCursor);
-                return di;
+                listener.onRequestSuccess(di);
             }
-            return null;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -112,13 +114,15 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
     @Override
-    public Person insertOrUpdate(Person p) throws DataAccessException {
-        if(getById(p.getId())!= null)
-        {
-           return update(p);
-        }else
-        {
-           return insert(p);
+    public void insertOrUpdate(Person p, RequestListener<Person> listener) {
+        try {
+            if (p.getId() != 0) {
+                listener.onRequestSuccess(update(p));
+            } else {
+                listener.onRequestSuccess( insert(p));
+            }
+        } catch (DataAccessException e) {
+            listener.onRequestFailure(new SpiceException(e));
         }
     }
 
@@ -128,21 +132,25 @@ public class PersonDAOLocal extends PersonDAO {
         try {
             SQLiteStatement stmt = database.compileStatement("INSERT INTO person (email,username,image,password,gender,dateOfBirth,interests,prefers) VALUES(?,?,?,?,?,?,?,?)");
             stmt.bindString(1, p.getEmail());
-            stmt.bindString(2, p.getUsername());
-            stmt.bindBlob(3, p.getImage());
-            stmt.bindString(4, p.getPassword());
+            if (p.getUsername() != null)
+                stmt.bindString(2, p.getUsername());
+            if (p.getImage() != null)
+                stmt.bindBlob(3, p.getImage());
+            if (p.getPassword() != null)
+                stmt.bindString(4, p.getPassword());
             stmt.bindLong(5, p.getGender());
-            if(p.getDateOfBirth()!= null)
-            {
+            if (p.getDateOfBirth() != null) {
                 stmt.bindString(6, BeerBuddyDbHelper.DATE_FORMAT.format(p.getDateOfBirth()));
             }
-            stmt.bindString(7, p.getInterests());
-            stmt.bindString(8, p.getPrefers());
+            if (p.getInterests() != null)
+                stmt.bindString(7, p.getInterests());
+            if (p.getPrefers() != null)
+                stmt.bindString(8, p.getPrefers());
             long l = stmt.executeInsert();
             p.setId(l);
             return p;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to accept DrinkingInvitation", e);
+            throw new DataAccessException("Failed to insert Person", e);
         } finally {
             database.endTransaction();
             database.close();
@@ -159,17 +167,16 @@ public class PersonDAOLocal extends PersonDAO {
             stmt.bindBlob(3, p.getImage());
             stmt.bindString(4, p.getPassword());
             stmt.bindLong(5, p.getGender());
-            if(p.getDateOfBirth()!= null)
-            {
+            if (p.getDateOfBirth() != null) {
                 stmt.bindString(6, BeerBuddyDbHelper.DATE_FORMAT.format(p.getDateOfBirth()));
             }
             stmt.bindString(7, p.getInterests());
             stmt.bindString(8, p.getPrefers());
-            stmt.bindLong(9,p.getId());
+            stmt.bindLong(9, p.getId());
             stmt.executeInsert();
             return p;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to accept DrinkingInvitation", e);
+            throw new DataAccessException("Failed to update Person", e);
         } finally {
             database.endTransaction();
             database.close();
@@ -178,4 +185,25 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
 
+    public Person getById(long id) throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
+        Cursor dbCursor = null;
+
+        try {
+            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, "id=?", new String[]{id + ""}, null, null, null);
+            List<Person> list = new LinkedList<Person>();
+            while (dbCursor.moveToNext()) {
+                Person di = getPerson(dbCursor);
+                return di;
+            }
+            return null;
+        } catch (Exception e) {
+          throw new DataAccessException("",e);
+        } finally {
+            if (dbCursor != null) {
+                dbCursor.close();
+            }
+            database.close();
+        }
+    }
 }

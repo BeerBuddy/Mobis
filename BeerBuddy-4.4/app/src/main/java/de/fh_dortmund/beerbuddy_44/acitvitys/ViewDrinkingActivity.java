@@ -15,6 +15,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
@@ -68,10 +70,20 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
         try {
             if (id != 0) {
 
-                drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getById(id);
-                if (drinkingSpot != null) {
-                    setValue(drinkingSpot);
-                }
+                 DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        //TODO handle error
+                    }
+
+                    @Override
+                    public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                        if (drinkingSpot != null) {
+                            setValue(drinkingSpot);
+                        }
+                    }
+                });
+
             } else {
                 throw new MissingParameterExcetion("Expected a Parameter: long id when calling ViewDrinkingActivity");
             }
@@ -86,7 +98,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
         ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() +" - " +spot.getAgeTo());
       ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
         ((TextView) findViewById(R.id.drinking_view_description)).setText(spot.getBeschreibung());
-        final Context context = this;
+        final BeerBuddyActivity context = this;
 
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.drinking_view_groupmembers);
@@ -124,10 +136,21 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
             @Override
             public void onClick(View v) {
                 try {
-                    DAOFactory.getDrinkingSpotDAO(context).join(spot.getId(), DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId());
+                    DAOFactory.getDrinkingSpotDAO(context).join(spot.getId(), DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId(), new RequestListener<Void>() {
+                        @Override
+                        public void onRequestFailure(SpiceException e) {
+                            Log.w(TAG, "Error accord during join", e);
+                        }
+
+                        @Override
+                        public void onRequestSuccess(Void aVoid) {
+
+                        }
+                    });
                 } catch (BeerBuddyException e) {
-                    e.printStackTrace();
                     Log.w(TAG, "Error accord during join", e);
+                    e.printStackTrace();
+
                 }
             }
         });

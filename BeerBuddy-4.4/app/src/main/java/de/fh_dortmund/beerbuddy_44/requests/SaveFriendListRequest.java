@@ -26,8 +26,7 @@ public class SaveFriendListRequest extends SpringAndroidSpiceRequest<FriendList>
 
   @Override
   public FriendList loadDataFromNetwork() throws Exception {
-     getRestTemplate().postForObject(ServerUtil.getHost()+"/friendlist/save", person, FriendList.class, Collections.EMPTY_MAP);
-    return null;
+    return getRestTemplate().postForObject(ServerUtil.getHost()+"/friendlist/save", person, FriendList.class);
   }
 
   public String createCacheKey() {

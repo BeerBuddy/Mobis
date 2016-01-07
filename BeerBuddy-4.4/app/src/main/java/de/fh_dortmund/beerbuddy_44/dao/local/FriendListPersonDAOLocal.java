@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendList;
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -21,7 +22,7 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 public class FriendListPersonDAOLocal {
     BeerBuddyDbHelper dbHelper;
     PersonDAOLocal personDAO;
-    public FriendListPersonDAOLocal(Context context) {
+    public FriendListPersonDAOLocal(BeerBuddyActivity context) {
         dbHelper = new BeerBuddyDbHelper(context);
         personDAO = new PersonDAOLocal(context);
     }

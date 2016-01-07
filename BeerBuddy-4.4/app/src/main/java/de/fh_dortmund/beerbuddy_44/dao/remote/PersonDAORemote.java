@@ -2,10 +2,13 @@ package de.fh_dortmund.beerbuddy_44.dao.remote;
 
 import android.content.Context;
 
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.util.Arrays;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -19,48 +22,27 @@ import de.fh_dortmund.beerbuddy_44.requests.SavePersonRequest;
  */
 public class PersonDAORemote extends PersonDAO {
 
-    public PersonDAORemote(Context context) {
-        super(context);
-    }
 
+    public PersonDAORemote(BeerBuddyActivity context){super(context);
+    }
     @Override
-    public List<Person> getAll() throws DataAccessException {
-        try {
+    public void getAll(RequestListener<Person[]> listener) {
             GetAllPersonsRequest getAllPersonsRequest = new GetAllPersonsRequest();
-            Person[] persons = getAllPersonsRequest.loadDataFromNetwork();
-            return Arrays.asList(persons);
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to get All Persons", e);
-        }
+            context.getSpiceManager().execute(getAllPersonsRequest, listener);
     }
-
     @Override
-    public Person getById(long id) throws DataAccessException {
-        try {
+    public void getById(long id,RequestListener<Person> listener) {
             GetByIDPersonRequest req = new GetByIDPersonRequest(id);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to getById Person", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
-
     @Override
-    public Person getByEmail(String mail) throws DataAccessException {
-        try {
+    public void getByEmail(String mail,RequestListener<Person> listener) {
             GetByEmailPersonRequest req = new GetByEmailPersonRequest(mail);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to getByEmail Person", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
-
     @Override
-    public Person insertOrUpdate(Person p) throws DataAccessException {
-        try {
+    public void insertOrUpdate(Person p,RequestListener<Person> listener) {
                 SavePersonRequest req = new SavePersonRequest(p);
-                return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update Person", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 }

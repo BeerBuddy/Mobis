@@ -40,4 +40,6 @@ public class CurrentPersonDAOLocal extends CurrentPersonDAO{
         editor.remove("userid");
         editor.commit();
     }
+
+
 }

@@ -2,7 +2,11 @@ package de.fh_dortmund.beerbuddy_44.dao.remote;
 
 import android.content.Context;
 
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 import de.fh_dortmund.beerbuddy_44.requests.GetFriendListRequest;
@@ -14,38 +18,25 @@ import de.fh_dortmund.beerbuddy_44.requests.SaveFriendListRequest;
  */
 public  class FriendListDAORemote extends FriendListDAO {
 
-    public FriendListDAORemote(Context context) {
+
+    public FriendListDAORemote(BeerBuddyActivity context) {
         super(context);
     }
 
     @Override
-    public boolean isFriendFromId(long personid, long friendid) throws DataAccessException {
+    public void isFriendFromId(long personid, long friendid, RequestListener<Boolean> listener)  {
 
-        try {
             GetIsFriendRequest req = new GetIsFriendRequest(personid, friendid);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed get isFriendFromId ", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
-
     @Override
-    public FriendList getFriendList(long personid) throws DataAccessException {
-        try {
+    public void getFriendList(long personid, RequestListener<FriendList> listener)  {
             GetFriendListRequest req = new GetFriendListRequest(personid);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed getFriendList ", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
-
     @Override
-    public FriendList insertOrUpdate(FriendList friendList) throws DataAccessException {
-        try {
+    public void insertOrUpdate(FriendList friendList, RequestListener<FriendList> listener)  {
             SaveFriendListRequest req = new SaveFriendListRequest(friendList);
-            return req.loadDataFromNetwork();
-        } catch (Exception e) {
-            throw new DataAccessException("Failed insertOrUpdate FriendList ", e);
-        }
+            context.getSpiceManager().execute(req, listener);
     }
 }

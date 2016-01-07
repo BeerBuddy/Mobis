@@ -26,8 +26,7 @@ public class SaveDrinkingInvitationRequest extends SpringAndroidSpiceRequest<Dri
 
   @Override
   public DrinkingInvitation loadDataFromNetwork() throws Exception {
-     getRestTemplate().postForObject(ServerUtil.getHost()+"/drinkinginvitation/save", person, DrinkingInvitation.class, Collections.EMPTY_MAP);
-    return null;
+    return getRestTemplate().postForObject(ServerUtil.getHost()+"/drinkinginvitation/save", person, DrinkingInvitation.class);
   }
 
   public String createCacheKey() {

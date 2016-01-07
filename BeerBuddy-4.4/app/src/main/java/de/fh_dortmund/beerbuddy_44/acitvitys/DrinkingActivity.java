@@ -11,6 +11,9 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
@@ -51,10 +54,20 @@ public class DrinkingActivity extends BeerBuddyActivity {
             save.setOnClickListener(drinkingListener);
 
             try {
-                 drinkingSpot = DAOFactory.getDrinkingSpotDAO(this).getActiveByPersonId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-                if (drinkingSpot != null) {
-                    setValue(drinkingSpot);
-                }
+                  DAOFactory.getDrinkingSpotDAO(this).getActiveByPersonId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<DrinkingSpot>() {
+                     @Override
+                     public void onRequestFailure(SpiceException e) {
+                         Log.e(TAG, "Error accured during getDrinkingSpot", e);
+                     }
+
+                     @Override
+                     public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                         if (drinkingSpot != null) {
+                             setValue(drinkingSpot);
+                         }
+                     }
+                 });
+
             } catch (BeerBuddyException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Error accured during getDrinkingSpot", e);

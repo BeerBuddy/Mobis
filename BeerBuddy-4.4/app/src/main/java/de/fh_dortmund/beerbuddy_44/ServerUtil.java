@@ -14,7 +14,8 @@ public class ServerUtil {
 
     public static String getHost() {
         if (BuildConfig.DEBUG) {
-            return (Build.PRODUCT).contains("sdk") ? HOST_PROTOCOL+HOST_EMULATOR+":"+HOST_PORT : HOST_PROTOCOL+BuildConfig.LOCAL_IP+":"+HOST_PORT;
+            //return (Build.PRODUCT).contains("sdk") ? HOST_PROTOCOL+HOST_EMULATOR+":"+HOST_PORT : HOST_PROTOCOL+BuildConfig.LOCAL_IP+":"+HOST_PORT;
+            return  HOST_PROTOCOL+BuildConfig.LOCAL_IP+":"+HOST_PORT;
         }
         return HOST_PROTOCOL+HOST_PRODUCTION+":"+HOST_PORT;
     }
