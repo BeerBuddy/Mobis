@@ -53,8 +53,9 @@ public final class DAOFactory {
     }
 
 
-    public static PersonDAO getPersonDAO(BeerBuddyActivity context){
+    public static PersonDAO getPersonDAO(BeerBuddyActivity context) {
         return new PersonDAORemote(context);
+    }
 
     public static CurrentPersonDAO getCurrentPersonDAO(Context context){
         return new CurrentPersonDAOLocal(context);
