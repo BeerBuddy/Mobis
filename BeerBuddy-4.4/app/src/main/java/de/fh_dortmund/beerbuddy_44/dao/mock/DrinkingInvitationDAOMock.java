@@ -27,7 +27,7 @@ public class DrinkingInvitationDAOMock extends DrinkingInvitationDAO {
     }
 
     @Override
-    public void insertOrUpdate(DrinkingInvitation i) {
+    public DrinkingInvitation insertOrUpdate(DrinkingInvitation i) {
         if(mapEinlader.get(i.getEinladerId()) == null)
         {
             mapEinlader.put(i.getEinladerId(), new ArrayList<DrinkingInvitation>());
@@ -39,10 +39,13 @@ public class DrinkingInvitationDAOMock extends DrinkingInvitationDAO {
             mapEingeladener.put(i.getEingeladenerId(), new ArrayList<DrinkingInvitation>());
         }
         mapEingeladener.get(i.getEingeladenerId()).add(i);
+
+        return i;
     }
 
     @Override
-    public  List<DrinkingInvitation>getAllFor(long personid) {
+    public  List<DrinkingInvitation>getAllFor
+            (long personid) {
 
         List<DrinkingInvitation> friendInvitations = mapEingeladener.get(personid);
         if(friendInvitations == null || friendInvitations.isEmpty())
@@ -78,6 +81,11 @@ public class DrinkingInvitationDAOMock extends DrinkingInvitationDAO {
 
     @Override
     public void accept(DrinkingInvitation friendInvitation) throws BeerBuddyException {
+
+    }
+
+    @Override
+    public void decline(DrinkingInvitation invitation) throws BeerBuddyException {
 
     }
 

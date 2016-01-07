@@ -58,13 +58,14 @@ public class PersonDAOMock extends PersonDAO {
     }
 
     @Override
-    public void insertOrUpdate(Person p) {
+    public Person insertOrUpdate(Person p) {
         if(p.getId() == 0)
         {
             p.setId((long)(Math.random()*(double)Long.MAX_VALUE)+1);
         }
         users.put(p.getId(), p);
         Log.d(TAG, "saved Person " + p.getId());
+        return p;
     }
 
 }

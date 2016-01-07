@@ -26,7 +26,7 @@ public class FriendInvitationDAOMock extends FriendInvitationDAO {
     }
 
     @Override
-    public void insertOrUpdate(FriendInvitation i) {
+    public FriendInvitation insertOrUpdate(FriendInvitation i) {
         if(mapEinlader.get(i.getEinladerId()) == null)
         {
             mapEinlader.put(i.getEinladerId(), new ArrayList<FriendInvitation>());
@@ -38,6 +38,7 @@ public class FriendInvitationDAOMock extends FriendInvitationDAO {
             mapEingeladener.put(i.getEingeladenerId(), new ArrayList<FriendInvitation>());
         }
         mapEingeladener.get(i.getEingeladenerId()).add(i);
+        return i;
     }
 
     @Override
@@ -77,6 +78,11 @@ public class FriendInvitationDAOMock extends FriendInvitationDAO {
 
     @Override
     public void accept(FriendInvitation friendInvitation) throws BeerBuddyException {
+
+    }
+
+    @Override
+    public void decline(FriendInvitation invitation) throws BeerBuddyException {
 
     }
 
