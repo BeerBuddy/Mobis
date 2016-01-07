@@ -194,4 +194,5 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         insertOrUpdate(drinkingSpot);
     }
 
+
 }

@@ -51,7 +51,7 @@ public class FriendListResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
     @UnitOfWork
-    public void insertOrUpdate(FriendList friendList) throws BeerBuddyException {
-        friendListDAO.insertOrUpdate(friendList);
+    public FriendList insertOrUpdate(FriendList friendList) throws BeerBuddyException {
+        return friendListDAO.insertOrUpdate(friendList);
     }
 }
