@@ -48,9 +48,10 @@ public class DrinkingInvitationResource {
     @Timed
     @Path("/save")
     @Consumes({MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public void addDrinkingInvitation(DrinkingInvitation drinkingInvitation) throws BeerBuddyException {
-        invitationDAO.insertOrUpdate(drinkingInvitation);
+    public DrinkingInvitation addDrinkingInvitation(DrinkingInvitation drinkingInvitation) throws BeerBuddyException {
+        return invitationDAO.insertOrUpdate(drinkingInvitation);
     }
 
     @POST

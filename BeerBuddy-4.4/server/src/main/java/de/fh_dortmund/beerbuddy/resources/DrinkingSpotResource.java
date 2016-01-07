@@ -53,8 +53,8 @@ public class DrinkingSpotResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
     @UnitOfWork
-    public void insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
-        drinkingSpotDAO.insertOrUpdate(drinkingSpot);
+    public DrinkingSpot insertOrUpdate(DrinkingSpot drinkingSpot) throws BeerBuddyException {
+        return drinkingSpotDAO.insertOrUpdate(drinkingSpot);
     }
 
     @GET

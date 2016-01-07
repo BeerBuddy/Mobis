@@ -66,7 +66,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
     @UnitOfWork
-    public void addPerson(Person person) throws BeerBuddyException {
-        personDAO.insertOrUpdate(person);
+    public Person addPerson(Person person) throws BeerBuddyException {
+        return personDAO.insertOrUpdate(person);
     }
 }

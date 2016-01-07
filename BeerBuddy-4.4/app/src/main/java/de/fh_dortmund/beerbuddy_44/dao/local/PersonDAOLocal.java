@@ -54,12 +54,13 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
     @Override
-    public void insertOrUpdate(Person p) throws DataAccessException {
+    public Person insertOrUpdate(Person p) throws DataAccessException {
         try {
             databaseHelper.getPersonDao().createOrUpdate(p);
         } catch (SQLException e) {
             throw new DataAccessException("Failed to insert or update Person",e);
         }
+        return p;
     }
 
 

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.DatabaseHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
@@ -25,13 +26,14 @@ public class DrinkingInvitationDAORemote extends DrinkingInvitationDAO {
     }
 
     @Override
-    public void insertOrUpdate(DrinkingInvitation i) throws DataAccessException {
+    public DrinkingInvitation insertOrUpdate(DrinkingInvitation i) throws DataAccessException {
         try {
             SaveDrinkingInvitationRequest req = new SaveDrinkingInvitationRequest(i);
             req.loadDataFromNetwork();
         } catch (Exception e) {
             throw new DataAccessException("Failed to insertOrUpdate DrinkingInvitation",e);
         }
+        return i;
     }
 
     @Override
@@ -72,6 +74,11 @@ public class DrinkingInvitationDAORemote extends DrinkingInvitationDAO {
         } catch (Exception e) {
             throw new DataAccessException("Failed to accept DrinkingInvitation",e);
         }
+
+    }
+
+    @Override
+    public void decline(DrinkingInvitation invitation) throws BeerBuddyException {
 
     }
 

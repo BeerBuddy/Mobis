@@ -44,11 +44,12 @@ public class FriendListDAOLocal extends FriendListDAO {
     }
 
     @Override
-    public void insertOrUpdate(FriendList friendList) throws DataAccessException {
+    public FriendList insertOrUpdate(FriendList friendList) throws DataAccessException {
         try {
             databaseHelper.getFriendListDao().createOrUpdate(friendList);
         } catch (SQLException e) {
             throw new DataAccessException("Failed to insert or update friendList",e);
         }
+        return friendList;
     }
 }

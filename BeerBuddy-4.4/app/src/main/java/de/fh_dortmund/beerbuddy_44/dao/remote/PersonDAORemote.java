@@ -55,12 +55,13 @@ public class PersonDAORemote extends PersonDAO {
     }
 
     @Override
-    public void insertOrUpdate(Person p) throws DataAccessException {
+    public Person insertOrUpdate(Person p) throws DataAccessException {
         try {
                 SavePersonRequest req = new SavePersonRequest(p);
                 req.loadDataFromNetwork();
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update Person", e);
         }
+        return p;
     }
 }

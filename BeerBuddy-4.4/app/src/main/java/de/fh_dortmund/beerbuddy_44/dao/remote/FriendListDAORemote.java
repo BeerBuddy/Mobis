@@ -47,12 +47,13 @@ public  class FriendListDAORemote extends FriendListDAO {
     }
 
     @Override
-    public void insertOrUpdate(FriendList friendList) throws DataAccessException {
+    public FriendList insertOrUpdate(FriendList friendList) throws DataAccessException {
         try {
             SaveFriendListRequest req = new SaveFriendListRequest(friendList);
             req.loadDataFromNetwork();
         } catch (Exception e) {
             throw new DataAccessException("Failed insertOrUpdate FriendList ", e);
         }
+        return friendList;
     }
 }
