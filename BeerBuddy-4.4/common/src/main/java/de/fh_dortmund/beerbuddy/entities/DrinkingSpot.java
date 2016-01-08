@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,7 @@ public class DrinkingSpot implements Serializable {
     long id;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @NotNull
     Person creator;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -45,12 +47,14 @@ public class DrinkingSpot implements Serializable {
     String beschreibung;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     Date startTime;
 
     int ageFrom;
 
     int ageTo;
 
+    @NotNull
     String gps;
 
     int amountMaleWithoutBeerBuddy;

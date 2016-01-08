@@ -145,9 +145,13 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
     }
 
     protected void createMarker(DrinkingSpot ds, GoogleMap mMap) {
-        LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
-        mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(ds.getCreator().getUsername() + " is drinking with " + ds.getPersons().size() + " others."));
-    }
+        if(ds.getGps() != null && ds.getCreator() != null)
+        {
+            LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
+            mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(( ds.getCreator().getUsername()) + " is drinking with " + ds.getPersons().size() + " others."));
+
+        }
+       }
 
 
 }

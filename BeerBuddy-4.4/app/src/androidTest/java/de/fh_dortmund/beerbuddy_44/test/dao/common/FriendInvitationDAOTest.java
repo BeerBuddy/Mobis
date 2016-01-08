@@ -1,7 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.test.dao.common;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -13,27 +12,31 @@ import java.util.Date;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
+import de.fh_dortmund.beerbuddy.entities.FriendList;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.DrinkingSpotDAO;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.PersonDAO;
 
 /**
  * Created by grimm on 08.01.2016.
  */
-public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationTestCase2<MainViewActivity> {
+public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTestCase2<MainViewActivity> {
 
 
     private boolean testDone;
 
-    public DrinkingInvitationDAOTest() {
+    public FriendInvitationDAOTest() {
         super(MainViewActivity.class);
     }
 
-    public abstract DrinkingSpotDAO getDrinkingSpotDAO();
+    public abstract FriendListDAO getFriendListDAO();
 
-    public abstract DrinkingInvitationDAO getDrinkingInvitationDAO();
+    public abstract FriendInvitationDAO getFriendInvitationDAO();
 
     public abstract PersonDAO getPersonDAO();
 
@@ -64,12 +67,9 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
 
                     @Override
                     public void onRequestSuccess(final Person p2) {
-                        DrinkingSpot ds = new DrinkingSpot();
-                        ds.setCreator(p1);
-                        final String gps = "-33.865143;151.209900";
-                        ds.setGps(gps);
-                        ds.setStartTime(new Date());
-                        getDrinkingSpotDAO().insertOrUpdate(ds, new RequestListener<DrinkingSpot>() {
+                        FriendList fl = new FriendList();
+                        fl.setPersonid(p1.getId());
+                        getFriendListDAO().insertOrUpdate(fl, new RequestListener<FriendList>() {
                             @Override
                             public void onRequestFailure(SpiceException spiceException) {
                                 testDone = true;
@@ -78,17 +78,14 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                             }
 
                             @Override
-                            public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                            public void onRequestSuccess(FriendList drinkingSpot) {
                                 assertFalse(drinkingSpot.getId() == 0);
-                                assertEquals(p1, drinkingSpot.getCreator());
-                                assertEquals(gps, drinkingSpot.getGps());
-                                assertNotNull(drinkingSpot.getStartTime());
-                                DrinkingInvitation drinkingInvitation = new DrinkingInvitation();
-                                drinkingInvitation.setDrinkingSpotId(drinkingSpot.getId());
+                                assertEquals(p1.getId(), drinkingSpot.getPersonid());
+                                FriendInvitation drinkingInvitation = new FriendInvitation();
                                 drinkingInvitation.setEingeladenerId(p2.getId());
                                 drinkingInvitation.setEinladerId(p1.getId());
 
-                                getDrinkingInvitationDAO().insertOrUpdate(drinkingInvitation, new RequestListener<DrinkingInvitation>() {
+                                getFriendInvitationDAO().insertOrUpdate(drinkingInvitation, new RequestListener<FriendInvitation>() {
                                     @Override
                                     public void onRequestFailure(SpiceException spiceException) {
                                         testDone = true;
@@ -96,8 +93,8 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                     }
 
                                     @Override
-                                    public void onRequestSuccess(final DrinkingInvitation drinkingInvitation) {
-                                        getDrinkingInvitationDAO().getAllFor(p2.getId(), new RequestListener<DrinkingInvitation[]>() {
+                                    public void onRequestSuccess(final FriendInvitation drinkingInvitation) {
+                                        getFriendInvitationDAO().getAllFor(p2.getId(), new RequestListener<FriendInvitation[]>() {
                                             @Override
                                             public void onRequestFailure(SpiceException spiceException) {
                                                 testDone = true;
@@ -105,13 +102,13 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                             }
 
                                             @Override
-                                            public void onRequestSuccess(DrinkingInvitation[] di) {
+                                            public void onRequestSuccess(FriendInvitation[] di) {
                                                 Assert.assertTrue(Arrays.asList(di).contains(drinkingInvitation));
                                                 testDone = true;
                                             }
                                         });
 
-                                        getDrinkingInvitationDAO().getAllFrom(p1.getId(), new RequestListener<DrinkingInvitation[]>() {
+                                        getFriendInvitationDAO().getAllFrom(p1.getId(), new RequestListener<FriendInvitation[]>() {
                                             @Override
                                             public void onRequestFailure(SpiceException spiceException) {
                                                 testDone = true;
@@ -119,7 +116,7 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                             }
 
                                             @Override
-                                            public void onRequestSuccess(DrinkingInvitation[] di) {
+                                            public void onRequestSuccess(FriendInvitation[] di) {
                                                 Assert.assertTrue(Arrays.asList(di).contains(drinkingInvitation));
                                                 testDone = true;
                                             }
@@ -170,12 +167,9 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
 
                     @Override
                     public void onRequestSuccess(final Person p2) {
-                        DrinkingSpot ds = new DrinkingSpot();
-                        ds.setCreator(p1);
-                        final String gps = "-33.865143;151.209900";
-                        ds.setGps(gps);
-                        ds.setStartTime(new Date());
-                        getDrinkingSpotDAO().insertOrUpdate(ds, new RequestListener<DrinkingSpot>() {
+                        FriendList fl = new FriendList();
+                        fl.setPersonid(p1.getId());
+                        getFriendListDAO().insertOrUpdate(fl, new RequestListener<FriendList>() {
                             @Override
                             public void onRequestFailure(SpiceException spiceException) {
                                 testDone = true;
@@ -184,17 +178,14 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                             }
 
                             @Override
-                            public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                            public void onRequestSuccess(FriendList drinkingSpot) {
                                 assertFalse(drinkingSpot.getId() == 0);
-                                assertEquals(p1, drinkingSpot.getCreator());
-                                assertEquals(gps, drinkingSpot.getGps());
-                                assertNotNull(drinkingSpot.getStartTime());
-                                DrinkingInvitation drinkingInvitation = new DrinkingInvitation();
-                                drinkingInvitation.setDrinkingSpotId(drinkingSpot.getId());
+                                assertEquals(p1.getId(), drinkingSpot.getPersonid());
+                                FriendInvitation drinkingInvitation = new FriendInvitation();
                                 drinkingInvitation.setEingeladenerId(p2.getId());
                                 drinkingInvitation.setEinladerId(p1.getId());
 
-                                getDrinkingInvitationDAO().insertOrUpdate(drinkingInvitation, new RequestListener<DrinkingInvitation>() {
+                                getFriendInvitationDAO().insertOrUpdate(drinkingInvitation, new RequestListener<FriendInvitation>() {
                                     @Override
                                     public void onRequestFailure(SpiceException spiceException) {
                                         testDone = true;
@@ -202,17 +193,16 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                     }
 
                                     @Override
-                                    public void onRequestSuccess(final DrinkingInvitation drinkingInvitation) {
-                                        getDrinkingInvitationDAO().accept(drinkingInvitation, new RequestListener<Void>() {
+                                    public void onRequestSuccess(final FriendInvitation drinkingInvitation) {
+                                        getFriendInvitationDAO().accept(drinkingInvitation, new RequestListener<Void>() {
                                             @Override
                                             public void onRequestFailure(SpiceException spiceException) {
-                                                testDone = true;
-                                                fail(spiceException.getMessage());
+
                                             }
 
                                             @Override
                                             public void onRequestSuccess(Void aVoid) {
-                                                getDrinkingSpotDAO().getActiveByPersonId(p1.getId(), new RequestListener<DrinkingSpot>() {
+                                                getFriendInvitationDAO().getAllFor(p2.getId(), new RequestListener<FriendInvitation[]>() {
                                                     @Override
                                                     public void onRequestFailure(SpiceException spiceException) {
                                                         testDone = true;
@@ -220,26 +210,13 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                                     }
 
                                                     @Override
-                                                    public void onRequestSuccess(DrinkingSpot drinkingSpot) {
-                                                        Assert.assertTrue(drinkingSpot.getPersons().contains(p2));
-                                                        testDone = true;
-                                                    }
-                                                });
-                                                getDrinkingInvitationDAO().getAllFor(p2.getId(), new RequestListener<DrinkingInvitation[]>() {
-                                                    @Override
-                                                    public void onRequestFailure(SpiceException spiceException) {
-                                                        testDone = true;
-                                                        fail(spiceException.getMessage());
-                                                    }
-
-                                                    @Override
-                                                    public void onRequestSuccess(DrinkingInvitation[] di) {
+                                                    public void onRequestSuccess(FriendInvitation[] di) {
                                                         Assert.assertFalse(Arrays.asList(di).contains(drinkingInvitation));
                                                         testDone = true;
                                                     }
                                                 });
 
-                                                getDrinkingInvitationDAO().getAllFrom(p1.getId(), new RequestListener<DrinkingInvitation[]>() {
+                                                getFriendInvitationDAO().getAllFrom(p1.getId(), new RequestListener<FriendInvitation[]>() {
                                                     @Override
                                                     public void onRequestFailure(SpiceException spiceException) {
                                                         testDone = true;
@@ -247,14 +224,53 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                                     }
 
                                                     @Override
-                                                    public void onRequestSuccess(DrinkingInvitation[] di) {
+                                                    public void onRequestSuccess(FriendInvitation[] di) {
                                                         Assert.assertFalse(Arrays.asList(di).contains(drinkingInvitation));
+                                                        testDone = true;
+                                                    }
+                                                });
+
+                                                getFriendListDAO().getFriendList(p2.getId(), new RequestListener<FriendList>() {
+                                                    @Override
+                                                    public void onRequestFailure(SpiceException spiceException) {
+                                                        testDone = true;
+                                                        fail(spiceException.getMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onRequestSuccess(FriendList friendList) {
+                                                        assertTrue(friendList.getFriends().contains(p1));
+                                                        testDone = true;
+                                                    }
+                                                });
+                                                getFriendListDAO().isFriendFromId(p1.getId(), p2.getId(), new RequestListener<Boolean>() {
+                                                    @Override
+                                                    public void onRequestFailure(SpiceException spiceException) {
+                                                        testDone = true;
+                                                        fail(spiceException.getMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onRequestSuccess(Boolean aBoolean) {
+                                                        assertTrue(aBoolean);
+                                                        testDone = true;
+                                                    }
+                                                });
+                                                getFriendListDAO().isFriendFromId(p2.getId(), p1.getId(), new RequestListener<Boolean>() {
+                                                    @Override
+                                                    public void onRequestFailure(SpiceException spiceException) {
+                                                        testDone = true;
+                                                        fail(spiceException.getMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onRequestSuccess(Boolean aBoolean) {
+                                                        assertTrue(aBoolean);
                                                         testDone = true;
                                                     }
                                                 });
                                             }
                                         });
-
 
                                     }
                                 });
@@ -302,12 +318,9 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
 
                     @Override
                     public void onRequestSuccess(final Person p2) {
-                        DrinkingSpot ds = new DrinkingSpot();
-                        ds.setCreator(p1);
-                        final String gps = "-33.865143;151.209900";
-                        ds.setGps(gps);
-                        ds.setStartTime(new Date());
-                        getDrinkingSpotDAO().insertOrUpdate(ds, new RequestListener<DrinkingSpot>() {
+                        FriendList fl = new FriendList();
+                        fl.setPersonid(p1.getId());
+                        getFriendListDAO().insertOrUpdate(fl, new RequestListener<FriendList>() {
                             @Override
                             public void onRequestFailure(SpiceException spiceException) {
                                 testDone = true;
@@ -316,17 +329,14 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                             }
 
                             @Override
-                            public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                            public void onRequestSuccess(FriendList drinkingSpot) {
                                 assertFalse(drinkingSpot.getId() == 0);
-                                assertEquals(p1, drinkingSpot.getCreator());
-                                assertEquals(gps, drinkingSpot.getGps());
-                                assertNotNull(drinkingSpot.getStartTime());
-                                DrinkingInvitation drinkingInvitation = new DrinkingInvitation();
-                                drinkingInvitation.setDrinkingSpotId(drinkingSpot.getId());
+                                assertEquals(p1.getId(), drinkingSpot.getPersonid());
+                                FriendInvitation drinkingInvitation = new FriendInvitation();
                                 drinkingInvitation.setEingeladenerId(p2.getId());
                                 drinkingInvitation.setEinladerId(p1.getId());
 
-                                getDrinkingInvitationDAO().insertOrUpdate(drinkingInvitation, new RequestListener<DrinkingInvitation>() {
+                                getFriendInvitationDAO().insertOrUpdate(drinkingInvitation, new RequestListener<FriendInvitation>() {
                                     @Override
                                     public void onRequestFailure(SpiceException spiceException) {
                                         testDone = true;
@@ -334,17 +344,16 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                     }
 
                                     @Override
-                                    public void onRequestSuccess(final DrinkingInvitation drinkingInvitation) {
-                                        getDrinkingInvitationDAO().decline(drinkingInvitation, new RequestListener<Void>() {
+                                    public void onRequestSuccess(final FriendInvitation drinkingInvitation) {
+                                        getFriendInvitationDAO().decline(drinkingInvitation, new RequestListener<Void>() {
                                             @Override
                                             public void onRequestFailure(SpiceException spiceException) {
-                                                testDone = true;
-                                                fail(spiceException.getMessage());
+
                                             }
 
                                             @Override
                                             public void onRequestSuccess(Void aVoid) {
-                                                getDrinkingSpotDAO().getActiveByPersonId(p1.getId(), new RequestListener<DrinkingSpot>() {
+                                                getFriendInvitationDAO().getAllFor(p2.getId(), new RequestListener<FriendInvitation[]>() {
                                                     @Override
                                                     public void onRequestFailure(SpiceException spiceException) {
                                                         testDone = true;
@@ -352,26 +361,13 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                                     }
 
                                                     @Override
-                                                    public void onRequestSuccess(DrinkingSpot drinkingSpot) {
-                                                        Assert.assertFalse(drinkingSpot.getPersons().contains(drinkingInvitation));
-                                                        testDone = true;
-                                                    }
-                                                });
-                                                getDrinkingInvitationDAO().getAllFor(p2.getId(), new RequestListener<DrinkingInvitation[]>() {
-                                                    @Override
-                                                    public void onRequestFailure(SpiceException spiceException) {
-                                                        testDone = true;
-                                                        fail(spiceException.getMessage());
-                                                    }
-
-                                                    @Override
-                                                    public void onRequestSuccess(DrinkingInvitation[] di) {
+                                                    public void onRequestSuccess(FriendInvitation[] di) {
                                                         Assert.assertFalse(Arrays.asList(di).contains(drinkingInvitation));
                                                         testDone = true;
                                                     }
                                                 });
 
-                                                getDrinkingInvitationDAO().getAllFrom(p1.getId(), new RequestListener<DrinkingInvitation[]>() {
+                                                getFriendInvitationDAO().getAllFrom(p1.getId(), new RequestListener<FriendInvitation[]>() {
                                                     @Override
                                                     public void onRequestFailure(SpiceException spiceException) {
                                                         testDone = true;
@@ -379,14 +375,53 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                                     }
 
                                                     @Override
-                                                    public void onRequestSuccess(DrinkingInvitation[] di) {
+                                                    public void onRequestSuccess(FriendInvitation[] di) {
                                                         Assert.assertFalse(Arrays.asList(di).contains(drinkingInvitation));
+                                                        testDone = true;
+                                                    }
+                                                });
+
+                                                getFriendListDAO().getFriendList(p2.getId(), new RequestListener<FriendList>() {
+                                                    @Override
+                                                    public void onRequestFailure(SpiceException spiceException) {
+                                                        testDone = true;
+                                                        fail(spiceException.getMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onRequestSuccess(FriendList friendList) {
+                                                        assertFalse(friendList.getFriends().contains(p1));
+                                                        testDone = true;
+                                                    }
+                                                });
+                                                getFriendListDAO().isFriendFromId(p1.getId(), p2.getId(), new RequestListener<Boolean>() {
+                                                    @Override
+                                                    public void onRequestFailure(SpiceException spiceException) {
+                                                        testDone = true;
+                                                        fail(spiceException.getMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onRequestSuccess(Boolean aBoolean) {
+                                                        assertFalse(aBoolean);
+                                                        testDone = true;
+                                                    }
+                                                });
+                                                getFriendListDAO().isFriendFromId(p2.getId(), p1.getId(), new RequestListener<Boolean>() {
+                                                    @Override
+                                                    public void onRequestFailure(SpiceException spiceException) {
+                                                        testDone = true;
+                                                        fail(spiceException.getMessage());
+                                                    }
+
+                                                    @Override
+                                                    public void onRequestSuccess(Boolean aBoolean) {
+                                                        assertFalse(aBoolean);
                                                         testDone = true;
                                                     }
                                                 });
                                             }
                                         });
-
 
                                     }
                                 });
@@ -405,4 +440,5 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
         }
 
     }
+
 }

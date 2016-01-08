@@ -1,4 +1,4 @@
-package de.fh_dortmund.beerbuddy_44.test;
+package de.fh_dortmund.beerbuddy_44.test.dao.remote;
 
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
