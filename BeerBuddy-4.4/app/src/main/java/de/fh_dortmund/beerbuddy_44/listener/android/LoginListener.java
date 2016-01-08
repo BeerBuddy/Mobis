@@ -75,7 +75,7 @@ public class LoginListener implements
                         @Override
                         public void onRequestSuccess(Person person) {
                             try {
-                                currentPersonDAO.insertCurrentPersonId(p.getId());
+                                currentPersonDAO.insertCurrentPersonId(person.getId());
                                 Intent i = new Intent(activity, MainViewActivity.class);
                                 activity.startActivity(i);
                                 return;
