@@ -44,6 +44,7 @@ public class RemoteFriendListDaoTest extends ActivityInstrumentationTestCase2<Ma
         Person p = new Person();
         String uniqueEmail = "test@test." + System.currentTimeMillis();
         p.setEmail(uniqueEmail);
+        p.setPassword(uniqueEmail);
         personDAORemote.insertOrUpdate(p, new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -58,6 +59,7 @@ public class RemoteFriendListDaoTest extends ActivityInstrumentationTestCase2<Ma
         p = new Person();
         uniqueEmail = "test@test." + System.currentTimeMillis();
         p.setEmail(uniqueEmail);
+        p.setPassword(uniqueEmail);
         personDAORemote.insertOrUpdate(p, new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {

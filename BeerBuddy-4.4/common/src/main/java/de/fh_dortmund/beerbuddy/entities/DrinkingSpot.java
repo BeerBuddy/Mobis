@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy.entities;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DrinkingSpot implements Serializable {
 
     @Id

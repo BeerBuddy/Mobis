@@ -43,24 +43,11 @@ public class RemoteDrinkingInvitationDaoTest extends ActivityInstrumentationTest
 
 
         // insert a new einlader
-        Person p = new Person();
+        eingeladener = new Person();
         String uniqueEmail = "test@test." + System.currentTimeMillis();
-        p.setEmail(uniqueEmail);
-        personDAORemote.insertOrUpdate(p, new RequestListener<Person>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-
-            }
-
-            @Override
-            public void onRequestSuccess(Person person) {
-                einlader = person;
-            }
-        });
-        p = new Person();
-        uniqueEmail = "test@test." + System.currentTimeMillis();
-        p.setEmail(uniqueEmail);
-        personDAORemote.insertOrUpdate(p, new RequestListener<Person>() {
+        eingeladener.setEmail(uniqueEmail);
+        eingeladener.setPassword(uniqueEmail);
+        personDAORemote.insertOrUpdate(eingeladener, new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
@@ -69,10 +56,25 @@ public class RemoteDrinkingInvitationDaoTest extends ActivityInstrumentationTest
             @Override
             public void onRequestSuccess(Person person) {
                 eingeladener = person;
+            }
+        });
+        einlader = new Person();
+        uniqueEmail = "test@test." + System.currentTimeMillis();
+        einlader.setEmail(uniqueEmail);
+        einlader.setPassword(uniqueEmail);
+        personDAORemote.insertOrUpdate(einlader, new RequestListener<Person>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+
+            }
+
+            @Override
+            public void onRequestSuccess(Person person) {
+                einlader = person;
                 DrinkingSpot ds = new DrinkingSpot();
                 ds.setActive(true);
                 ds.setBeschreibung("test Spot");
-                ds.setCreator(einlader);
+                ds.setCreator(eingeladener);
                 ds.setGps("1231;23123");
                 ds.setStartTime(new Date(System.currentTimeMillis()));
 
