@@ -1,8 +1,9 @@
 package de.fh_dortmund.beerbuddy.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 public class DrinkingSpot implements Serializable {
 
     @Id
@@ -37,7 +38,7 @@ public class DrinkingSpot implements Serializable {
     Person creator;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<Person> persons;
+    List<Person> persons = new ArrayList<Person>();
 
     String beschreibung;
 

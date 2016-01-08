@@ -6,9 +6,12 @@ import android.util.Log;
 
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 
-import org.codehaus.jackson.map.ObjectMapper;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy_44.dao.remote.JsonSpiceService;
 import de.fh_dortmund.beerbuddy_44.requests.GetAllPersonsRequest;
 import de.fh_dortmund.beerbuddy_44.requests.SavePersonRequest;
 
@@ -28,10 +31,11 @@ public class SaveSimplePersonTest extends InstrumentationTestCase {
         p.setPassword("asdasddas");
         request = new SavePersonRequest(p);
         JacksonSpringAndroidSpiceService service = new JacksonSpringAndroidSpiceService();
+        org.codehaus.jackson.map.ObjectMapper objectMapper = new MappingJacksonHttpMessageConverter().getObjectMapper();
         request.setRestTemplate(service.createRestTemplate());
         Log.i("BuddysActivity", request.toString());
         Log.i("BuddysActivity", request.getRestTemplate().toString());
-        Log.i("BuddysActivity", new ObjectMapper().writeValueAsString(p));
+        Log.i("BuddysActivity", objectMapper.writeValueAsString(p));
     }
 
     public void test_loadDataFromNetwork() throws Exception {

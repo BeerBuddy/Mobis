@@ -3,7 +3,6 @@ package de.fh_dortmund.beerbuddy_44.requests;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.Collections;
 
@@ -27,7 +26,16 @@ public class SavePersonRequest extends SpringAndroidSpiceRequest<Person> {
 
   @Override
   public Person loadDataFromNetwork() throws Exception {
-    return getRestTemplate().postForObject(ServerUtil.getHost() + "/person/save", new ObjectMapper().writeValueAsString(person), Person.class);
+   /*
+   ObjectMapper m = new ObjectMapper();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+   m.setSerializationInclusion(JsonSerialize.Inclusion.NON_DEFAULT);
+    HttpEntity<String> entity = new HttpEntity<String>( m.writeValueAsString(person),headers);
+    return getRestTemplate().postForObject(ServerUtil.getHost() + "/person/save", entity, Person.class);
+    */
+
+    return getRestTemplate().postForObject(ServerUtil.getHost() + "/person/save", person, Person.class);
   }
 
   public String createCacheKey() {

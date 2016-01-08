@@ -1,8 +1,9 @@
 package de.fh_dortmund.beerbuddy.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 public class FriendList implements Serializable {
     @Id
     @GeneratedValue
@@ -29,7 +30,7 @@ public class FriendList implements Serializable {
     long personid;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<Person> friends;
+    List<Person> friends = new ArrayList<Person>();
 
     long version;
 }

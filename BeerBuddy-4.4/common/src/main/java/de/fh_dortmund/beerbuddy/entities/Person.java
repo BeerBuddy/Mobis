@@ -1,7 +1,6 @@
 package de.fh_dortmund.beerbuddy.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @RequiredArgsConstructor(suppressConstructorProperties = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 public class Person implements Serializable{
 
     @Id

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'findbugs'
 
-defaultTasks  'writeOrmLiteConfig', 'build'
+defaultTasks   'clean','build'
 
 android {
     signingConfigs {
@@ -83,33 +83,15 @@ configurations {
     androidTestCompile.exclude module: 'multidex'
 }
 
-project.getConfigurations().all { config ->
-    if (config.name.contains("AndroidTest")) {
-        config.resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.name == "multidex") {
-                details.useTarget("de.felixschulze.teamcity:teamcity-status-message-helper:1.2")
-            }
-        }
-    }
-}
 
 dependencies {
-    //own Projects
-    compile project(':common')
+    compile (project(':common'))
     testCompile 'junit:junit:4.12'
-    //Google Api
-    //Robo Spice
-    //Lombok
-    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
     compile ('com.google.android.gms:play-services-maps:7.8.0'){
         exclude module: 'support-v4'
     }
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
-    compile ('com.j256.ormlite:ormlite-android:4.48') {
-        exclude module: 'ormlite-core'
-    }
-
     compile ('com.android.support:design:23.1.0'){
         exclude module: 'appcompat-v7'
         exclude module: 'support-v4'
@@ -121,11 +103,3 @@ dependencies {
                 exclude module: 'support-v4'
             }
 }
-
-task writeOrmLiteConfig(type: JavaExec) {
-    main("de.fh_dortmund.beerbuddy_44.dao.util.DatabaseConfigUtil")
-    classpath(configurations.all, files('build/intermediates/classes/debug'))
-    workingDir("./src/main")
-}
-
-writeOrmLiteConfig.dependsOn 'generateDebugSources'

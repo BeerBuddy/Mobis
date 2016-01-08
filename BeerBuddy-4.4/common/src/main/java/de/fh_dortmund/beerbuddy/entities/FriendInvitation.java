@@ -1,6 +1,6 @@
 package de.fh_dortmund.beerbuddy.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
 public class FriendInvitation implements Serializable{
 
     @Id

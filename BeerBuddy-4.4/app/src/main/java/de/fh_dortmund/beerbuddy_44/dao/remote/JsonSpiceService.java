@@ -36,7 +36,6 @@ public class JsonSpiceService extends SpringAndroidSpiceService {
         FormHttpMessageConverter formHttpMessageConverter = new FormHttpMessageConverter();
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
         final List<HttpMessageConverter<?>> listHttpMessageConverters = restTemplate.getMessageConverters();
-
         listHttpMessageConverters.add(jsonConverter);
         listHttpMessageConverters.add(formHttpMessageConverter);
         listHttpMessageConverters.add(stringHttpMessageConverter);
