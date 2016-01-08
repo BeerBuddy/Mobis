@@ -30,7 +30,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     public DrinkingInvitationDAOLocal(BeerBuddyActivity context) {
         super(context);
-        dbHelper = new BeerBuddyDbHelper(context);
+        dbHelper = BeerBuddyDbHelper.getInstance(context);
     }
 
     @Override
@@ -42,6 +42,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
                 listener.onRequestSuccess(insert(i));
             }
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         }
     }
@@ -53,10 +54,12 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             stmt.bindLong(1, i.getEinladerId());
             stmt.bindLong(2, i.getDrinkingSpotId());
             stmt.bindLong(3, i.getEingeladenerId());
+            if(i.getFreitext()!= null)
             stmt.bindString(4, i.getFreitext());
             i.setId(stmt.executeInsert());
             return i;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
             database.close();
@@ -75,6 +78,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             stmt.executeInsert();
             return i;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
             database.close();
@@ -93,6 +97,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             }
             return null;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
             if (dbCursor != null) {
@@ -116,6 +121,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             }
             listener.onRequestSuccess(list.toArray(new DrinkingInvitation[]{}));
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -150,6 +156,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             }
             listener.onRequestSuccess(list.toArray(new DrinkingInvitation[]{}));
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -166,7 +173,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         try {
             //Eingeladener joined dem drinking Spot
             DrinkingSpotDAOLocal dao = new DrinkingSpotDAOLocal(context);
-            dao.join(friendInvitation.getEingeladenerId(), friendInvitation.getDrinkingSpotId());
+            dao.join(friendInvitation.getEingeladenerId(), friendInvitation.getDrinkingSpotId(), database);
 
             //löschen der Einladung
             SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkinginvitation WHERE id = ? ");
@@ -174,6 +181,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             stmt.executeInsert();
             listener.onRequestSuccess(null);
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             database.endTransaction();
@@ -193,6 +201,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             stmt.executeInsert();
             listener.onRequestSuccess(null);
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             database.endTransaction();

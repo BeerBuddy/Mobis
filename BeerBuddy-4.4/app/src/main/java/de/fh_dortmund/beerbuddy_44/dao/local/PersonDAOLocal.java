@@ -28,7 +28,7 @@ public class PersonDAOLocal extends PersonDAO {
 
     public PersonDAOLocal(BeerBuddyActivity context) {
         super(context);
-        dbHelper = new BeerBuddyDbHelper(context);
+        dbHelper = BeerBuddyDbHelper.getInstance(context);
     }
 
 
@@ -46,6 +46,7 @@ public class PersonDAOLocal extends PersonDAO {
             }
             listener.onRequestSuccess(list.toArray(new Person[]{}));
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -82,6 +83,7 @@ public class PersonDAOLocal extends PersonDAO {
                 return;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -104,6 +106,7 @@ public class PersonDAOLocal extends PersonDAO {
                 listener.onRequestSuccess(di);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -122,6 +125,7 @@ public class PersonDAOLocal extends PersonDAO {
                 listener.onRequestSuccess( insert(p));
             }
         } catch (DataAccessException e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         }
     }
@@ -150,6 +154,7 @@ public class PersonDAOLocal extends PersonDAO {
             p.setId(l);
             return p;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert Person", e);
         } finally {
             database.endTransaction();
@@ -176,6 +181,7 @@ public class PersonDAOLocal extends PersonDAO {
             stmt.executeInsert();
             return p;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to update Person", e);
         } finally {
             database.endTransaction();
@@ -185,8 +191,7 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
 
-    public Person getById(long id) throws DataAccessException {
-        SQLiteDatabase database = dbHelper.getDatabase();
+    public Person getById(long id, SQLiteDatabase database) throws DataAccessException {
         Cursor dbCursor = null;
 
         try {
@@ -198,12 +203,12 @@ public class PersonDAOLocal extends PersonDAO {
             }
             return null;
         } catch (Exception e) {
+            e.printStackTrace();
           throw new DataAccessException("",e);
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
             }
-            database.close();
         }
     }
 }

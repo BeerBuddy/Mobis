@@ -26,7 +26,7 @@ public class FriendListDAOLocal extends FriendListDAO {
     FriendListPersonDAOLocal friendListPersonDAOLocal;
     public FriendListDAOLocal(BeerBuddyActivity context) {
         super(context);
-        dbHelper = new BeerBuddyDbHelper(context);
+        dbHelper = BeerBuddyDbHelper.getInstance(context);
         friendListPersonDAOLocal = new FriendListPersonDAOLocal(context);
     }
 
@@ -62,7 +62,8 @@ public class FriendListDAOLocal extends FriendListDAO {
             while (dbCursor.moveToNext()) {
                 FriendList friendList =new FriendList();
                 friendList.setId(dbCursor.getLong(dbCursor.getColumnIndex("id")));
-                friendList.setFriends(friendListPersonDAOLocal.getAllFrom(friendList.getId()));
+                //TODO join
+                friendList.setFriends(friendListPersonDAOLocal.getAllFrom(friendList.getId(),database));
                 friendList.setPersonid(dbCursor.getLong(dbCursor.getColumnIndex("personid")));
                 listener.onRequestSuccess(friendList);
                 return;
@@ -85,7 +86,7 @@ public class FriendListDAOLocal extends FriendListDAO {
             while (dbCursor.moveToNext()) {
                 FriendList friendList =new FriendList();
                 friendList.setId(dbCursor.getLong(dbCursor.getColumnIndex("id")));
-                friendList.setFriends(friendListPersonDAOLocal.getAllFrom(friendList.getId()));
+                friendList.setFriends(friendListPersonDAOLocal.getAllFrom(friendList.getId(),database));
                 friendList.setPersonid(dbCursor.getLong(dbCursor.getColumnIndex("personid")));
                 return friendList;
             }
@@ -108,7 +109,7 @@ public class FriendListDAOLocal extends FriendListDAO {
             while (dbCursor.moveToNext()) {
                 FriendList friendList =new FriendList();
                 friendList.setId(dbCursor.getLong(dbCursor.getColumnIndex("id")));
-                friendList.setFriends(friendListPersonDAOLocal.getAllFrom(friendList.getId()));
+                friendList.setFriends(friendListPersonDAOLocal.getAllFrom(friendList.getId(),database));
                 friendList.setPersonid(dbCursor.getLong(dbCursor.getColumnIndex("personid")));
                 return friendList;
             }
@@ -146,7 +147,7 @@ public class FriendListDAOLocal extends FriendListDAO {
             SQLiteStatement stmt = database.compileStatement("INSERT INTO friendlist (personid) VALUES (?)");
             stmt.bindLong(1, i.getPersonid());
             long l = stmt.executeInsert();
-            friendListPersonDAOLocal.saveAll(l, i.getFriends());
+            friendListPersonDAOLocal.saveAll(l, i.getFriends(),database);
             i.setId(l);
             return i;
         } catch (Exception e) {
@@ -165,8 +166,8 @@ public class FriendListDAOLocal extends FriendListDAO {
             stmt.bindLong(1, i.getPersonid());
             stmt.bindLong(2, i.getId());
             stmt.executeInsert();
-            friendListPersonDAOLocal.deleteAll(i.getId());
-            friendListPersonDAOLocal.saveAll(i.getId(), i.getFriends());
+            friendListPersonDAOLocal.deleteAll(i.getId(),database);
+            friendListPersonDAOLocal.saveAll(i.getId(), i.getFriends(),database);
             return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);

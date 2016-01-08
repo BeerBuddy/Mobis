@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.text.SimpleDateFormat;
 
 public class BeerBuddyDbHelper extends SQLiteOpenHelper {
+
+    private static BeerBuddyDbHelper instance;
     // If you change the database schema, you must increment the database version.
     public static final int BOOLEAN_TRUE = 0;
     public static final int BOOLEAN_FALSE = 1;
@@ -92,8 +94,16 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     " );";
 
 
-    public BeerBuddyDbHelper(Context context) {
+    private BeerBuddyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static BeerBuddyDbHelper getInstance(Context context) {
+        if(instance == null)
+        {
+            instance = new BeerBuddyDbHelper(context);
+        }
+        return instance;
     }
 
     public void onCreate(SQLiteDatabase db) {

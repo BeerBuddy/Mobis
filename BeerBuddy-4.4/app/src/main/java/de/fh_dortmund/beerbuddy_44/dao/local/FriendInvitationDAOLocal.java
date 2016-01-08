@@ -1,6 +1,5 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -14,13 +13,10 @@ import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.entities.FriendList;
-import de.fh_dortmund.beerbuddy.entities.Person;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
-import de.fh_dortmund.beerbuddy_44.listener.rest.VoidRequestListener;
 
 /**
  * Created by David on 30.11.2015.
@@ -31,7 +27,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
 
     public FriendInvitationDAOLocal(BeerBuddyActivity context) {
         super(context);
-        dbHelper = new BeerBuddyDbHelper(context);
+        dbHelper = BeerBuddyDbHelper.getInstance(context);
     }
 
     @Override
@@ -59,6 +55,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             i.setId(l);
             return i;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
             database.close();
@@ -76,6 +73,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             stmt.executeInsert();
             return i;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
             database.close();
@@ -89,6 +87,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             stmt.bindLong(2, i.getId());
             stmt.executeInsert();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to delete FriendInvitation", e);
         } finally {
             database.close();
@@ -108,6 +107,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             }
             return null;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
         } finally {
             if (dbCursor != null) {
@@ -131,6 +131,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             }
             listener.onRequestSuccess(list.toArray(new FriendInvitation[]{}));
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -164,6 +165,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             }
             listener.onRequestSuccess(list.toArray(new FriendInvitation[]{}));
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         } finally {
             if (dbCursor != null) {
@@ -182,7 +184,12 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
 
             //Eingeladener FreindList den Einlader hinzufügen
             FriendList list = dao.getFriendList(friendInvitation.getEingeladenerId());
-            list.getFriends().add(dao2.getById(friendInvitation.getEinladerId()));
+            SQLiteDatabase database = dbHelper.getDatabase();
+            try {
+                list.getFriends().add(dao2.getById(friendInvitation.getEinladerId(), database));
+            } finally {
+                database.close();
+            }
             //und speichern
             dao.insertOrUpdate(list, new RequestListener<FriendList>() {
                 @Override
@@ -195,7 +202,13 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
                     try {
                         //Einlader FreindList den Eingeladenen hinzufügen
                         FriendList list1 = dao.getFriendList(friendInvitation.getEinladerId());
-                        list1.getFriends().add(dao2.getById(friendInvitation.getEingeladenerId()));
+                        SQLiteDatabase database = dbHelper.getDatabase();
+                        try {
+                            list1.getFriends().add(dao2.getById(friendInvitation.getEingeladenerId(), database));
+                        } finally {
+                            database.close();
+                        }
+
                         //und speichern
                         dao.insertOrUpdate(list1, new RequestListener<FriendList>() {
                             @Override
@@ -220,6 +233,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
                 }
             });
         } catch (Exception e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         }
 
@@ -231,6 +245,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
             delete(invitation);
             listener.onRequestSuccess(null);
         } catch (DataAccessException e) {
+            e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         }
 

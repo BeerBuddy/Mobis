@@ -109,7 +109,7 @@ public abstract class DrinkingSpotDAOTest extends ActivityInstrumentationTestCas
                                     }
                                 });
 
-                                getDrinkingSpotDAO().getAll( new RequestListener<DrinkingSpot[]>() {
+                                getDrinkingSpotDAO().getAll(new RequestListener<DrinkingSpot[]>() {
                                     @Override
                                     public void onRequestFailure(SpiceException spiceException) {
                                         testDone = true;
@@ -190,7 +190,8 @@ public abstract class DrinkingSpotDAOTest extends ActivityInstrumentationTestCas
                                 getDrinkingSpotDAO().deactivate(drinkingSpot.getId(), new RequestListener<Void>() {
                                     @Override
                                     public void onRequestFailure(SpiceException spiceException) {
-
+                                        testDone = true;
+                                        fail(spiceException.getMessage());
                                     }
 
                                     @Override
@@ -204,7 +205,7 @@ public abstract class DrinkingSpotDAOTest extends ActivityInstrumentationTestCas
 
                                             @Override
                                             public void onRequestSuccess(DrinkingSpot ds) {
-                                                assertFalse( ds.isActive());
+                                                assertFalse(ds.isActive());
                                                 testDone = true;
                                             }
                                         });

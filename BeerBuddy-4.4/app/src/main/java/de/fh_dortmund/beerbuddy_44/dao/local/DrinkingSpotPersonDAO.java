@@ -21,29 +21,28 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
  */
 public class DrinkingSpotPersonDAO {
     private final BeerBuddyActivity context;
+    private final PersonDAOLocal personDAOLocal;
     BeerBuddyDbHelper dbHelper;
 
 
     public DrinkingSpotPersonDAO(BeerBuddyActivity context) {
         this.context = context;
-        dbHelper = new BeerBuddyDbHelper(context);
+        dbHelper = BeerBuddyDbHelper.getInstance(context);
+         personDAOLocal = new PersonDAOLocal(context);
     }
 
-    public void deleteAll(long id) throws DataAccessException {
-        SQLiteDatabase database = dbHelper.getDatabase();
+    public void deleteAll(long id,SQLiteDatabase database) throws DataAccessException {
         try {
             SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkingspotperson WHERE drinkingSpotId = ?");
             stmt.bindLong(1, id);
             stmt.executeInsert();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to delete all DrinkingSpotPerson", e);
-        } finally {
-            database.close();
         }
     }
 
-    public void saveAll(long id, List<Person> persons) throws DataAccessException {
-        SQLiteDatabase database = dbHelper.getDatabase();
+    public void saveAll(long id, List<Person> persons, SQLiteDatabase database) throws DataAccessException {
         try {
             for(Person p: persons)
             {
@@ -53,31 +52,29 @@ public class DrinkingSpotPersonDAO {
                 stmt.executeInsert();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to insert DrinkingSpotPerson", e);
-        } finally {
-            database.close();
         }
     }
 
-    public List<Person> getByDsId(long id) throws DataAccessException {
-        SQLiteDatabase database = dbHelper.getDatabase();
+    public List<Person> getByDsId(long id, SQLiteDatabase database) throws DataAccessException {
         Cursor dbCursor = null;
 
         try {
             dbCursor = database.query("drinkingspotperson", new String[]{"id", "drinkingSpotId", "personid"}, " id = ?", new String[]{id + ""}, null, null, null);
             List<Person> list = new LinkedList<Person>();
-            PersonDAOLocal personDAOLocal = new PersonDAOLocal(context);
+            
             while (dbCursor.moveToNext()) {
-                list.add(personDAOLocal.getById(dbCursor.getLong(dbCursor.getColumnIndex("personid"))));
+                list.add(personDAOLocal.getById(dbCursor.getLong(dbCursor.getColumnIndex("personid")),database));
             }
             return list;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DataAccessException("Failed to getByDsId DrinkingSpotPerson", e);
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
             }
-            database.close();
         }
     }
 }

@@ -1,6 +1,7 @@
 package de.fh_dortmund.beerbuddy_44.test.dao.common;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -82,6 +83,9 @@ public abstract class PersonDAOTest extends ActivityInstrumentationTestCase2<Mai
                     @Override
                     public void onRequestSuccess(Person[] persons) {
                         testDone = true;
+                        for (Person p : persons) {
+                            Log.i("BeerBuddyTest", p.toString());
+                        }
                         assertTrue(Arrays.asList(persons).contains(p1));
                     }
                 });
