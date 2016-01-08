@@ -39,14 +39,14 @@ public class Person implements Serializable{
     @NonNull
     String email;
 
-    @NotBlank
-    @Length(min = 3, max = 30)
-    @NonNull
+
     String username;
 
     @Lob
     byte[]  image;
 
+    @NotBlank
+    @NonNull
     @Length(min = 3, max = 30)
     String password;
 

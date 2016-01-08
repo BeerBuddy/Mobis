@@ -1,5 +1,9 @@
 package de.fh_dortmund.beerbuddy;
 
+import org.glassfish.jersey.filter.LoggingFilter;
+
+import java.util.logging.Logger;
+
 import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
@@ -58,6 +62,10 @@ public class ServerApplication extends Application<ServerConfig> {
     @Override
     public void run(ServerConfig config, Environment env) throws Exception {
         final PersonDAO personDAO = new PersonDAO(hibernateBundle.getSessionFactory());
+        env.jersey().register(new LoggingFilter(
+                        Logger.getLogger(LoggingFilter.class.getName()),
+                        true)
+        );
         env.jersey().register(new PersonResource(personDAO));
 
         final FriendListDAO friendListDAO = new FriendListDAO(hibernateBundle.getSessionFactory());

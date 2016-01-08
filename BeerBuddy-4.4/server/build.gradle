@@ -7,7 +7,7 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
-defaultTasks 'clean', 'build', 'oneJar'
+defaultTasks 'clean', 'build', 'oneJar', 'run'
 
 // UTF-8 should be standard by now. So use it!
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

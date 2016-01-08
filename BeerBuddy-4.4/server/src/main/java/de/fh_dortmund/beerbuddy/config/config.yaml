@@ -8,7 +8,9 @@ server:
   adminConnectors:
    - type: http
      port: 9001
-
+logging:
+  loggers:
+    "com.sun.jersey.api.container.filter.LoggingFilter": INFO
 # Database settings.
 database:
   # the name of your JDBC driver
