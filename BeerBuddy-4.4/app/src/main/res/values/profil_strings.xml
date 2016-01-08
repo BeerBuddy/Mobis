@@ -10,6 +10,9 @@
     <string name="profil_gender_other">Other</string>
     <string name="profil_age">Age</string>
     <string name="profil_saved">Profil saved!</string>
+    <string name="profil_saved_error">Error while saving Profile!</string>
+    <string name="profil_saved_error_password">The new password is not identical to the retyped password. Other data will be saved.</string>
+    <string name="profil_saved_error_password_wrong">Old password is wrong. Other data will be saved.</string>
     <string name="profil_dateofbirth">Date of Birth</string>
     <string name="profil_change_date">Pick</string>
     <string name="request_send">The request was send!</string>

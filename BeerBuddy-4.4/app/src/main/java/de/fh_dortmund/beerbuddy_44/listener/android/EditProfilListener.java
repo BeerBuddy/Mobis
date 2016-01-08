@@ -17,7 +17,6 @@ import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.picker.ImagePicker;
 import de.fh_dortmund.beerbuddy_44.picker.PickerFragmentFactory;
 
@@ -70,7 +69,7 @@ public class EditProfilListener implements View.OnClickListener {
 
     private void imageChange() {
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(context);
-        context.startActivityForResult(chooseImageIntent, context.PICK_IMAGE_ID);
+        context.startActivityForResult(chooseImageIntent, EditProfilActivity.PICK_IMAGE_ID);
     }
 
     private void saveProfil() {
@@ -79,12 +78,26 @@ public class EditProfilListener implements View.OnClickListener {
             DAOFactory.getPersonDAO(context).insertOrUpdate(p, new RequestListener<Person>() {
                 @Override
                 public void onRequestFailure(SpiceException e) {
-                    Log.e(TAG, "Error accured during save: " ,e);
+                    // Error while saving the profile. We have to rollback the data because we are getting in a inconsistent state!
+                    Toast.makeText(context, context.getString(R.string.profil_saved_error), Toast.LENGTH_SHORT).show();
+                    DAOFactory.getPersonDAO(context).getById(context.getPerson().getId(), new RequestListener<Person>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            Log.e(TAG, "Error occured during save and then retrieving the person from the server: ", spiceException);
+                        }
+
+                        @Override
+                        public void onRequestSuccess(Person person) {
+                            context.setValues(person);
+                        }
+                    });
+                    Log.e(TAG, "Error occured during save: ", e);
                 }
 
                 @Override
                 public void onRequestSuccess(Person person) {
                     Toast.makeText(context, context.getString(R.string.profil_saved), Toast.LENGTH_SHORT).show();
+                    context.clearPasswordFields();
                 }
             });
 
