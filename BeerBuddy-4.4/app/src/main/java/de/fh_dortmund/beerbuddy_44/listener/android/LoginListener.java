@@ -88,8 +88,8 @@ public class LoginListener implements
                     try {
                         //Login successfull close this activity
                         currentPersonDAO.insertCurrentPersonId(person.getId());
-                        activity.setResult(Activity.RESULT_OK, new Intent(activity, MainViewActivity.class));
-                        activity.finish();//dead code ahead
+                        Intent i = new Intent(activity, MainViewActivity.class);
+                        activity.startActivity(i);
                         return;
                     } catch (BeerBuddyException e) {
                         e.printStackTrace();
