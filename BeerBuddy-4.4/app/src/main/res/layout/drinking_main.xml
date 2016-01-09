@@ -14,12 +14,14 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:measureWithLargestChild="true"
+            android:measureWithLargestChild="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
@@ -134,7 +136,9 @@
                 android:foregroundGravity="top|bottom"
                 android:paddingRight="30dp"
                 android:enabled="true"
-                android:inputType="none" />
+                android:inputType="none"
+                android:nestedScrollingEnabled="true"
+                android:foreground="#c70a0a" />
 
 
             <LinearLayout
@@ -168,19 +172,20 @@
             <ListView
                 android:id="@+id/drinking_buddys"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:fastScrollAlwaysVisible="false"
                 android:fastScrollEnabled="false"
                 android:minHeight="500dp"
                 android:drawSelectorOnTop="false"
-                android:textFilterEnabled="false" />
+                android:textFilterEnabled="false"
+                />
 
             <Button
                 android:id="@+id/drinking_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/drinking_save"
-                android:layout_marginTop="50dp"/>
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
     </ScrollView>
