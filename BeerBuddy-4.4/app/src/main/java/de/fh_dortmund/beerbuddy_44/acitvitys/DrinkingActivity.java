@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -55,7 +56,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
             invite.setOnClickListener(drinkingListener);
             save.setOnClickListener(drinkingListener);
 
-           // ((RadioButton)findViewById(R.id.drinking_alone)).setChecked(true);
+            ((RadioButton)findViewById(R.id.drinking_alone)).setChecked(true);
 
             try {
                 //Let's get the current Person
@@ -184,11 +185,29 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
     public DrinkingSpot getValue() {
 
+        //if it's a new spot, we need a spot-object first
+        //and we set the current Person as its creator
         if (drinkingSpot == null){
             drinkingSpot = new DrinkingSpot();
             drinkingSpot.setCreator(creator);
         }
-        drinkingSpot.setGps("51.49407079999999;7.420100000000048");
+
+        try {
+            //get current Location
+            LatLng location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());
+
+            //Converting Location: LatLng --> String
+            String locationString = location.toString();
+            locationString = locationString.substring(9);
+            locationString = locationString.replace("(", "");
+            locationString = locationString.replace(")", "");
+            locationString = locationString.replace(",", ";");
+            drinkingSpot.setGps(locationString);
+        } catch (BeerBuddyException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error accured during Location ", e);
+        }
+
         drinkingSpot.setStartTime(new Date());
 
         drinkingSpot.setBeschreibung(((EditText) findViewById(R.id.drinking_description)).getText().toString());
