@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 
 import org.hibernate.SessionFactory;
 
-import java.util.Collection;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
@@ -31,7 +30,7 @@ public class DrinkingSpotDAO extends AbstractDAO<DrinkingSpot> implements IDrink
     }
 
     public DrinkingSpot getActiveByPersonId(long personId) throws BeerBuddyException {
-        List<DrinkingSpot> drinkingSpots = super.currentSession().createQuery("FROM DrinkingSpot ds WHERE ds.creator.id=" + personId).list();
+        List<DrinkingSpot> drinkingSpots = super.currentSession().createQuery("FROM DrinkingSpot ds WHERE ds.active = true AND ds.creator.id=" + personId).list();
         if (drinkingSpots != null && !drinkingSpots.isEmpty()) {
             return drinkingSpots.get(0);
         }
