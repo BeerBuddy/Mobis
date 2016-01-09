@@ -14,6 +14,8 @@ import android.widget.RadioButton;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.Date;
+
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
@@ -38,6 +40,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
     private static final String TAG = "DrinkingActivity";
     @Getter
     private DrinkingSpot drinkingSpot;
+    private Person creator;
 
     @Override
     public void onFurtherCreate(Bundle savedInstanceState) {
@@ -52,17 +55,35 @@ public class DrinkingActivity extends BeerBuddyActivity {
             invite.setOnClickListener(drinkingListener);
             save.setOnClickListener(drinkingListener);
 
+           // ((RadioButton)findViewById(R.id.drinking_alone)).setChecked(true);
+
             try {
-                  DAOFactory.getDrinkingSpotDAO(this).getActiveByPersonId(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<DrinkingSpot>() {
+                //Let's get the current Person
+                long theId = DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId();
+                DAOFactory.getPersonDAO(this).getById(theId, new RequestListener<Person>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        Log.d(TAG, "No Person found");
+                    }
+
+                    @Override
+                    public void onRequestSuccess(Person person) {
+                        Log.d(TAG, "There is a person!!!");
+                        creator = person;
+                    }
+                });
+
+                DAOFactory.getDrinkingSpotDAO(this).getActiveByPersonId(theId, new RequestListener<DrinkingSpot>() {
                      @Override
                      public void onRequestFailure(SpiceException e) {
                          Log.e(TAG, "Error accured during getDrinkingSpot", e);
                      }
 
                      @Override
-                     public void onRequestSuccess(DrinkingSpot drinkingSpot) {
-                         if (drinkingSpot != null) {
-                             setValue(drinkingSpot);
+                     public void onRequestSuccess(DrinkingSpot oldDrinkingSpot) {
+                         if (oldDrinkingSpot != null) {
+                             drinkingSpot = oldDrinkingSpot;
+                             setValue(oldDrinkingSpot);
                          }
                      }
                  });
@@ -94,6 +115,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
             np2.setMinValue(0);
             np2.setMaxValue(20);
             np2.setWrapSelectorWheel(false);
+
     }
 
     public void setValue(DrinkingSpot spot) {
@@ -144,29 +166,30 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
             if(minAge > spot.getAgeFrom() )
             {
-                minAge = spot.getAgeFrom();
+                spot.setAgeFrom(minAge);
             }
 
             if(maxAge < spot.getAgeTo())
             {
-                maxAge = spot.getAgeTo();
+                spot.setAgeFrom(maxAge);
             }
 
             ((NumberPicker)findViewById(R.id.drinking_group_amount_female)).setValue(spot.getAmountFemaleWithoutBeerBuddy());
             ((NumberPicker)findViewById(R.id.drinking_group_amount_male)).setValue(spot.getAmountMaleWithoutBeerBuddy());
 
-            //((NumberPicker)findViewById(R.id.drinking_group_age_from)).setValue(minAge);
-            //((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(maxAge);
-
-
         }
 
         ((EditText)findViewById(R.id.drinking_description)).setText(spot.getBeschreibung());
-
-
     }
 
     public DrinkingSpot getValue() {
+
+        if (drinkingSpot == null){
+            drinkingSpot = new DrinkingSpot();
+            drinkingSpot.setCreator(creator);
+        }
+        drinkingSpot.setGps("51.49407079999999;7.420100000000048");
+        drinkingSpot.setStartTime(new Date());
 
         drinkingSpot.setBeschreibung(((EditText) findViewById(R.id.drinking_description)).getText().toString());
         drinkingSpot.setAmountFemaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_female)).getValue());
