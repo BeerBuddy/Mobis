@@ -1,6 +1,5 @@
 package de.fh_dortmund.beerbuddy_44.adapter;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,7 +20,9 @@ public class FriendListAdapter extends BuddyListAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = super.getView(position,convertView,parent);
+        // remove unnecessary buttons
             rowView.findViewById(R.id.buddy_list_row_button_add).setVisibility(View.GONE);
+        rowView.findViewById(R.id.buddy_list_row_button_decline).setVisibility(View.GONE);
 
         return rowView;
     }

@@ -17,5 +17,6 @@
     <string name="profil_change_date">Pick</string>
     <string name="request_send">The request was send!</string>
     <string name="request_accepted">The request was accepted!</string>
+    <string name="request_declined">The request was declined!</string>
 
 </resources>

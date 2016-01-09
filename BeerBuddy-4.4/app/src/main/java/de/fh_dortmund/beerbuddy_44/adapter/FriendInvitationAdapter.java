@@ -22,16 +22,15 @@ import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by grimm on 02.12.2015.
  */
 public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
+    public final static String UPDATE_FRIENDLIST = "de.fh_dortmund.beerbuddy_44.UPDATE_FRIENDLIST";
+    private static final String TAG = "FriendInvitationAdapter";
     private final BeerBuddyActivity context;
     private final FriendInvitation[] objects;
-    private static final String TAG = "FriendInvitationAdapter";
-    public final static String UPDATE_FRIENDLIST = "de.fh_dortmund.beerbuddy_44.UPDATE_FRIENDLIST";
 
     public FriendInvitationAdapter(BeerBuddyActivity context, int resource, FriendInvitation[] objects) {
         super(context, resource, objects);
@@ -47,10 +46,10 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
 
         final FriendInvitation friendInvitation = objects[position];
 
-        DAOFactory.getPersonDAO(context).getById(friendInvitation.getId(), new RequestListener<Person>() {
+        DAOFactory.getPersonDAO(context).getById(friendInvitation.getEinladerId(), new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                Log.e(TAG, "Error occured while getting person from friendInvitation", spiceException);
             }
 
             @Override
@@ -61,6 +60,9 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
                         ((ImageView) rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
                     }
                     ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
+                    if (p.getUsername() == null) {
+                        ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getEmail());
+                    }
                 }
             }
         });
@@ -74,7 +76,7 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
                 DAOFactory.getFriendInvitationDAO(context).accept(friendInvitation, new RequestListener<Void>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-
+                        Log.e(TAG, "Error occured while accepting friendInvitation", spiceException);
                     }
 
                     @Override
@@ -83,6 +85,28 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
                         broadcastIntent.setAction(UPDATE_FRIENDLIST);
                         context.sendBroadcast(broadcastIntent);
                         Toast.makeText(context, context.getString(R.string.request_accepted), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+        rowView.findViewById(R.id.buddy_list_row_button_decline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //decline a Friend Request
+                DAOFactory.getFriendInvitationDAO(context).decline(friendInvitation, new RequestListener<Void>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        Log.e(TAG, "Error occured while declining friendInvitation", spiceException);
+                    }
+
+                    @Override
+                    public void onRequestSuccess(Void aVoid) {
+                        Intent broadcastIntent = new Intent();
+                        broadcastIntent.setAction(UPDATE_FRIENDLIST);
+                        context.sendBroadcast(broadcastIntent);
+                        Toast.makeText(context, context.getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
                     }
                 });
 

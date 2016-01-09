@@ -1,12 +1,10 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,19 +12,18 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
-import de.fh_dortmund.beerbuddy_44.exceptions.MissingParameterExcetion;
 import de.fh_dortmund.beerbuddy_44.listener.android.ViewProfilListener;
 
 public class ViewProfilActivity extends BeerBuddyActivity {
+    private static final String TAG = "ViewProfilActivity";
+
     public ViewProfilActivity() {
         super(R.layout.view_profil_activity_main, true);
     }
-
-    private static final String TAG = "ViewProfilActivity";
 
     @Override
     protected void onFurtherCreate(Bundle savedInstanceState)  {
@@ -59,10 +56,10 @@ public class ViewProfilActivity extends BeerBuddyActivity {
                             public void onRequestSuccess(Boolean aBoolean) {
                                 if (currentPerson == person.getId() && aBoolean) {
                                     ViewProfilListener viewListener = new ViewProfilListener(context, person);
-                                    ((Button) findViewById(R.id.action_profil_send_request)).setOnClickListener(viewListener);
+                                    findViewById(R.id.action_profil_send_request).setOnClickListener(viewListener);
                                 } else {
                                     //hide the Button
-                                    ((Button) findViewById(R.id.action_profil_send_request)).setVisibility(View.INVISIBLE);
+                                    findViewById(R.id.action_profil_send_request).setVisibility(View.INVISIBLE);
                                 }
                             }
                         });
@@ -103,8 +100,10 @@ public class ViewProfilActivity extends BeerBuddyActivity {
                 Log.e(TAG, "undefinde Gender for Person:" + p.getId());
                 break;
         }
-        int ageFromBirthday = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
-        ((TextView) findViewById(R.id.profil_alter)).setText(ageFromBirthday + "");
+        if (p.getDateOfBirth() != null) {
+            int ageFromBirthday = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
+            ((TextView) findViewById(R.id.profil_alter)).setText(ageFromBirthday + "");
+        }
     }
 
 }

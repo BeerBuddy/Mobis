@@ -81,16 +81,15 @@ public class BuddysActivity extends BeerBuddyActivity {
 
     public void setValueFL() {
         ListView listViewBuddys = (ListView) this.findViewById(R.id.buddys_buddys);
-        FriendListAdapter adapter = new FriendListAdapter(this,
+        FriendListAdapter friendListAdapter = new FriendListAdapter(this,
                 R.layout.buddy_list_row_layout, friendList.getFriends().toArray(new Person[]{}));
-        listViewBuddys.setAdapter(adapter);
+        listViewBuddys.setAdapter(friendListAdapter);
     }
 
     public void setValueFI() {
         ListView listViewRequests = (ListView) this.findViewById(R.id.buddys_requests);
-        FriendInvitationAdapter freindAdapter = new FriendInvitationAdapter(this, R.layout.buddy_list_row_layout, friendInvitations.toArray(new FriendInvitation[]{}));
-        listViewRequests.setAdapter(freindAdapter);
-
+        FriendInvitationAdapter friendInvitationAdapter = new FriendInvitationAdapter(this, R.layout.buddy_list_row_layout, friendInvitations.toArray(new FriendInvitation[]{}));
+        listViewRequests.setAdapter(friendInvitationAdapter);
     }
 
 

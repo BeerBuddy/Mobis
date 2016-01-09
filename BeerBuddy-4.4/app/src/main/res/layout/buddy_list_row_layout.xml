@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,23 +11,31 @@
 
         <ImageView
             android:id="@+id/buddy_list_row_icon"
-            android:src="@drawable/avatar"
             android:layout_width="@android:dimen/app_icon_size"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="false"
+            android:src="@drawable/avatar" />
 
         <TextView
             android:id="@+id/buddy_list_row_name"
-            android:layout_width="190dp"
-            android:layout_height="match_parent"
-            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="top"
+            android:layout_toRightOf="@+id/buddy_list_row_icon"
+            android:layout_weight="1"
+            android:autoText="false"
+            android:elegantTextHeight="false"
+            android:nestedScrollingEnabled="false"
+            android:singleLine="false"
+            android:text="VeryLongUsernameOrEvenEmailAddress"
             android:textAlignment="center"
-            android:text="VeryLongUsername"
-            android:layout_gravity="top" />
+            android:textSize="18sp" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:layout_toRightOf="@+id/buddy_list_row_name"
             android:orientation="horizontal">
         <Button
             android:id="@+id/buddy_list_row_button_view"
@@ -39,9 +48,13 @@
             android:layout_height="@android:dimen/app_icon_size"
             android:drawableTop="@drawable/ic_account_plus" />
 
+            <Button
+                android:id="@+id/buddy_list_row_button_decline"
+                android:layout_width="@android:dimen/app_icon_size"
+                android:layout_height="@android:dimen/app_icon_size"
+                android:drawableTop="@drawable/ic_logout" />
+
         </LinearLayout>
-
-
     </LinearLayout>
 
 </LinearLayout>

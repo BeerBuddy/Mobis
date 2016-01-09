@@ -17,19 +17,19 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by grimm on 01.12.2015.
  */
 public class BuddyListAdapter extends ArrayAdapter<Person> {
+    private static final String TAG = "BuddyListAdapter";
     private final Person[] objects;
     private final BeerBuddyActivity context;
-    private static final String TAG = "BuddyListAdapter";
 
     public BuddyListAdapter(BeerBuddyActivity context, int resource, Person[] objects) {
         super(context, resource, objects);
@@ -38,8 +38,6 @@ public class BuddyListAdapter extends ArrayAdapter<Person> {
         this.objects = objects;
     }
 
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
@@ -47,14 +45,15 @@ public class BuddyListAdapter extends ArrayAdapter<Person> {
         View rowView = inflater.inflate(R.layout.buddy_list_row_layout, parent, false);
 
         final Person p = objects[position];
-        if(p!= null)
-        {
-            if(p.getImage() != null && p.getImage().length > 0)
-            {
+        if (p != null) {
+            if (p.getImage() != null && p.getImage().length > 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(p.getImage(), 0, p.getImage().length);
-                ((ImageView)rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
+                ((ImageView) rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
             }
             ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
+            if (p.getUsername() == null) {
+                ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getEmail());
+            }
             rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowProfilListener(context, p.getId()));
             rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,13 +77,11 @@ public class BuddyListAdapter extends ArrayAdapter<Person> {
 
                     } catch (BeerBuddyException e) {
                         e.printStackTrace();
-                        Log.e(TAG, "Error accured during FreindRequest",e);
+                        Log.e(TAG, "Error occured during FriendRequest", e);
                     }
                 }
             });
         }
-
         return rowView;
     }
-
 }
