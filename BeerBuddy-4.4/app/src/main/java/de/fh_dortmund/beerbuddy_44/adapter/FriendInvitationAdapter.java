@@ -49,7 +49,7 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
         DAOFactory.getPersonDAO(context).getById(friendInvitation.getEinladerId(), new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                Log.e(TAG, "Error occured while getting person from friendInvitation", spiceException);
+                Log.e(TAG, "Error occurred while getting person from friendInvitation", spiceException);
             }
 
             @Override
@@ -76,7 +76,7 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
                 DAOFactory.getFriendInvitationDAO(context).accept(friendInvitation, new RequestListener<Void>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        Log.e(TAG, "Error occured while accepting friendInvitation", spiceException);
+                        Log.e(TAG, "Error occurred while accepting friendInvitation", spiceException);
                     }
 
                     @Override
@@ -98,7 +98,7 @@ public class FriendInvitationAdapter extends ArrayAdapter<FriendInvitation> {
                 DAOFactory.getFriendInvitationDAO(context).decline(friendInvitation, new RequestListener<Void>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        Log.e(TAG, "Error occured while declining friendInvitation", spiceException);
+                        Log.e(TAG, "Error occurred while declining friendInvitation", spiceException);
                     }
 
                     @Override

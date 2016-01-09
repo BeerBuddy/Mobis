@@ -23,16 +23,15 @@ import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 /**
  * Created by grimm on 02.12.2015.
  */
 public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> {
+    public final static String UPDATE_DRINKING_INVITATIONS = "de.fh_dortmund.beerbuddy_44.UPDATE_DRINKING_INVITATIONS";
+    private static final String TAG = "DrinkingInvitationAd";
     private final BeerBuddyActivity context;
     private final DrinkingInvitation[] objects;
-    private static final String TAG = "DrinkingInvitationAd";
-    public final static String UPDATE_DRINKING_INVITATIONS = "de.fh_dortmund.beerbuddy_44.UPDATE_DRINKING_INVITATIONS";
 
     public DrinkingInvitationAdapter(BeerBuddyActivity context, int resource, DrinkingInvitation[] objects) {
         super(context, resource, objects);
@@ -46,12 +45,13 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.buddy_list_row_layout, parent, false);
 
-        final DrinkingInvitation friendInvitation = objects[position];
+        final DrinkingInvitation drinkingInvitation = objects[position];
 
-        DAOFactory.getPersonDAO(context).getById(friendInvitation.getEingeladenerId(), new RequestListener<Person>() {
+        // Get the drinkingInvitation einlader to display his profile picture and his username/email
+        DAOFactory.getPersonDAO(context).getById(drinkingInvitation.getEinladerId(), new RequestListener<Person>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                Log.e(TAG, "Error occurred while getting creator drinkingInvitations", spiceException);
             }
 
             @Override
@@ -62,26 +62,33 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
                         ((ImageView) rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
                     }
                     ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(person.getUsername());
+                    if (person.getUsername() == null) {
+                        ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(person.getEmail());
+                    }
                 }
             }
         });
-        DAOFactory.getDrinkingSpotDAO(context).getActiveByPersonId(friendInvitation.getEingeladenerId(), new RequestListener<DrinkingSpot>() {
+
+        // Get the drinkingSpot from the drinkingInvitation
+        DAOFactory.getDrinkingSpotDAO(context).getById(drinkingInvitation.getDrinkingSpotId(), new RequestListener<DrinkingSpot>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                Log.e(TAG, "Error occurred while getting the drinkingSpot from a drinkingInvitation", spiceException);
             }
 
             @Override
             public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                //TODO: maybe change icon of button_view to group icon
                 rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, drinkingSpot.getId()));
+
                 rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //accept a Friend Request
-                        DAOFactory.getDrinkingInvitationDAO(context).accept(friendInvitation, new RequestListener<Void>() {
+                        //accept a drinking Request
+                        DAOFactory.getDrinkingInvitationDAO(context).accept(drinkingInvitation, new RequestListener<Void>() {
                             @Override
                             public void onRequestFailure(SpiceException spiceException) {
-
+                                Log.e(TAG, "Error occurred while accepting a drinkingInvitation", spiceException);
                             }
 
                             @Override
@@ -90,6 +97,27 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
                                 broadcastIntent.setAction(UPDATE_DRINKING_INVITATIONS);
                                 context.sendBroadcast(broadcastIntent);
                                 Toast.makeText(context, context.getString(R.string.request_accepted), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                });
+                rowView.findViewById(R.id.buddy_list_row_button_decline).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //decline a drinking Request
+                        DAOFactory.getDrinkingInvitationDAO(context).decline(drinkingInvitation, new RequestListener<Void>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                Log.e(TAG, "Error occurred while declining a drinkingInvitation", spiceException);
+                            }
+
+                            @Override
+                            public void onRequestSuccess(Void aVoid) {
+                                Intent broadcastIntent = new Intent();
+                                broadcastIntent.setAction(UPDATE_DRINKING_INVITATIONS);
+                                context.sendBroadcast(broadcastIntent);
+                                Toast.makeText(context, context.getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
                             }
                         });
 
