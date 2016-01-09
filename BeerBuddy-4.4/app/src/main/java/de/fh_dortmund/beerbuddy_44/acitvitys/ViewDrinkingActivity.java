@@ -1,10 +1,7 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -14,21 +11,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Marker;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import java.util.List;
-
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.Person;
-
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.adapter.BuddyListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.MissingParameterExcetion;
 import lombok.Getter;
 
@@ -37,27 +30,26 @@ import lombok.Getter;
  * <p/>
  * Revised and Updated by Marco on 10.12.2015.
  */
-public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapReadyCallback{
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        googleMap.setMyLocationEnabled(true);
-            //get current GPS position
-            if (drinkingSpot != null) {
-                //move the map to current location
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 20));
-                createMarker(drinkingSpot,googleMap);
-            }
-    }
-
+public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapReadyCallback {
+    private static final String TAG = "ViewDrinkingAct";
+    private GoogleMap mMap;
+    @Getter
+    private DrinkingSpot drinkingSpot;
     public ViewDrinkingActivity() {
         super(R.layout.view_drinking_activity_main, true);
     }
 
-    private GoogleMap mMap;
-    private static final String TAG = "ViewDrinkingAct";
-    @Getter
-    private DrinkingSpot drinkingSpot;
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        googleMap.setMyLocationEnabled(true);
+        //get current GPS position
+        if (drinkingSpot != null) {
+            //move the map to current location
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 20));
+            createMarker(drinkingSpot, googleMap);
+        }
+    }
 
     @Override
     public void onFurtherCreate(Bundle savedInstanceState) {
@@ -70,7 +62,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
         try {
             if (id != 0) {
 
-                 DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
+                DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         //TODO handle error
@@ -95,8 +87,8 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
 
     public void setValue(final DrinkingSpot spot) {
 
-        ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() +" - " +spot.getAgeTo());
-      ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
+        ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() + " - " + spot.getAgeTo());
+        ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(spot.getCreator().getUsername());
         ((TextView) findViewById(R.id.drinking_view_description)).setText(spot.getBeschreibung());
         final BeerBuddyActivity context = this;
 
@@ -129,9 +121,11 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
         ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
 
         ((ListView) findViewById(R.id.drinking_view_usersjoined)).setAdapter(new BuddyListAdapter(context, R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{})));
-        ((Button) findViewById(R.id.drinking_view_creatorprofil)).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
-        ((Button) findViewById(R.id.drinking_view_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
-        ((Button) findViewById(R.id.drinking_view_showonmap)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnMapListener(context, spot.getId()));
+        findViewById(R.id.drinking_view_creatorprofil).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
+        findViewById(R.id.drinking_view_navigate).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
+        findViewById(R.id.drinking_view_showonmap).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnMapListener(context, spot.getId()));
+
+        /*
         ((Button) findViewById(R.id.drinking_view_join)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +148,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity  implements OnMapRea
                 }
             }
         });
+        */
 
     }
 
