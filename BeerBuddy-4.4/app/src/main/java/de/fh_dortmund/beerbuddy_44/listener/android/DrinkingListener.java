@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.listener.android;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
+import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.picker.BuddyPicker;
 
@@ -59,6 +61,8 @@ public class DrinkingListener implements View.OnClickListener {
                 @Override
                 public void onRequestSuccess(DrinkingSpot drinkingSpot) {
                     Toast.makeText(context, context.getString(R.string.drinking_saved), Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(context, MainViewActivity.class);
+                    context.startActivity(i);
                 }
             });
 

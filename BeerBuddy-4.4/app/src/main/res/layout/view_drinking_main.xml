@@ -47,10 +47,10 @@
                 <TextView
                     android:id="@+id/drinking_view_creatorname"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
+                    android:layout_height="fill_parent"
                     android:text="BeerBuddy User"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:paddingRight="20dp" />
 
 
                 <Button
@@ -83,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:text="@string/profil_age"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:paddingTop="10dp" />
 
 
             <TextView
@@ -99,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:text="@string/drinking_description"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:paddingTop="10dp" />
 
             <TextView
                 android:id="@+id/drinking_view_description"
@@ -115,7 +117,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:text="@string/mainview_usersjoined"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:paddingTop="10dp" />
 
             <ListView
                 android:id="@+id/drinking_view_usersjoined"

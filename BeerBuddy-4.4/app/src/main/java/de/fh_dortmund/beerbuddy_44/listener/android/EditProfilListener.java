@@ -16,6 +16,7 @@ import java.util.Calendar;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.EditProfilActivity;
+import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.picker.ImagePicker;
 import de.fh_dortmund.beerbuddy_44.picker.PickerFragmentFactory;
@@ -98,6 +99,8 @@ public class EditProfilListener implements View.OnClickListener {
                 public void onRequestSuccess(Person person) {
                     Toast.makeText(context, context.getString(R.string.profil_saved), Toast.LENGTH_SHORT).show();
                     context.clearPasswordFields();
+                    Intent i = new Intent(context, MainViewActivity.class);
+                    context.startActivity(i);
                 }
             });
 
