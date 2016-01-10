@@ -23,7 +23,10 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
 /**
  * Created by David on 30.11.2015.
+ *
+ * Not working
  */
+
 public class FriendInvitationDAOLocal extends FriendInvitationDAO {
 
     BeerBuddyDbHelper dbHelper;
@@ -86,7 +89,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     public void delete(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            database.delete("friendinvitation", "id = ?", new String[]{i.getId()+""});
+            database.delete("friendinvitation", "id = ?", new String[]{i.getId() + ""});
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to delete FriendInvitation", e);

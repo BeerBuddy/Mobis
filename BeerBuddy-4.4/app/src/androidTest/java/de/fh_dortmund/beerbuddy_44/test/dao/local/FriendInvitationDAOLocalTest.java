@@ -27,8 +27,7 @@ public class FriendInvitationDAOLocalTest extends FriendInvitationDAOTest {
     public void setUp() throws Exception {
         friendInvitationDAO = new FriendInvitationDAOLocal(getActivity());
         personDAO = new PersonDAOLocal(getActivity());
-        friendListDAO = new FriendListDAOLocal(getActivity()) {
-        };
+        friendListDAO = new FriendListDAOLocal(getActivity()) ;
     }
 
 

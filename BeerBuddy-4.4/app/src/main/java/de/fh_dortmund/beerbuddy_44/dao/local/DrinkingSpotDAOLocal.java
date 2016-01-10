@@ -51,7 +51,7 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
         try {
-            dbCursor = database.rawQuery(SELECT+";", null);
+            dbCursor = database.rawQuery(SELECT + " WHERE  ds.active = ?;", new String[]{ BeerBuddyDbHelper.BOOLEAN_TRUE + ""});
             Collection<DrinkingSpot> drinkingSpot = getDrinkingSpot(dbCursor);
             if (!drinkingSpot.isEmpty()) {
                 listener.onRequestSuccess(drinkingSpot.toArray(new DrinkingSpot[]{}));

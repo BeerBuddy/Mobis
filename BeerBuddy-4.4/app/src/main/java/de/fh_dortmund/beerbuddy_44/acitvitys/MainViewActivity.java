@@ -93,7 +93,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
     public void onBackPressed() {
 
         SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        if (slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.ANCHORED)) {
+        if (!slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.HIDDEN)) {
             hideDrinkingView();
         } else {
             super.onBackPressed();
@@ -103,7 +103,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
     public void hideDrinkingView() {
         SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         //maybe this should help
-        slidingUpPanelLayout.setPanelState(defaultState);
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
        // ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
     }
