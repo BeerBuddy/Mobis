@@ -10,7 +10,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -85,10 +84,8 @@ public final class ObjectMapperUtil {
 
     public static int getAgeFromBirthday(Date d) {
         long ageInMillis = System.currentTimeMillis() - d.getTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(ageInMillis);
-        int age = calendar.get(Calendar.YEAR);
-        return age;
+        int ageinYears = (int)(ageInMillis / 1000 / 60 / 60 / 24 / 365);
+        return ageinYears;
     }
 
     public static LatLng getLatLangFropmGPS(String gps) {

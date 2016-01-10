@@ -79,6 +79,8 @@ public class DrinkingActivity extends BeerBuddyActivity {
                      @Override
                      public void onRequestFailure(SpiceException e) {
                          Log.e(TAG, "Error accured during getDrinkingSpot", e);
+                         //if it's a new spot, we need a spot-object first
+                         //and we set the current Person as its creator
                          drinkingSpot = new DrinkingSpot();
                          drinkingSpot.setCreator(creator);
                      }
@@ -132,13 +134,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
     public DrinkingSpot getValue() {
 
-        //if it's a new spot, we need a spot-object first
-        //and we set the current Person as its creator
-/*        if (drinkingSpot == null) {
-            drinkingSpot = new DrinkingSpot();
-            drinkingSpot.setCreator(creator);
-        }*/
-
         try {
             //get current Location
             LatLng location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());
@@ -182,11 +177,12 @@ public class DrinkingActivity extends BeerBuddyActivity {
             layout.setVisibility(View.VISIBLE);
             //start counting
 
-            int male, female = 0;
+            int male = 0;
+            int female = 0;
             int minAge =  Integer.MAX_VALUE;
             int maxAge = -1;
-            male = spot.getAmountMaleWithoutBeerBuddy();
-            female = spot.getAmountFemaleWithoutBeerBuddy();
+            //male = spot.getAmountMaleWithoutBeerBuddy();
+            //female = spot.getAmountFemaleWithoutBeerBuddy();
             minAge = spot.getAgeFrom();
             maxAge = spot.getAgeTo();
 
@@ -195,14 +191,17 @@ public class DrinkingActivity extends BeerBuddyActivity {
             ((ListView)findViewById(R.id.drinking_buddys)).setAdapter(adapter);
 
             for (Person p : spot.getPersons()) {
-                int age = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
+                int age = Integer.MAX_VALUE;
+                if (p.getDateOfBirth() != null) {
+                    age = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
+                }
 
                 if(age > maxAge )
                 {
                     maxAge = age;
                 }
 
-                if(age < minAge)
+                if(age < minAge || minAge == 0)
                 {
                     minAge = age;
                 }
@@ -216,23 +215,24 @@ public class DrinkingActivity extends BeerBuddyActivity {
                 }
             }
 
-            if(minAge > spot.getAgeFrom() )
+            if((minAge < spot.getAgeFrom() && minAge != Integer.MAX_VALUE)|| (minAge == 0));
             {
-                spot.setAgeFrom(minAge);
+                drinkingSpot.setAgeFrom(minAge);
             }
 
-            if(maxAge < spot.getAgeTo())
+            if(maxAge > spot.getAgeTo() && maxAge != -1)
             {
-                spot.setAgeFrom(maxAge);
+                drinkingSpot.setAgeTo(maxAge);
             }
 
-            ((NumberPicker)findViewById(R.id.drinking_group_amount_female)).setValue(spot.getAmountFemaleWithoutBeerBuddy());
-            ((NumberPicker)findViewById(R.id.drinking_group_amount_male)).setValue(spot.getAmountMaleWithoutBeerBuddy());
-            ((NumberPicker)findViewById(R.id.drinking_group_age_from)).setValue(spot.getAgeFrom());
-            ((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(spot.getAgeTo());
+            drinkingSpot.setAmountFemaleWithoutBeerBuddy(female);
+            drinkingSpot.setAmountMaleWithoutBeerBuddy(male);
 
+            ((NumberPicker)findViewById(R.id.drinking_group_amount_female)).setValue(drinkingSpot.getAmountFemaleWithoutBeerBuddy());
+            ((NumberPicker)findViewById(R.id.drinking_group_amount_male)).setValue(drinkingSpot.getAmountMaleWithoutBeerBuddy());
+            ((NumberPicker)findViewById(R.id.drinking_group_age_from)).setValue(drinkingSpot.getAgeFrom());
+            ((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(drinkingSpot.getAgeTo());
         }
-
         ((EditText)findViewById(R.id.drinking_description)).setText(spot.getBeschreibung());
     }
 }
