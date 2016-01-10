@@ -75,26 +75,15 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
     public void getById(long id, RequestListener<Person> listener) {
-        SQLiteDatabase database = dbHelper.getDatabase();
-        Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers", "version"}, "id=?", new String[]{id + ""}, null, null, null);
-            List<Person> list = new LinkedList<Person>();
-            while (dbCursor.moveToNext()) {
-                Person di = getPerson(dbCursor);
-                listener.onRequestSuccess(di);
-                return;
-            }
-        } catch (Exception e) {
+            listener.onRequestSuccess(getById(id));
+        } catch (       Exception e             )
+        {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
-        } finally {
-            if (dbCursor != null) {
-                dbCursor.close();
-            }
-            database.close();
         }
+
     }
 
     @Override
@@ -203,7 +192,8 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
 
-    public Person getById(long id, SQLiteDatabase database) throws DataAccessException {
+    public Person getById(long id) throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
         try {
@@ -221,6 +211,7 @@ public class PersonDAOLocal extends PersonDAO {
             if (dbCursor != null) {
                 dbCursor.close();
             }
+            database.close();
         }
     }
 }

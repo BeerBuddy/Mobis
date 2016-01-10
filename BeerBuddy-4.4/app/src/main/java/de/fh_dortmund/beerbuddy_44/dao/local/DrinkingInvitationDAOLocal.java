@@ -48,7 +48,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         }
     }
 
-    private DrinkingInvitation insert(DrinkingInvitation i) throws DataAccessException {
+    public DrinkingInvitation insert(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         ContentValues values = new ContentValues();
         try {
@@ -68,7 +68,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         }
     }
 
-    private DrinkingInvitation update(DrinkingInvitation i) throws DataAccessException {
+    public DrinkingInvitation update(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         ContentValues values = new ContentValues();
         try {
@@ -78,7 +78,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
             values.put("freitext", i.getFreitext());
             values.put("version", i.getVersion());
 
-            database.update("drinkinginvitation",  values, "id=?",new String[]{i.getId()+""});
+            database.update("drinkinginvitation", values, "id=?", new String[]{i.getId() + ""});
             return i;
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,6 +112,16 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     @Override
     public void getAllFor(long personid, RequestListener<DrinkingInvitation[]> listener) {
+
+        try {
+            listener.onRequestSuccess(getAllFor(personid));
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onRequestFailure(new SpiceException(e));
+        }
+    }
+
+    public DrinkingInvitation[] getAllFor(long personid) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
@@ -122,10 +132,10 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
                 DrinkingInvitation di = getDrinkingInvitation(dbCursor);
                 list.add(di);
             }
-            listener.onRequestSuccess(list.toArray(new DrinkingInvitation[]{}));
+           return (list.toArray(new DrinkingInvitation[]{}));
         } catch (Exception e) {
             e.printStackTrace();
-            listener.onRequestFailure(new SpiceException(e));
+            throw new DataAccessException("Faield getAllFor DrinkingInvitation",e);
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -148,6 +158,16 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     @Override
     public void getAllFrom(long personid, RequestListener<DrinkingInvitation[]> listener) {
+
+        try {
+            listener.onRequestSuccess(getAllFrom(personid));
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onRequestFailure(new SpiceException(e));
+        }
+    }
+
+    public DrinkingInvitation[] getAllFrom(long personid) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
@@ -158,10 +178,10 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
                 DrinkingInvitation di = getDrinkingInvitation(dbCursor);
                 list.add(di);
             }
-            listener.onRequestSuccess(list.toArray(new DrinkingInvitation[]{}));
+          return (list.toArray(new DrinkingInvitation[]{}));
         } catch (Exception e) {
             e.printStackTrace();
-            listener.onRequestFailure(new SpiceException(e));
+           throw new DataAccessException("Failed getAllFrom DrinkingInvitation",e);
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();

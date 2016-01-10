@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,8 @@ import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCallback {
+    private SlidingUpPanelLayout.PanelState defaultState;
+
     public MainViewActivity() {
         super(R.layout.mainview_activity_main, true);
     }
@@ -93,8 +96,23 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        if (slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.ANCHORED)) {
+            hideDrinkingView();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     public void hideDrinkingView() {
-        ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        //maybe this should help
+        slidingUpPanelLayout.setPanelState(defaultState);
+
+       // ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
     }
 
     public void showDrinkingView(final DrinkingSpot spot) {
@@ -139,7 +157,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
 
     @Override
     protected void onFurtherCreate(Bundle savedInstanceState) {
-
+       this.defaultState =  ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).getPanelState();
         //Get the Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
