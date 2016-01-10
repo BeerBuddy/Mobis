@@ -38,17 +38,20 @@ public class IntentUtil {
     public static class ShowDrinkingSpotListener implements View.OnClickListener {
         private final long id;
         private final Context context;
+        private boolean joinPossible;
 
-        public ShowDrinkingSpotListener(Context context,long dsid)
+        public ShowDrinkingSpotListener(Context context, long dsid, boolean isJoinPossible)
         {
             this.context = context;
             this.id = dsid;
+            this.joinPossible = isJoinPossible;
         }
 
         @Override
         public void onClick(View v) {
             Intent i = new Intent(context, ViewDrinkingActivity.class);
             i.putExtra("id", id);
+            i.putExtra("joinPossible", joinPossible);
             context.startActivity(i);
         }
     }

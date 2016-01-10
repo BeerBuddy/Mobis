@@ -83,7 +83,7 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
             public void onRequestSuccess(DrinkingSpot drinkingSpot) {
                 Drawable multiple = context.getResources().getDrawable(R.drawable.ic_account_multiple);
                 ((Button) rowView.findViewById(R.id.buddy_list_row_button_view)).setCompoundDrawablesWithIntrinsicBounds(null, multiple, null, null);
-                rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, drinkingSpot.getId()));
+                rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, drinkingSpot.getId(), false));
 
                 rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,7 +129,6 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
                 });
             }
         });
-
 
         return rowView;
     }

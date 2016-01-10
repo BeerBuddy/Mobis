@@ -128,6 +128,14 @@
                         android:text="Show on Map"
                         android:textSize="14sp" />
 
+                    <Button
+                        android:id="@+id/drinking_view_join"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:src="@drawable/ic_beer"
+                        android:text="Join"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 

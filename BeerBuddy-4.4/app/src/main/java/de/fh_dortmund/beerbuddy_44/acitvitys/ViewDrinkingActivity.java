@@ -2,6 +2,7 @@ package de.fh_dortmund.beerbuddy_44.acitvitys;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -57,6 +58,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         mapFragment.getMapAsync(this);
         Bundle b = getIntent().getExtras();
         long id = b.getLong("id");
+
         try {
             if (id != 0) {
                 DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
@@ -129,30 +131,37 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         findViewById(R.id.drinking_view_navigate).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
         findViewById(R.id.drinking_view_showonmap).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnMapListener(context, spot.getId()));
 
-        /*
-        ((Button) findViewById(R.id.drinking_view_join)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    DAOFactory.getDrinkingSpotDAO(context).join(spot.getId(), DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId(), new RequestListener<Void>() {
-                        @Override
-                        public void onRequestFailure(SpiceException e) {
-                            Log.w(TAG, "Error accord during join", e);
-                        }
+        Bundle extras = getIntent().getExtras();
+        boolean joinPossible = extras.getBoolean("joinPossible");
 
-                        @Override
-                        public void onRequestSuccess(Void aVoid) {
+        if (joinPossible) {
+            findViewById(R.id.drinking_view_join).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        DAOFactory.getDrinkingSpotDAO(context).join(spot.getId(), DAOFactory.getCurrentPersonDAO(context).getCurrentPersonId(), new RequestListener<Void>() {
+                            @Override
+                            public void onRequestFailure(SpiceException e) {
+                                Log.w(TAG, "Error accord during join", e);
+                            }
 
-                        }
-                    });
-                } catch (BeerBuddyException e) {
-                    Log.w(TAG, "Error accord during join", e);
-                    e.printStackTrace();
+                            @Override
+                            public void onRequestSuccess(Void aVoid) {
 
+                            }
+                        });
+                    } catch (BeerBuddyException e) {
+                        Log.w(TAG, "Error accord during join", e);
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-        */
+            });
+        } else {
+            // if join is not possible we hide the button
+            findViewById(R.id.drinking_view_join).setVisibility(View.GONE);
+        }
+
+
 
     }
 

@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,29 +14,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.List;
-
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 
 public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCallback {
+    private static final String TAG = "MainViewActivity";
     private SlidingUpPanelLayout.PanelState defaultState;
-
+    private LatLng location;
     public MainViewActivity() {
         super(R.layout.mainview_activity_main, true);
     }
-
-    private static final String TAG = "MainViewActivity";
-    private LatLng location;
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
@@ -149,8 +142,8 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         });
         final Context context = this;
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(spot.getTotalAmount() + "/ " + spot.getAgeFrom() + " - " + spot.getAgeTo());
-        ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_view)).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId()));
-        ((Button) slidingUpPanelLayout.findViewById(R.id.mainview_navigate)).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
+        slidingUpPanelLayout.findViewById(R.id.mainview_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId(), true));
+        slidingUpPanelLayout.findViewById(R.id.mainview_navigate).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
     }
 
