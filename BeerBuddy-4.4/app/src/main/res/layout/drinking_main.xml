@@ -178,15 +178,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/drinking_invited"
-                    android:textSize="24sp"
-                    android:textStyle="bold"/>
-
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:orientation="horizontal">
@@ -200,17 +193,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-            <ListView
-                android:id="@+id/drinking_buddys"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fastScrollAlwaysVisible="false"
-                android:fastScrollEnabled="false"
-                android:minHeight="500dp"
-                android:drawSelectorOnTop="false"
-                android:textFilterEnabled="false"
-                />
 
             <LinearLayout
                 android:orientation="horizontal"

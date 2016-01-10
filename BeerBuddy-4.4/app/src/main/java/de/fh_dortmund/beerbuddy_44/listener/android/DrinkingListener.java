@@ -99,6 +99,9 @@ public class DrinkingListener implements View.OnClickListener {
     private void hideGroupLayout() {
         LinearLayout layout = (LinearLayout) context.findViewById(R.id.drinking_group_layout);
         layout.setVisibility(View.GONE);
+        if(context.getDrinkingSpot() == null){
+            context.createDrinkingSpot();
+        }
         context.getDrinkingSpot().setAmountMaleWithoutBeerBuddy(0);
         context.getDrinkingSpot().setAmountFemaleWithoutBeerBuddy(0);
         context.getDrinkingSpot().setAgeFrom(0);

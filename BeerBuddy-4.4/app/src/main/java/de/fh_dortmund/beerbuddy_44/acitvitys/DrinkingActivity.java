@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
@@ -22,16 +21,10 @@ import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
-import de.fh_dortmund.beerbuddy_44.adapter.InvitedListAdapter;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.listener.android.DrinkingListener;
 import lombok.Getter;
 
-/**
- * Created by David on 01.11.2015.
- *
- * Revised and Updated by Marco on 10.12.2015.
- */
 public class DrinkingActivity extends BeerBuddyActivity {
     private static final String TAG = "DrinkingActivity";
     @Getter
@@ -64,13 +57,12 @@ public class DrinkingActivity extends BeerBuddyActivity {
                 long theId = DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId();
                 DAOFactory.getPersonDAO(this).getById(theId, new RequestListener<Person>() {
                     @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        Log.d(TAG, "No Person found");
+                    public void onRequestFailure(SpiceException e) {
+                        Log.e(TAG, "Error accured during getPerson", e);
                     }
 
                     @Override
                     public void onRequestSuccess(Person person) {
-                        Log.d(TAG, "There is a person!!!");
                         creator = person;
                     }
                 });
@@ -81,7 +73,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
                          Log.e(TAG, "Error accured during getDrinkingSpot", e);
                          //if it's a new spot, we need a spot-object first
                          //and we set the current Person as its creator
-                         drinkingSpot = new DrinkingSpot();
+                         createDrinkingSpot();
                          drinkingSpot.setCreator(creator);
                      }
 
@@ -108,8 +100,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
                 }
             };
 
-            ListView lv = (ListView) findViewById(R.id.drinking_buddys);
-            lv.setOnTouchListener(otl);
             EditText et = (EditText) findViewById(R.id.drinking_description);
             et.setOnTouchListener(otl);
 
@@ -132,8 +122,11 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
     }
 
-    public DrinkingSpot getValue() {
+    public void createDrinkingSpot(){
+        drinkingSpot = new DrinkingSpot();
+    }
 
+    public DrinkingSpot getValue() {
         try {
             //get current Location
             LatLng location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());
@@ -153,7 +146,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
         }
 
         drinkingSpot.setStartTime(new Date());
-
         drinkingSpot.setBeschreibung(((EditText) findViewById(R.id.drinking_description)).getText().toString());
         drinkingSpot.setAmountFemaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_female)).getValue());
         drinkingSpot.setAmountMaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_male)).getValue());
@@ -185,10 +177,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
             //female = spot.getAmountFemaleWithoutBeerBuddy();
             minAge = spot.getAgeFrom();
             maxAge = spot.getAgeTo();
-
-            InvitedListAdapter adapter = new InvitedListAdapter(this,
-                    R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{}));
-            ((ListView)findViewById(R.id.drinking_buddys)).setAdapter(adapter);
 
             for (Person p : spot.getPersons()) {
                 int age = Integer.MAX_VALUE;
