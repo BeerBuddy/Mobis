@@ -90,6 +90,9 @@ public class AcceptAndDeclineDrinkingInvitationTest extends ActivityInstrumentat
         dao.join(i.getDrinkingSpotId(), i.getEingeladenerId());
         //löschen der Einladung
         drinkingInvitationDAOLocal. delete(i);
+
+        assertTrue(drinkingInvitationDAOLocal.getAllFor(p2.getId()).length == 0);
+        assertTrue(drinkingInvitationDAOLocal.getAllFrom(p.getId()).length == 0);
     }
 
     private Person insertPerson() throws DataAccessException {
