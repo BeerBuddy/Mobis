@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -49,13 +50,12 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     private FriendInvitation insert(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO friendinvitation (einladerId,eingeladenerId,freitext,version) VALUES (?,?,?,?)");
-            stmt.bindLong(1, i.getEinladerId());
-            stmt.bindLong(2, i.getEingeladenerId());
-            if(i.getFreitext()!=null)
-            stmt.bindString(3, i.getFreitext());
-            stmt.bindLong(4, i.getVersion());
-            i.setId( stmt.executeInsert());
+            ContentValues values = new ContentValues();
+            values.put("einladerId", i.getEinladerId());
+            values.put("eingeladenerId", i.getEingeladenerId());
+            values.put("freitext", i.getFreitext());
+            values.put("version", i.getVersion());
+            i.setId( database.insert("friendinvitation", null, values));
             return i;
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,15 +68,12 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     private FriendInvitation update(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE  friendinvitation SET einladerId = ? ,  eingeladenerId=?,freitext=?,version=?) WHERE id = ?  ");
-            stmt.bindLong(1, i.getEinladerId());
-            stmt.bindLong(2, i.getEingeladenerId());
-            if(i.getFreitext()!=null)
-                stmt.bindString(3, i.getFreitext());
-
-            stmt.bindLong(4, i.getVersion());
-            stmt.bindLong(5, i.getId());
-            stmt.executeUpdateDelete();
+            ContentValues values = new ContentValues();
+            values.put("einladerId", i.getEinladerId());
+            values.put("eingeladenerId", i.getEingeladenerId());
+            values.put("freitext", i.getFreitext());
+            values.put("version", i.getVersion());
+            database.update("friendinvitation", values, "id = ?", new String[]{i.getId() + ""});
             return i;
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,9 +86,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     public void delete(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("DELETE FROM friendinvitation WHERE id = ?  ");
-            stmt.bindLong(1, i.getId());
-            stmt.executeUpdateDelete();
+            database.delete("friendinvitation", "id = ?", new String[]{i.getId()+""});
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to delete FriendInvitation", e);

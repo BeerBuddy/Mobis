@@ -33,7 +33,8 @@ public abstract class PersonDAOTest extends ActivityInstrumentationTestCase2<Mai
     public void test_Insert() {
 
         Person p = new Person();
-        p.setEmail("test@Insert.de");
+        final String mail = "test@Insert" + System.currentTimeMillis() + ".de";
+        p.setEmail(mail);
         p.setPassword("test_Insert_Get1");
 
         getPersonDAO().insertOrUpdate(p, new RequestListener<Person>() {
@@ -46,7 +47,9 @@ public abstract class PersonDAOTest extends ActivityInstrumentationTestCase2<Mai
             @Override
             public void onRequestSuccess(final Person p1) {
                 assertTrue(p1.getId() != 0);
-                assertEquals("test@Insert.de", p1.getEmail());
+                assertTrue(p1.getId() != -1);
+
+                assertEquals(mail, p1.getEmail());
                 getPersonDAO().getByEmail(p1.getEmail(), new RequestListener<Person>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {

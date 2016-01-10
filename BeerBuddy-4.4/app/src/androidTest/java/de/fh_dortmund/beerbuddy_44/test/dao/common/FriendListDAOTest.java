@@ -55,6 +55,7 @@ public abstract class FriendListDAOTest extends ActivityInstrumentationTestCase2
                     @Override
                     public void onRequestSuccess(final FriendList friendList) {
                         assertTrue(friendList.getId() != 0);
+                        assertTrue(friendList.getId() != -1);
                         assertEquals(friendList.getPersonid(), p1.getId());
                         getFriendListDAO().getFriendList(p1.getId(), new RequestListener<FriendList>() {
                             @Override

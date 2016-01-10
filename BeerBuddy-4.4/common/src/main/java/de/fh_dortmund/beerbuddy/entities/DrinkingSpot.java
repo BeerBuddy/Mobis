@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy.entities;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -65,6 +66,7 @@ public class DrinkingSpot implements Serializable {
 
     long version;
 
+    @JsonIgnore
     public int getTotalAmount() {
         return persons.size() + amountFemaleWithoutBeerBuddy + amountMaleWithoutBeerBuddy;
     }

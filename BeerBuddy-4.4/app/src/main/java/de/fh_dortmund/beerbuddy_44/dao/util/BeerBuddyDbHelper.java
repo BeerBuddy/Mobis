@@ -13,7 +13,7 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
     public static final int BOOLEAN_TRUE = 0;
     public static final int BOOLEAN_FALSE = 1;
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 12;
     public static final String DATABASE_NAME = "BeerBuddy.db";
     public static String SQL_DELETE_friendlistperson = "DROP TABLE friendlistperson;";
     public static String SQL_DELETE_friendinvitation = "DROP TABLE friendinvitation;";
@@ -25,8 +25,8 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
 
 
     public static String SQL_CREATE_PERSON =
-            "CREATE TABLE person (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS person (" +
+                    "id INTEGER PRIMARY KEY," +
                     "email TEXT," +
                     "username TEXT," +
                     "image BLOB," +
@@ -38,23 +38,23 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "prefers TEXT" +
                     " );";
     public static String SQL_CREATE_FriendList =
-            "CREATE TABLE friendlist (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS friendlist (" +
+                    "id INTEGER PRIMARY KEY," +
                     "personid INTEGER," +
                     "version INTEGER," +
                     "FOREIGN KEY(id) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_FriendListPerson =
-            "CREATE TABLE friendlistperson (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS friendlistperson (" +
+                    "id INTEGER PRIMARY KEY," +
                     "friendlistid INTEGER," +
                     "personid INTEGER," +
                     "FOREIGN KEY(personid) REFERENCES person(id)," +
                     "FOREIGN KEY(friendlistid) REFERENCES friendlist(id)" +
                     " );";
     public static String SQL_CREATE_FriendInvitation =
-            "CREATE TABLE friendinvitation (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS friendinvitation (" +
+                    "id INTEGER PRIMARY KEY," +
                     "einladerId INTEGER," +
                     "eingeladenerId INTEGER," +
                     "freitext TEXT," +
@@ -63,8 +63,8 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(eingeladenerId) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingInvitation =
-            "CREATE TABLE drinkinginvitation (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS drinkinginvitation (" +
+                    "id INTEGER PRIMARY KEY," +
                     "einladerId INTEGER," +
                     "eingeladenerId INTEGER," +
                     "drinkingSpotId INTEGER," +
@@ -75,8 +75,8 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingSpot =
-            "CREATE TABLE drinkingspot (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS drinkingspot (" +
+                    "id INTEGER PRIMARY KEY," +
                     "creatorid INTEGER," +
                     "beschreibung TEXT," +
                     "startTime TEXT," +
@@ -90,8 +90,8 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(creatorid) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingSpotPerson =
-            "CREATE TABLE drinkingspotperson (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS drinkingspotperson (" +
+                    "id INTEGER PRIMARY KEY," +
                     "drinkingSpotId INTEGER," +
                     "personid INTEGER," +
                     "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)," +

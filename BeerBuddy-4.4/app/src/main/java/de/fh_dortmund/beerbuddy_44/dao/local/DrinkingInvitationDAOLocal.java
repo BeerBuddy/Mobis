@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -49,19 +50,19 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     private DrinkingInvitation insert(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
+        ContentValues values = new ContentValues();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO drinkinginvitation (einladerId,drinkingSpotId,eingeladenerId,freitext,version) VALUES (?,?,?,?,?)");
-            stmt.bindLong(1, i.getEinladerId());
-            stmt.bindLong(2, i.getDrinkingSpotId());
-            stmt.bindLong(3, i.getEingeladenerId());
-            stmt.bindLong(5, i.getVersion());
-            if(i.getFreitext()!= null)
-            stmt.bindString(4, i.getFreitext());
-            i.setId(stmt.executeInsert());
+            values.put("einladerId",  i.getEinladerId());
+            values.put("drinkingSpotId", i.getDrinkingSpotId());
+            values.put("eingeladenerId", i.getEingeladenerId());
+            values.put("freitext", i.getFreitext());
+            values.put("version", i.getVersion());
+
+            i.setId(database.insert("drinkinginvitation", null, values));
             return i;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            throw new DataAccessException("Failed to insert Person", e);
         } finally {
             database.close();
         }
@@ -69,20 +70,19 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     private DrinkingInvitation update(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
+        ContentValues values = new ContentValues();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE  drinkinginvitation SET einladerId = ? , drinkingSpotId = ?, eingeladenerId=?,freitext=?, version=?) WHERE id = ?  ");
-            stmt.bindLong(1, i.getEinladerId());
-            stmt.bindLong(2, i.getDrinkingSpotId());
-            stmt.bindLong(3, i.getEingeladenerId());
-            stmt.bindLong(3, i.getId());
-            if(i.getFreitext()!= null)
-            stmt.bindString(4, i.getFreitext());
-            stmt.bindLong(5, i.getVersion());
-            stmt.executeInsert();
+            values.put("einladerId", i.getEinladerId());
+            values.put("drinkingSpotId", i.getDrinkingSpotId());
+            values.put("eingeladenerId", i.getEingeladenerId());
+            values.put("freitext", i.getFreitext());
+            values.put("version", i.getVersion());
+
+            database.update("drinkinginvitation",  values, "id=?",new String[]{i.getId()+""});
             return i;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            throw new DataAccessException("Failed to insert Person", e);
         } finally {
             database.close();
         }
@@ -188,15 +188,12 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     public void delete(DrinkingInvitation drinkingInvitation) throws DataAccessException{
         SQLiteDatabase database = dbHelper.getDatabase();
-        database.beginTransaction();
         try {
-            SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkinginvitation WHERE id = ? ");
-            stmt.bindLong(1, drinkingInvitation.getId());
-            stmt.executeInsert();
+            database.delete("drinkinginvitation", "id = ?", new String[]{drinkingInvitation.getId() + ""});
         } catch (Exception e) {
             e.printStackTrace();
+            throw new DataAccessException("Failed to delete DrinkingInvitation",e);
         } finally {
-            database.endTransaction();
             database.close();
         }
     }

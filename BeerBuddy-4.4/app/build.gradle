@@ -47,7 +47,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "LOCAL_IP", '\"' + "217.160.126.153" + '\"'
+        buildConfigField "String", "LOCAL_IP", '\"' + "192.168.0.51" + '\"'
     }
 
 

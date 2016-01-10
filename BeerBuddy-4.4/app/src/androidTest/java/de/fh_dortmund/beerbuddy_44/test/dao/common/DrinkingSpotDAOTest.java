@@ -66,6 +66,8 @@ public abstract class DrinkingSpotDAOTest extends ActivityInstrumentationTestCas
                         final String gps = "-33.865143;151.209900";
                         ds.setGps(gps);
                         ds.setStartTime(new Date());
+                        ds.setAmountFemaleWithoutBeerBuddy(20);
+                        ds.setAmountMaleWithoutBeerBuddy(20);
                         getDrinkingSpotDAO().insertOrUpdate(ds, new RequestListener<DrinkingSpot>() {
                             @Override
                             public void onRequestFailure(SpiceException spiceException) {
@@ -76,6 +78,7 @@ public abstract class DrinkingSpotDAOTest extends ActivityInstrumentationTestCas
 
                             @Override
                             public void onRequestSuccess(final DrinkingSpot drinkingSpot) {
+                                assertFalse(drinkingSpot.getId() == -1);
                                 assertFalse(drinkingSpot.getId() == 0);
                                 assertEquals(p1, drinkingSpot.getCreator());
                                 assertEquals(gps, drinkingSpot.getGps());
@@ -182,6 +185,7 @@ public abstract class DrinkingSpotDAOTest extends ActivityInstrumentationTestCas
 
                             @Override
                             public void onRequestSuccess(final DrinkingSpot drinkingSpot) {
+                                assertFalse(drinkingSpot.getId() == -1);
                                 assertFalse(drinkingSpot.getId() == 0);
                                 assertEquals(p1, drinkingSpot.getCreator());
                                 assertEquals(gps, drinkingSpot.getGps());

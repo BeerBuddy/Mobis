@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -90,7 +91,7 @@ public class FriendListDAOLocal extends FriendListDAO {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
         try {
-            dbCursor = database.rawQuery(SELECT + " WHERE flpersonid = ?;", new String[]{personid + ""});
+            dbCursor = database.rawQuery(SELECT +" WHERE fl.personid = ?;", new String[]{personid + ""});
             Collection<FriendList> entitys = getEntitys(dbCursor);
             if (!entitys.isEmpty()) {
                 return entitys.toArray(new FriendList[]{})[0];
@@ -111,35 +112,43 @@ public class FriendListDAOLocal extends FriendListDAO {
         Map<Long, FriendList> map = new HashMap<Long, FriendList>();
         while (dbCursor.moveToNext()) {
             long dsid = dbCursor.getLong(dbCursor.getColumnIndex("flid"));
+            Person person = getPerson(dbCursor);
             if (map.get(dsid) == null) {
                 FriendList di = new FriendList();
                 di.setVersion(dbCursor.getLong(dbCursor.getColumnIndex("flversion")));
                 di.setId(dsid);
                 di.setPersonid(dbCursor.getLong(dbCursor.getColumnIndex("flpersonid")));
-                di.getFriends().add(getPerson(dbCursor));
+                if (person != null)
+                    di.getFriends().add(person);
                 map.put(dsid, di);
             } else {
-                map.get(dsid).getFriends().add(getPerson(dbCursor));
+                if (person != null)
+                    map.get(dsid).getFriends().add(person);
             }
         }
         return map.values();
     }
 
     private Person getPerson(Cursor dbCursor) throws ParseException {
-        Person p = new Person();
-        p.setId(dbCursor.getInt(dbCursor.getColumnIndex("pid")));
-        p.setUsername(dbCursor.getString(dbCursor.getColumnIndex("pusername")));
-        p.setEmail(dbCursor.getString(dbCursor.getColumnIndex("pemail")));
-        p.setPassword(dbCursor.getString(dbCursor.getColumnIndex("ppassword")));
-        String date = dbCursor.getString(dbCursor.getColumnIndex("pdateOfBirth"));
-        if (date != null)
-            p.setDateOfBirth(BeerBuddyDbHelper.DATE_FORMAT.parse(date));
-        p.setGender(dbCursor.getInt(dbCursor.getColumnIndex("pgender")));
-        p.setImage(dbCursor.getBlob(dbCursor.getColumnIndex("pimage")));
-        p.setInterests(dbCursor.getString(dbCursor.getColumnIndex("pinterests")));
-        p.setPrefers(dbCursor.getString(dbCursor.getColumnIndex("pprefers")));
-        p.setVersion(dbCursor.getInt(dbCursor.getColumnIndex("pversion")));
-        return p;
+
+        int pid = dbCursor.getInt(dbCursor.getColumnIndex("pid"));
+        if (pid != 0) {
+            Person p = new Person();
+            p.setId(pid);
+            p.setUsername(dbCursor.getString(dbCursor.getColumnIndex("pusername")));
+            p.setEmail(dbCursor.getString(dbCursor.getColumnIndex("pemail")));
+            p.setPassword(dbCursor.getString(dbCursor.getColumnIndex("ppassword")));
+            String date = dbCursor.getString(dbCursor.getColumnIndex("pdateOfBirth"));
+            if (date != null)
+                p.setDateOfBirth(BeerBuddyDbHelper.DATE_FORMAT.parse(date));
+            p.setGender(dbCursor.getInt(dbCursor.getColumnIndex("pgender")));
+            p.setImage(dbCursor.getBlob(dbCursor.getColumnIndex("pimage")));
+            p.setInterests(dbCursor.getString(dbCursor.getColumnIndex("pinterests")));
+            p.setPrefers(dbCursor.getString(dbCursor.getColumnIndex("pprefers")));
+            p.setVersion(dbCursor.getInt(dbCursor.getColumnIndex("pversion")));
+            return p;
+        }
+        return null;
     }
 
     @Override
@@ -165,41 +174,36 @@ public class FriendListDAOLocal extends FriendListDAO {
 
     public FriendList insert(FriendList i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
-        database.beginTransaction();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO friendlist (personid,version) VALUES (?,?)");
-            stmt.bindLong(1, i.getPersonid());
-            stmt.bindLong(2, i.getVersion());
-            long l = stmt.executeInsert();
-            friendListPersonDAOLocal.saveAll(l, i.getFriends(), database);
-            i.setId(l);
+
+            ContentValues values = new ContentValues();
+            values.put("personid", i.getPersonid());
+            values.put("version", i.getVersion());
+            i.setId(database.insert("friendlist", null, values));
+            friendListPersonDAOLocal.saveAll(i.getId(), i.getFriends(), database);
             return i;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            throw new DataAccessException("Failed to insert FriendList", e);
         } finally {
-            database.endTransaction();
             database.close();
         }
     }
 
     public FriendList update(FriendList i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
-        database.beginTransaction();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE friendlist SET personid = ? , version = ? WHERE id=? ");
-            stmt.bindLong(1, i.getPersonid());
-            stmt.bindLong(2, i.getVersion());
-            stmt.bindLong(3, i.getId());
-            stmt.executeUpdateDelete();
+
+            ContentValues values = new ContentValues();
+            values.put("personid", i.getPersonid());
+            values.put("version", i.getVersion());
+            database.update("friendlist", values, "id = ?", new String[]{i.getId() + ""});
             friendListPersonDAOLocal.deleteAll(i.getId(), database);
             friendListPersonDAOLocal.saveAll(i.getId(), i.getFriends(), database);
             return i;
         } catch (Exception e) {
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
+            throw new DataAccessException("Failed to  update FriendList", e);
         } finally {
-            database.endTransaction();
             database.close();
-
         }
     }
 }
