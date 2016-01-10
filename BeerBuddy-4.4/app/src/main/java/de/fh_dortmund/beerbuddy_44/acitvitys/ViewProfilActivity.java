@@ -26,7 +26,7 @@ public class ViewProfilActivity extends BeerBuddyActivity {
     }
 
     @Override
-    protected void onFurtherCreate(Bundle savedInstanceState)  {
+    protected void onFurtherCreate(Bundle savedInstanceState) {
         Bundle b = getIntent().getExtras();
         long id = b.getLong("id");
 
@@ -54,12 +54,12 @@ public class ViewProfilActivity extends BeerBuddyActivity {
 
                             @Override
                             public void onRequestSuccess(Boolean aBoolean) {
-                                if (currentPerson == person.getId() && aBoolean) {
-                                    ViewProfilListener viewListener = new ViewProfilListener(context, person);
-                                    findViewById(R.id.action_profil_send_request).setOnClickListener(viewListener);
-                                } else {
+                                if (currentPerson == person.getId() || aBoolean) {
                                     //hide the Button
                                     findViewById(R.id.action_profil_send_request).setVisibility(View.INVISIBLE);
+                                } else {
+                                    ViewProfilListener viewListener = new ViewProfilListener(context, person);
+                                    findViewById(R.id.action_profil_send_request).setOnClickListener(viewListener);
                                 }
                             }
                         });
