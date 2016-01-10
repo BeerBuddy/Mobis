@@ -26,7 +26,7 @@ public class DrinkingSpotDAO extends AbstractDAO<DrinkingSpot> implements IDrink
     }
 
     public List<DrinkingSpot> getAll() throws BeerBuddyException {
-        return super.currentSession().createQuery("FROM DrinkingSpot ds").list();
+        return super.currentSession().createQuery("FROM DrinkingSpot ds ds.active = true").list();
     }
 
     public DrinkingSpot getActiveByPersonId(long personId) throws BeerBuddyException {
