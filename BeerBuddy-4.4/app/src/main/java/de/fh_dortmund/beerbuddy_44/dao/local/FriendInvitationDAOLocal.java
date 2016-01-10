@@ -13,8 +13,10 @@ import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.FriendInvitation;
 import de.fh_dortmund.beerbuddy.entities.FriendList;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendInvitationDAO;
+import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
 import de.fh_dortmund.beerbuddy_44.dao.util.BeerBuddyDbHelper;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
@@ -47,12 +49,13 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     private FriendInvitation insert(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO friendinvitation (einladerId,eingeladenerId,freitext) VALUES (?,?,?)");
+            SQLiteStatement stmt = database.compileStatement("INSERT INTO friendinvitation (einladerId,eingeladenerId,freitext,version) VALUES (?,?,?,?)");
             stmt.bindLong(1, i.getEinladerId());
             stmt.bindLong(2, i.getEingeladenerId());
+            if(i.getFreitext()!=null)
             stmt.bindString(3, i.getFreitext());
-            long l = stmt.executeInsert();
-            i.setId(l);
+            stmt.bindLong(4, i.getVersion());
+            i.setId( stmt.executeInsert());
             return i;
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,12 +68,15 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     private FriendInvitation update(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE  friendinvitation SET einladerId = ? ,  eingeladenerId=?,freitext=?) WHERE id = ?  ");
+            SQLiteStatement stmt = database.compileStatement("UPDATE  friendinvitation SET einladerId = ? ,  eingeladenerId=?,freitext=?,version=?) WHERE id = ?  ");
             stmt.bindLong(1, i.getEinladerId());
             stmt.bindLong(2, i.getEingeladenerId());
-            stmt.bindString(3, i.getFreitext());
-            stmt.bindLong(2, i.getId());
-            stmt.executeInsert();
+            if(i.getFreitext()!=null)
+                stmt.bindString(3, i.getFreitext());
+
+            stmt.bindLong(4, i.getVersion());
+            stmt.bindLong(5, i.getId());
+            stmt.executeUpdateDelete();
             return i;
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,12 +86,12 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         }
     }
 
-    private void delete(FriendInvitation i) throws DataAccessException {
+    public void delete(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             SQLiteStatement stmt = database.compileStatement("DELETE FROM friendinvitation WHERE id = ?  ");
-            stmt.bindLong(2, i.getId());
-            stmt.executeInsert();
+            stmt.bindLong(1, i.getId());
+            stmt.executeUpdateDelete();
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to delete FriendInvitation", e);
@@ -100,7 +106,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext"}, " id = ?", new String[]{id + ""}, null, null, null);
+            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext", "version"}, " id = ?", new String[]{id + ""}, null, null, null);
             List<FriendInvitation> list = new LinkedList<FriendInvitation>();
             while (dbCursor.moveToNext()) {
                 return getFriendInvitatio(dbCursor);
@@ -123,7 +129,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("friendinvitation", new String[]{"id", "einladerId", "eingeladenerId", "freitext"}, " eingeladenerId = ?", new String[]{personid + ""}, null, null, null);
+            dbCursor = database.query("friendinvitation", new String[]{"id", "einladerId", "eingeladenerId", "freitext", "version"}, " eingeladenerId = ?", new String[]{personid + ""}, null, null, null);
             List<FriendInvitation> list = new LinkedList<FriendInvitation>();
             while (dbCursor.moveToNext()) {
                 FriendInvitation di = getFriendInvitatio(dbCursor);
@@ -141,12 +147,12 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         }
     }
 
-    @NonNull
     private FriendInvitation getFriendInvitatio(Cursor dbCursor) {
         FriendInvitation di = new FriendInvitation();
         di.setId(dbCursor.getLong(dbCursor.getColumnIndex("id")));
         di.setEinladerId(dbCursor.getLong(dbCursor.getColumnIndex("einladerId")));
         di.setEingeladenerId(dbCursor.getLong(dbCursor.getColumnIndex("eingeladenerId")));
+        di.setVersion(dbCursor.getLong(dbCursor.getColumnIndex("version")));
         di.setFreitext(dbCursor.getString(dbCursor.getColumnIndex("freitext")));
         return di;
     }
@@ -158,7 +164,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("friendinvitation", new String[]{"id", "einladerId", "eingeladenerId", "freitext"}, " einladerId = ?", new String[]{personid + ""}, null, null, null);
+            dbCursor = database.query("friendinvitation", new String[]{"id", "einladerId", "eingeladenerId", "freitext", "version"}, " einladerId = ?", new String[]{personid + ""}, null, null, null);
             List<FriendInvitation> list = new LinkedList<FriendInvitation>();
             while (dbCursor.moveToNext()) {
                 list.add(getFriendInvitatio(dbCursor));
@@ -177,66 +183,35 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
 
     @Override
     public void accept(final FriendInvitation friendInvitation, final RequestListener<Void> listener) {
-        //einladung löschen und freund zur Freundesliste hinzufügen
         try {
-            final FriendListDAOLocal dao = new FriendListDAOLocal(context);
-            final PersonDAOLocal dao2 = new PersonDAOLocal(context);
-
-            //Eingeladener FreindList den Einlader hinzufügen
-            FriendList list = dao.getFriendList(friendInvitation.getEingeladenerId());
-            SQLiteDatabase database = dbHelper.getDatabase();
-            try {
-                list.getFriends().add(dao2.getById(friendInvitation.getEinladerId(), database));
-            } finally {
-                database.close();
-            }
-            //und speichern
-            dao.insertOrUpdate(list, new RequestListener<FriendList>() {
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    listener.onRequestFailure(spiceException);
-                }
-
-                @Override
-                public void onRequestSuccess(FriendList friendList) {
-                    try {
-                        //Einlader FreindList den Eingeladenen hinzufügen
-                        FriendList list1 = dao.getFriendList(friendInvitation.getEinladerId());
-                        SQLiteDatabase database = dbHelper.getDatabase();
-                        try {
-                            list1.getFriends().add(dao2.getById(friendInvitation.getEingeladenerId(), database));
-                        } finally {
-                            database.close();
-                        }
-
-                        //und speichern
-                        dao.insertOrUpdate(list1, new RequestListener<FriendList>() {
-                            @Override
-                            public void onRequestFailure(SpiceException spiceException) {
-                                listener.onRequestFailure(spiceException);
-                            }
-
-                            @Override
-                            public void onRequestSuccess(FriendList friendList) {
-                                //löschen der Einladung
-                                try {
-                                    delete(friendInvitation);
-                                    listener.onRequestSuccess(null);
-                                } catch (Exception e) {
-                                    listener.onRequestFailure(new SpiceException(e));
-                                }
-                            }
-                        });
-                    } catch (DataAccessException e) {
-                        listener.onRequestFailure(new SpiceException(e));
-                    }
-                }
-            });
+            accept(friendInvitation);
+            listener.onRequestSuccess(null);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         }
+    }
 
+    public void accept(FriendInvitation friendInvitation) throws DataAccessException{
+        FriendListDAOLocal friendListDAOLocal = new FriendListDAOLocal(context);
+        FriendList friendList = friendListDAOLocal.getFriendList(friendInvitation.getEingeladenerId());
+        FriendList friendList1 = friendListDAOLocal.getFriendList(friendInvitation.getEinladerId());
+        if(friendList == null)
+        {
+            friendList = new FriendList();
+            friendList.setPersonid(friendInvitation.getEingeladenerId());
+        }
+
+        if(friendList1 == null)
+        {
+            friendList1 = new FriendList();
+            friendList1.setPersonid(friendInvitation.getEinladerId());
+        }
+        friendList.getFriends().add(new Person(friendInvitation.getEinladerId()));
+        friendList1.getFriends().add(new Person(friendInvitation.getEingeladenerId()));
+        friendListDAOLocal.insertOrUpdate(friendList);
+        friendListDAOLocal.insertOrUpdate(friendList1);
+        delete(friendInvitation);
     }
 
     @Override

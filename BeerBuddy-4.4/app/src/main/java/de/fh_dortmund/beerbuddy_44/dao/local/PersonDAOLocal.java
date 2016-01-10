@@ -38,7 +38,7 @@ public class PersonDAOLocal extends PersonDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, null, null, null, null, null);
+            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers", "version"}, null, null, null, null, null);
             List<Person> list = new LinkedList<Person>();
             while (dbCursor.moveToNext()) {
                 Person di = getPerson(dbCursor);
@@ -64,9 +64,12 @@ public class PersonDAOLocal extends PersonDAO {
         p.setImage(dbCursor.getBlob(dbCursor.getColumnIndex("image")));
         p.setPassword(dbCursor.getString(dbCursor.getColumnIndex("password")));
         p.setGender(dbCursor.getInt(dbCursor.getColumnIndex("gender")));
-        p.setDateOfBirth(BeerBuddyDbHelper.DATE_FORMAT.parse(dbCursor.getString(dbCursor.getColumnIndex("dateOfBirth"))));
+        String dateOfBirth = dbCursor.getString(dbCursor.getColumnIndex("dateOfBirth"));
+        if (dateOfBirth != null)
+            p.setDateOfBirth(BeerBuddyDbHelper.DATE_FORMAT.parse(dateOfBirth));
         p.setInterests(dbCursor.getString(dbCursor.getColumnIndex("interests")));
         p.setPrefers(dbCursor.getString(dbCursor.getColumnIndex("prefers")));
+        p.setVersion(dbCursor.getLong(dbCursor.getColumnIndex("version")));
         return p;
     }
 
@@ -75,7 +78,7 @@ public class PersonDAOLocal extends PersonDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, "id=?", new String[]{id + ""}, null, null, null);
+            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers", "version"}, "id=?", new String[]{id + ""}, null, null, null);
             List<Person> list = new LinkedList<Person>();
             while (dbCursor.moveToNext()) {
                 Person di = getPerson(dbCursor);
@@ -99,7 +102,7 @@ public class PersonDAOLocal extends PersonDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, "email=?", new String[]{mail}, null, null, null);
+            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers", "version"}, "email=?", new String[]{mail}, null, null, null);
             List<Person> list = new LinkedList<Person>();
             while (dbCursor.moveToNext()) {
                 Person di = getPerson(dbCursor);
@@ -122,7 +125,7 @@ public class PersonDAOLocal extends PersonDAO {
             if (p.getId() != 0) {
                 listener.onRequestSuccess(update(p));
             } else {
-                listener.onRequestSuccess( insert(p));
+                listener.onRequestSuccess(insert(p));
             }
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -134,7 +137,7 @@ public class PersonDAOLocal extends PersonDAO {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO person (email,username,image,password,gender,dateOfBirth,interests,prefers) VALUES(?,?,?,?,?,?,?,?)");
+            SQLiteStatement stmt = database.compileStatement("INSERT INTO person (email,username,image,password,gender,dateOfBirth,interests,prefers,version) VALUES(?,?,?,?,?,?,?,?,?)");
             stmt.bindString(1, p.getEmail());
             if (p.getUsername() != null)
                 stmt.bindString(2, p.getUsername());
@@ -150,8 +153,8 @@ public class PersonDAOLocal extends PersonDAO {
                 stmt.bindString(7, p.getInterests());
             if (p.getPrefers() != null)
                 stmt.bindString(8, p.getPrefers());
-            long l = stmt.executeInsert();
-            p.setId(l);
+            stmt.bindLong(9, p.getVersion());
+            p.setId(stmt.executeInsert());
             return p;
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,7 +169,7 @@ public class PersonDAOLocal extends PersonDAO {
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE person SET email=?,username=?,image=?,password=?,gender=?,dateOfBirth=?,interests=?,prefers=? WHERE id=?");
+            SQLiteStatement stmt = database.compileStatement("UPDATE person SET email=?,username=?,image=?,password=?,gender=?,dateOfBirth=?,interests=?,prefers=?,version=? WHERE id=?");
             stmt.bindString(1, p.getEmail());
             stmt.bindString(2, p.getUsername());
             stmt.bindBlob(3, p.getImage());
@@ -177,8 +180,9 @@ public class PersonDAOLocal extends PersonDAO {
             }
             stmt.bindString(7, p.getInterests());
             stmt.bindString(8, p.getPrefers());
-            stmt.bindLong(9, p.getId());
-            stmt.executeInsert();
+            stmt.bindLong(9, p.getVersion());
+            stmt.bindLong(10, p.getId());
+            stmt.executeUpdateDelete();
             return p;
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,7 +199,7 @@ public class PersonDAOLocal extends PersonDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers"}, "id=?", new String[]{id + ""}, null, null, null);
+            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers", "version"}, "id=?", new String[]{id + ""}, null, null, null);
             List<Person> list = new LinkedList<Person>();
             while (dbCursor.moveToNext()) {
                 Person di = getPerson(dbCursor);
@@ -204,7 +208,7 @@ public class PersonDAOLocal extends PersonDAO {
             return null;
         } catch (Exception e) {
             e.printStackTrace();
-          throw new DataAccessException("",e);
+            throw new DataAccessException("", e);
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();

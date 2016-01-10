@@ -13,7 +13,7 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
     public static final int BOOLEAN_TRUE = 0;
     public static final int BOOLEAN_FALSE = 1;
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "BeerBuddy.db";
     public static String SQL_DELETE_friendlistperson = "DROP TABLE friendlistperson;";
     public static String SQL_DELETE_friendinvitation = "DROP TABLE friendinvitation;";
@@ -34,38 +34,42 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "gender INTEGER," +
                     "dateOfBirth TEXT," +
                     "interests TEXT," +
+                    "version INTEGER," +
                     "prefers TEXT" +
                     " );";
     public static String SQL_CREATE_FriendList =
             "CREATE TABLE friendlist (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "personid REAL," +
+                    "personid INTEGER," +
+                    "version INTEGER," +
                     "FOREIGN KEY(id) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_FriendListPerson =
             "CREATE TABLE friendlistperson (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "friendlistid REAL," +
-                    "personid REAL," +
+                    "friendlistid INTEGER," +
+                    "personid INTEGER," +
                     "FOREIGN KEY(personid) REFERENCES person(id)," +
                     "FOREIGN KEY(friendlistid) REFERENCES friendlist(id)" +
                     " );";
     public static String SQL_CREATE_FriendInvitation =
             "CREATE TABLE friendinvitation (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "einladerId REAL," +
-                    "eingeladenerId REAL," +
+                    "einladerId INTEGER," +
+                    "eingeladenerId INTEGER," +
                     "freitext TEXT," +
+                    "version INTEGER," +
                     "FOREIGN KEY(einladerId) REFERENCES person(id)," +
                     "FOREIGN KEY(eingeladenerId) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingInvitation =
             "CREATE TABLE drinkinginvitation (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "einladerId REAL," +
-                    "eingeladenerId REAL," +
-                    "drinkingSpotId REAL," +
+                    "einladerId INTEGER," +
+                    "eingeladenerId INTEGER," +
+                    "drinkingSpotId INTEGER," +
                     "freitext TEXT," +
+                    "version INTEGER," +
                     "FOREIGN KEY(einladerId) REFERENCES person(id)," +
                     "FOREIGN KEY(eingeladenerId) REFERENCES person(id)," +
                     "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)" +
@@ -73,7 +77,7 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
     public static String SQL_CREATE_DrinkingSpot =
             "CREATE TABLE drinkingspot (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "creatorid REAL," +
+                    "creatorid INTEGER," +
                     "beschreibung TEXT," +
                     "startTime TEXT," +
                     "ageFrom INTEGER," +
@@ -82,13 +86,14 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "amountMaleWithoutBeerBuddy INTEGER," +
                     "amountFemaleWithoutBeerBuddy INTEGER," +
                     "active INTEGER," +
+                    "version INTEGER," +
                     "FOREIGN KEY(creatorid) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingSpotPerson =
             "CREATE TABLE drinkingspotperson (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "drinkingSpotId REAL," +
-                    "personid REAL," +
+                    "drinkingSpotId INTEGER," +
+                    "personid INTEGER," +
                     "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)," +
                     "FOREIGN KEY(personid) REFERENCES person(id)" +
                     " );";

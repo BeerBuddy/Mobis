@@ -23,25 +23,6 @@ public class FriendListPersonDAOLocal {
         personDAO = new PersonDAOLocal(context);
     }
 
-    public List<Person> getAllFrom(long friendlistid,SQLiteDatabase database ) throws DataAccessException {
-        Cursor dbCursor = null;
-        try {
-            dbCursor = database.query("friendlistperson", new String[]{"id","friendlistid","personid"}, " friendlistid = ?", new String[]{friendlistid + ""}, null, null, null);
-            List<Person> list = new LinkedList<Person>();
-            while (dbCursor.moveToNext()) {
-                list.add(personDAO.getById(dbCursor.getLong(dbCursor.getColumnIndex("personid")), database));
-            }
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new DataAccessException("Failed to insert or update DrinkingInvitation", e);
-        } finally {
-            if (dbCursor != null) {
-                dbCursor.close();
-            }
-        }
-    }
-
     public void saveAll(long l, List<Person> friends,SQLiteDatabase database ) throws DataAccessException {
         try {
             for(Person p: friends)
@@ -62,7 +43,7 @@ public class FriendListPersonDAOLocal {
         try {
             SQLiteStatement stmt = database.compileStatement("DELETE FROM friendlistperson WHERE friendlistid = ?");
             stmt.bindLong(1, id);
-            stmt.executeInsert();
+            stmt.executeUpdateDelete();
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to delete all DrinkingSpotPerson", e);

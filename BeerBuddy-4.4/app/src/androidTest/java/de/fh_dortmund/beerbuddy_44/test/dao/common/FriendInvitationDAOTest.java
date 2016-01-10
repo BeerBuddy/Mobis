@@ -197,7 +197,8 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
                                         getFriendInvitationDAO().accept(drinkingInvitation, new RequestListener<Void>() {
                                             @Override
                                             public void onRequestFailure(SpiceException spiceException) {
-
+                                                testDone = true;
+                                                fail(spiceException.getMessage());
                                             }
 
                                             @Override
@@ -234,6 +235,7 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
                                                     @Override
                                                     public void onRequestFailure(SpiceException spiceException) {
                                                         testDone = true;
+                                                        spiceException.printStackTrace();
                                                         fail(spiceException.getMessage());
                                                     }
 
@@ -348,7 +350,8 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
                                         getFriendInvitationDAO().decline(drinkingInvitation, new RequestListener<Void>() {
                                             @Override
                                             public void onRequestFailure(SpiceException spiceException) {
-
+                                                testDone = true;
+                                                fail(spiceException.getMessage());
                                             }
 
                                             @Override
@@ -390,6 +393,7 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
 
                                                     @Override
                                                     public void onRequestSuccess(FriendList friendList) {
+                                                        if(friendList!=null)
                                                         assertFalse(friendList.getFriends().contains(p1));
                                                         testDone = true;
                                                     }

@@ -254,8 +254,6 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
                                                 });
                                             }
                                         });
-
-
                                     }
                                 });
                             }

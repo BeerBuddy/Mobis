@@ -36,7 +36,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
     @Override
     public void insertOrUpdate(DrinkingInvitation i, RequestListener<DrinkingInvitation> listener) {
         try {
-            if (getById(i.getId()) != null) {
+            if (i.getId() != 0) {
                 listener.onRequestSuccess(update(i));
             } else {
                 listener.onRequestSuccess(insert(i));
@@ -50,10 +50,11 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
     private DrinkingInvitation insert(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO drinkinginvitation (einladerId,drinkingSpotId,eingeladenerId,freitext) VALUES (?,?,?,?)");
+            SQLiteStatement stmt = database.compileStatement("INSERT INTO drinkinginvitation (einladerId,drinkingSpotId,eingeladenerId,freitext,version) VALUES (?,?,?,?,?)");
             stmt.bindLong(1, i.getEinladerId());
             stmt.bindLong(2, i.getDrinkingSpotId());
             stmt.bindLong(3, i.getEingeladenerId());
+            stmt.bindLong(5, i.getVersion());
             if(i.getFreitext()!= null)
             stmt.bindString(4, i.getFreitext());
             i.setId(stmt.executeInsert());
@@ -69,12 +70,14 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
     private DrinkingInvitation update(DrinkingInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE  drinkinginvitation SET einladerId = ? , drinkingSpotId = ?, eingeladenerId=?,freitext=?) WHERE id = ?  ");
+            SQLiteStatement stmt = database.compileStatement("UPDATE  drinkinginvitation SET einladerId = ? , drinkingSpotId = ?, eingeladenerId=?,freitext=?, version=?) WHERE id = ?  ");
             stmt.bindLong(1, i.getEinladerId());
             stmt.bindLong(2, i.getDrinkingSpotId());
             stmt.bindLong(3, i.getEingeladenerId());
             stmt.bindLong(3, i.getId());
+            if(i.getFreitext()!= null)
             stmt.bindString(4, i.getFreitext());
+            stmt.bindLong(5, i.getVersion());
             stmt.executeInsert();
             return i;
         } catch (Exception e) {
@@ -90,7 +93,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext"}, " id = ?", new String[]{id + ""}, null, null, null);
+            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext", "version"}, " id = ?", new String[]{id + ""}, null, null, null);
             List<DrinkingInvitation> list = new LinkedList<DrinkingInvitation>();
             while (dbCursor.moveToNext()) {
                 return getDrinkingInvitation(dbCursor);
@@ -113,7 +116,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext"}, " eingeladenerId = ?", new String[]{personid + ""}, null, null, null);
+            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext", "version"}, " eingeladenerId = ?", new String[]{personid + ""}, null, null, null);
             List<DrinkingInvitation> list = new LinkedList<DrinkingInvitation>();
             while (dbCursor.moveToNext()) {
                 DrinkingInvitation di = getDrinkingInvitation(dbCursor);
@@ -137,6 +140,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         di.setEinladerId(dbCursor.getLong(dbCursor.getColumnIndex("einladerId")));
         di.setDrinkingSpotId(dbCursor.getLong(dbCursor.getColumnIndex("drinkingSpotId")));
         di.setEingeladenerId(dbCursor.getLong(dbCursor.getColumnIndex("eingeladenerId")));
+        di.setVersion(dbCursor.getLong(dbCursor.getColumnIndex("version")));
         di.setFreitext(dbCursor.getString(dbCursor.getColumnIndex("freitext")));
         return di;
     }
@@ -148,7 +152,7 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext"}, " einladerId = ?", new String[]{personid + ""}, null, null, null);
+            dbCursor = database.query("drinkinginvitation", new String[]{"id", "einladerId", "drinkingSpotId", "eingeladenerId", "freitext", "version"}, " einladerId = ?", new String[]{personid + ""}, null, null, null);
             List<DrinkingInvitation> list = new LinkedList<DrinkingInvitation>();
             while (dbCursor.moveToNext()) {
                 DrinkingInvitation di = getDrinkingInvitation(dbCursor);
@@ -168,44 +172,44 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
 
     @Override
     public void accept(DrinkingInvitation friendInvitation, RequestListener<Void> listener) {
-        SQLiteDatabase database = dbHelper.getDatabase();
-        database.beginTransaction();
         try {
             //Eingeladener joined dem drinking Spot
             DrinkingSpotDAOLocal dao = new DrinkingSpotDAOLocal(context);
-            dao.join(friendInvitation.getEingeladenerId(), friendInvitation.getDrinkingSpotId(), database);
-
+            dao.join(friendInvitation.getDrinkingSpotId(),friendInvitation.getEingeladenerId());
             //löschen der Einladung
-            SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkinginvitation WHERE id = ? ");
-            stmt.bindLong(1, friendInvitation.getId());
-            stmt.executeInsert();
+            delete(friendInvitation);
             listener.onRequestSuccess(null);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
-        } finally {
-            database.endTransaction();
-            database.close();
         }
 
     }
 
-    @Override
-    public void decline(DrinkingInvitation invitation, RequestListener<Void> listener) {
+    public void delete(DrinkingInvitation drinkingInvitation) throws DataAccessException{
         SQLiteDatabase database = dbHelper.getDatabase();
         database.beginTransaction();
         try {
-            //löschen der Einladung
             SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkinginvitation WHERE id = ? ");
-            stmt.bindLong(1, invitation.getId());
+            stmt.bindLong(1, drinkingInvitation.getId());
             stmt.executeInsert();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
+            database.close();
+        }
+    }
+
+    @Override
+    public void decline(DrinkingInvitation invitation, RequestListener<Void> listener) {
+        try {
+            //löschen der Einladung
+            delete(invitation);
             listener.onRequestSuccess(null);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
-        } finally {
-            database.endTransaction();
-            database.close();
         }
     }
 

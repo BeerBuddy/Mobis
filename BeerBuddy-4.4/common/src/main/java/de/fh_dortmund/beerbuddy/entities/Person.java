@@ -32,6 +32,11 @@ import lombok.RequiredArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Person implements Serializable{
 
+    public Person(long id)
+    {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue
     long id;

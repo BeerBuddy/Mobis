@@ -35,7 +35,7 @@ public class DrinkingSpotPersonDAO {
         try {
             SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkingspotperson WHERE drinkingSpotId = ?");
             stmt.bindLong(1, id);
-            stmt.executeInsert();
+            stmt.executeUpdateDelete();
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to delete all DrinkingSpotPerson", e);
@@ -57,24 +57,4 @@ public class DrinkingSpotPersonDAO {
         }
     }
 
-    public List<Person> getByDsId(long id, SQLiteDatabase database) throws DataAccessException {
-        Cursor dbCursor = null;
-
-        try {
-            dbCursor = database.query("drinkingspotperson", new String[]{"id", "drinkingSpotId", "personid"}, " id = ?", new String[]{id + ""}, null, null, null);
-            List<Person> list = new LinkedList<Person>();
-            
-            while (dbCursor.moveToNext()) {
-                list.add(personDAOLocal.getById(dbCursor.getLong(dbCursor.getColumnIndex("personid")),database));
-            }
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new DataAccessException("Failed to getByDsId DrinkingSpotPerson", e);
-        } finally {
-            if (dbCursor != null) {
-                dbCursor.close();
-            }
-        }
-    }
 }
