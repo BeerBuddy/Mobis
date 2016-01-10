@@ -143,11 +143,6 @@
             </LinearLayout>
         </ScrollView>
 
-        <ListView
-            android:id="@+id/drinking_view_usersjoined"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
         <TextView
 
             android:layout_width="wrap_content"
@@ -155,6 +150,11 @@
             android:paddingLeft="10dp"
             android:text="@string/mainview_usersjoined"
             android:textSize="14sp" />
+
+        <ListView
+            android:id="@+id/drinking_view_usersjoined"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </RelativeLayout>
