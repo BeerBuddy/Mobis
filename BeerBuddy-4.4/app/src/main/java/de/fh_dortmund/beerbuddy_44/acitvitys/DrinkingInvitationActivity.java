@@ -49,7 +49,7 @@ public class DrinkingInvitationActivity extends BeerBuddyActivity {
             DAOFactory.getDrinkingInvitationDAO(this).getAllFor(DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId(), new RequestListener<DrinkingInvitation[]>() {
                 @Override
                 public void onRequestFailure(SpiceException e) {
-                    Log.e(TAG, "Error accured during get DrinkingInvitations", e);
+                    Log.e(TAG, "Error occurred during get DrinkingInvitations", e);
                 }
 
                 @Override
@@ -59,7 +59,7 @@ public class DrinkingInvitationActivity extends BeerBuddyActivity {
             });
         } catch (BeerBuddyException e) {
             e.printStackTrace();
-            Log.e(TAG, "Error accured during get DrinkingInvitations", e);
+            Log.e(TAG, "Error occurred during get DrinkingInvitations", e);
         }
     }
 

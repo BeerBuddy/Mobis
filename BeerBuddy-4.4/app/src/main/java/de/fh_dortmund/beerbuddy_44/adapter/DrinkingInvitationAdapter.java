@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,7 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
                         Bitmap bitmap = BitmapFactory.decodeByteArray(person.getImage(), 0, person.getImage().length);
                         ((ImageView) rowView.findViewById(R.id.buddy_list_row_icon)).setImageBitmap(bitmap);
                     }
+
                     ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(person.getUsername());
                     if (person.getUsername() == null) {
                         ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(person.getEmail());
@@ -78,7 +81,8 @@ public class DrinkingInvitationAdapter extends ArrayAdapter<DrinkingInvitation> 
 
             @Override
             public void onRequestSuccess(DrinkingSpot drinkingSpot) {
-                //TODO: maybe change icon of button_view to group icon
+                Drawable multiple = context.getResources().getDrawable(R.drawable.ic_account_multiple);
+                ((Button) rowView.findViewById(R.id.buddy_list_row_button_view)).setCompoundDrawablesWithIntrinsicBounds(null, multiple, null, null);
                 rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, drinkingSpot.getId()));
 
                 rowView.findViewById(R.id.buddy_list_row_button_add).setOnClickListener(new View.OnClickListener() {

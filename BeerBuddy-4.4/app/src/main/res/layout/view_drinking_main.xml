@@ -3,18 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="wrap_content"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".acitvitys.BuddysActivity">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -32,125 +30,123 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp">
-
-
-                <TextView
-                    android:id="@+id/drinking_view_creatorname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:text="BeerBuddy User"
-                    android:textSize="14sp"
-                    android:paddingRight="20dp" />
-
-
-                <Button
-                    android:id="@+id/drinking_view_creatorprofil"
-                    android:layout_width="@android:dimen/app_icon_size"
-                    android:layout_height="@android:dimen/app_icon_size"
-                    android:drawableTop="@drawable/ic_account" />
-            </LinearLayout>
-
-
-            <TextView
-                android:id="@+id/drinking_view_isdrinkingtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="is Drinking in a Group of x:"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:id="@+id/drinking_view_groupmembers"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp">
-                <!-- Hier kommen programmatisch die m/w-Icons rein -->
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="@string/profil_age"
-                android:textSize="14sp"
-                android:paddingTop="10dp" />
-
-
-            <TextView
-                android:id="@+id/drinking_view_age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="24 "
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="@string/drinking_description"
-                android:textSize="14sp"
-                android:paddingTop="10dp" />
-
-            <TextView
-                android:id="@+id/drinking_view_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="@string/drinking_description"
-                android:textSize="14sp" />
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="@string/mainview_usersjoined"
-                android:textSize="14sp"
-                android:paddingTop="10dp" />
-
-            <ListView
-                android:id="@+id/drinking_view_usersjoined"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/drinking_view_navigate"
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp">
+
+
+                    <TextView
+                        android:id="@+id/drinking_view_creatorname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:paddingRight="20dp"
+                        android:text="@string/mainview_creator"
+                        android:textSize="14sp" />
+
+
+                    <Button
+                        android:id="@+id/drinking_view_creatorprofil"
+                        android:layout_width="@android:dimen/app_icon_size"
+                        android:layout_height="@android:dimen/app_icon_size"
+                        android:drawableTop="@drawable/ic_account" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/drinking_view_isdrinkingtext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:src="@android:drawable/ic_menu_directions"
-                    android:text="Navigate"
+                    android:paddingLeft="10dp"
+                    android:text="is Drinking in a Group of x:"
                     android:textSize="14sp" />
 
-                <Button
-                    android:id="@+id/drinking_view_showonmap"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:src="@android:drawable/ic_dialog_map"
-                    android:text="Show on Map"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/profil_age"
                     android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/drinking_view_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="24 "
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/drinking_description"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/drinking_view_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="@string/drinking_description"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/drinking_view_navigate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:src="@android:drawable/ic_menu_directions"
+                        android:text="Navigate"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/drinking_view_showonmap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:src="@android:drawable/ic_dialog_map"
+                        android:text="Show on Map"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
 
 
             </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
+
+        <ListView
+            android:id="@+id/drinking_view_usersjoined"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="@string/mainview_usersjoined"
+            android:textSize="14sp" />
+
     </LinearLayout>
 </RelativeLayout>

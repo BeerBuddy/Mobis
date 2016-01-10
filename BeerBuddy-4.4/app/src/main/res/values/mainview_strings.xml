@@ -1,5 +1,5 @@
 <resources>
-
-    <string name="mainview_usersjoined">Users already joined</string>
+    <string name="mainview_creator">Creator</string>
+    <string name="mainview_usersjoined">Users that already joined</string>
     <string name="mainview_isdrinkinginagroup">Is drinking in an Group of</string>
 </resources>
