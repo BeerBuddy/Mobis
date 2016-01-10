@@ -83,9 +83,13 @@ public class AcceptAndDeclineDrinkingInvitationTest extends ActivityInstrumentat
         assertNotNull(byId);
 
         assertTrue(drinkingInvitationDAOLocal.getAllFor(p2.getId()).length > 0);
-        assertTrue( drinkingInvitationDAOLocal.getAllFrom(p.getId()).length > 0);
+        assertTrue(drinkingInvitationDAOLocal.getAllFrom(p.getId()).length > 0);
 
-        drinkingInvitationDAOLocal.accept(i);
+
+        DrinkingSpotDAOLocal dao = new DrinkingSpotDAOLocal(getActivity());
+        dao.join(i.getDrinkingSpotId(), i.getEingeladenerId());
+        //löschen der Einladung
+        drinkingInvitationDAOLocal. delete(i);
     }
 
     private Person insertPerson() throws DataAccessException {
