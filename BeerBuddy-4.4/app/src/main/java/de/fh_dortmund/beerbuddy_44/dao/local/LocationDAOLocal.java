@@ -10,9 +10,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.LocationDAO;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.MissingPermissionException;
 
 /**
@@ -202,10 +202,6 @@ public class LocationDAOLocal extends LocationDAO implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        if(provider.equals(LocationManager.GPS_PROVIDER))
-        {
-            turnGPSOn(context);
-        }
     }
 
 }
