@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drinkinginvitation_invitation">Einladungen</string>
+    <string name="drinkinginvitation_title">Wähle deine Buddys aus</string>
+    <string name="button_inviteselected">Lade ausgewählte ein</string>
+    <string name="button_cancel">Abbrechen</string>
+    <string name="button_inviteall">Lade alle ein</string>
+</resources>

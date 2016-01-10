@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">BeerBuddy</string>
-    <string name="email">Email@email.de</string>
     <string name="oldpassword">Altes Passwort</string>
     <string name="password">Passwort</string>
     <string name="repassword">Passwort wiederholen</string>
     <string name="save">Speichern</string>
+    <string name="navigation_drawer_open">Öffne Navigation</string>
+    <string name="navigation_drawer_close">Schließe Navigation</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="pick_image_intent_text">Wähle ein Bild</string>
+    <string name="gps_disabled_message">GPS ist deaktiviert. Möchten Sie es aktivieren?</string>
 </resources>
+
+

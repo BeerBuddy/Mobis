@@ -9,7 +9,7 @@
     <string name="profil_gender_female">Female</string>
     <string name="profil_gender_other">Other</string>
     <string name="profil_age">Age</string>
-    <string name="profil_saved">Profil saved!</string>
+    <string name="profil_saved">Profile saved!</string>
     <string name="profil_saved_error">Error while saving Profile!</string>
     <string name="profil_saved_error_password">The new password is not identical to the retyped password. Other data will be saved.</string>
     <string name="profil_saved_error_password_wrong">Old password is wrong. Other data will be saved.</string>
@@ -18,5 +18,4 @@
     <string name="request_send">The request was send!</string>
     <string name="request_accepted">The request was accepted!</string>
     <string name="request_declined">The request was declined!</string>
-
 </resources>

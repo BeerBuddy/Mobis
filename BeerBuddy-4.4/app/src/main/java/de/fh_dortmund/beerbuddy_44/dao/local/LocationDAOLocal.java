@@ -55,13 +55,13 @@ public class LocationDAOLocal extends LocationDAO implements LocationListener {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(R.string.gps_disabled_message)
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(context.getResources().getText(R.string.mainview_yes), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             context.startActivity(intent);
                         }
                     })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(context.getResources().getText(R.string.mainview_no), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }

@@ -2,4 +2,8 @@
     <string name="mainview_creator">Creator</string>
     <string name="mainview_usersjoined">Users that already joined</string>
     <string name="mainview_isdrinkinginagroup">Is drinking in a Group of</string>
+    <string name="mainview_yes">Yes</string>
+    <string name="mainview_no">No</string>
+    <string name="mainview_person_count">Person count: </string>
+    <string name="mainview_age">Age: </string>
 </resources>

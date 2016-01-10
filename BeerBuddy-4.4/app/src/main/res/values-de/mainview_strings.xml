@@ -1,3 +1,9 @@
 <resources>
-
+    <string name="mainview_creator">Ersteller</string>
+    <string name="mainview_usersjoined">Bereits beigetretene Benutzer</string>
+    <string name="mainview_isdrinkinginagroup">Trinkt in einer Gruppe von</string>
+    <string name="mainview_yes">Ja</string>
+    <string name="mainview_no">Nein</string>
+    <string name="mainview_person_count">Anzahl Personen: </string>
+    <string name="mainview_age">Alter: </string>
 </resources>

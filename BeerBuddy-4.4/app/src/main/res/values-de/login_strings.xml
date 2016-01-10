@@ -1,4 +1,4 @@
 <resources>
-
-    <string name="login_fb">Einloggen mit FB</string>
+    <string name="email">Email@email.de</string>
+    <string name="wrong_pw">Falsche Email oder Passwort!</string>
 </resources>

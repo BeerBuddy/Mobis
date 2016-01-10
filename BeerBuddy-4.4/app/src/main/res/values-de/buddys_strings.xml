@@ -1,4 +1,5 @@
     <resources>
         <string name="buddys_requests">Kontaktanfragen</string>
         <string name="buddys_buddys">Buddys</string>
+        <string name="buddy_picker_checkall">Alle selektieren</string>
     </resources>

@@ -1,10 +1,21 @@
-    <resources>
-        <string name="profil_vorlieben">Vorlieben</string>
-        <string name="profil_interessen">Intressen</string>
-        <string name="profil_username">Nutzername</string>
-        <string name="profil_change_image">Bild ändern</string>
-       <string name="profil_send_request">Abnfrage versenden</string>
-        <string name="profil_gender">Geschlecht</string>
-        <string name="profil_gender_male">Männlich</string>
-        <string name="profil_gender_female">Weiblich</string>
-    </resources>
+<resources>
+    <string name="profil_vorlieben">Vorlieben</string>
+    <string name="profil_interessen">Interessen</string>
+    <string name="profil_username">Nutzername</string>
+    <string name="profil_change_image">Bild ändern</string>
+    <string name="profil_send_request">Anfrage versenden</string>
+    <string name="profil_gender">Geschlecht</string>
+    <string name="profil_gender_male">Männlich</string>
+    <string name="profil_gender_female">Weiblich</string>
+    <string name="profil_gender_other">Anderes</string>
+    <string name="profil_age">Alter</string>
+    <string name="profil_saved">Profil gespeichert!</string>
+    <string name="profil_saved_error">Fehler beim speichern des Profils</string>
+    <string name="profil_saved_error_password">Das neue Passwort ist nicht identisch mit der erneuten Eingabe. Andere Eingaben werden gespeichert.</string>
+    <string name="profil_saved_error_password_wrong">Altes Passwort ist falsch. Andere Eingaben werden gespeichert.</string>
+    <string name="profil_dateofbirth">Geburtsdatum</string>
+    <string name="profil_change_date">Wähle</string>
+    <string name="request_send">Die Anfrage wurde abgeschickt!</string>
+    <string name="request_accepted">Die Anfrage wurde angenommen!</string>
+    <string name="request_declined">Die Anfrage wurde abgelehnt!</string>
+</resources>

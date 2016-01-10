@@ -141,10 +141,10 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
             }
         });
         final Context context = this;
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(spot.getTotalAmount() + "/ " + spot.getAgeFrom() + " - " + spot.getAgeTo());
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(getResources().getText(R.string.mainview_person_count).toString() + " " + spot.getTotalAmount() + " " + getResources().getText(R.string.mainview_age).toString() + " " + spot.getAgeFrom() + " - " + spot.getAgeTo());
         slidingUpPanelLayout.findViewById(R.id.mainview_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId(), true));
         slidingUpPanelLayout.findViewById(R.id.mainview_navigate).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + "is drinking");
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + " is drinking");
     }
 
 
