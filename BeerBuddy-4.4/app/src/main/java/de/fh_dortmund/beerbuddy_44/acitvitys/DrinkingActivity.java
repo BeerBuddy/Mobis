@@ -116,6 +116,14 @@ public class DrinkingActivity extends BeerBuddyActivity {
             np2.setMinValue(0);
             np2.setMaxValue(20);
             np2.setWrapSelectorWheel(false);
+            NumberPicker np3 = (NumberPicker) findViewById(R.id.drinking_group_age_from);
+            np3.setMinValue(0);
+            np3.setMaxValue(80);
+            np3.setWrapSelectorWheel(false);
+            NumberPicker np4 = (NumberPicker) findViewById(R.id.drinking_group_age_to);
+            np4.setMinValue(0);
+            np4.setMaxValue(80);
+            np4.setWrapSelectorWheel(false);
 
     }
 
@@ -134,10 +142,13 @@ public class DrinkingActivity extends BeerBuddyActivity {
             layout.setVisibility(View.VISIBLE);
             //start counting
 
-            int male =0;
-            int female =0;
+            int male, female = 0;
             int minAge =  Integer.MAX_VALUE;
-            int maxAge =-1;
+            int maxAge = -1;
+            male = spot.getAmountMaleWithoutBeerBuddy();
+            female = spot.getAmountFemaleWithoutBeerBuddy();
+            minAge = spot.getAgeFrom();
+            maxAge = spot.getAgeTo();
 
             InvitedListAdapter adapter = new InvitedListAdapter(this,
                     R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{}));
@@ -148,7 +159,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
                 if(age > maxAge )
                 {
-                    maxAge =age;
+                    maxAge = age;
                 }
 
                 if(age < minAge)
@@ -177,6 +188,8 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
             ((NumberPicker)findViewById(R.id.drinking_group_amount_female)).setValue(spot.getAmountFemaleWithoutBeerBuddy());
             ((NumberPicker)findViewById(R.id.drinking_group_amount_male)).setValue(spot.getAmountMaleWithoutBeerBuddy());
+            ((NumberPicker)findViewById(R.id.drinking_group_age_from)).setValue(spot.getAgeFrom());
+            ((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(spot.getAgeTo());
 
         }
 

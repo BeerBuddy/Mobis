@@ -3,6 +3,7 @@ package de.fh_dortmund.beerbuddy_44.listener.android;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -12,7 +13,6 @@ import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
-import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.picker.BuddyPicker;
 
 /**
@@ -77,6 +77,13 @@ public class DrinkingListener implements View.OnClickListener {
     private void hideGroupLayout() {
         LinearLayout layout = (LinearLayout) context.findViewById(R.id.drinking_group_layout);
         layout.setVisibility(View.GONE);
-
+        context.getDrinkingSpot().setAmountMaleWithoutBeerBuddy(0);
+        context.getDrinkingSpot().setAmountFemaleWithoutBeerBuddy(0);
+        context.getDrinkingSpot().setAgeFrom(0);
+        context.getDrinkingSpot().setAgeTo(0);
+        ((NumberPicker)context.findViewById(R.id.drinking_group_amount_female)).setValue(context.getDrinkingSpot().getAmountFemaleWithoutBeerBuddy());
+        ((NumberPicker)context.findViewById(R.id.drinking_group_amount_male)).setValue(context.getDrinkingSpot().getAmountMaleWithoutBeerBuddy());
+        ((NumberPicker) context.findViewById(R.id.drinking_group_age_from)).setValue(context.getDrinkingSpot().getAgeFrom());
+        ((NumberPicker) context.findViewById(R.id.drinking_group_age_to)).setValue(context.getDrinkingSpot().getAgeTo());
     }
 }

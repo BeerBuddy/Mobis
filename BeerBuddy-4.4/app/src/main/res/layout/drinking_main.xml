@@ -50,6 +50,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -58,59 +60,89 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/profil_gender_male" />
+                        android:layout_height="match_parent">
 
-                    <NumberPicker
-                        android:id="@+id/drinking_group_amount_male"
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/profil_gender_male"
+                                android:layout_gravity="center_horizontal" />
+
+                            <NumberPicker
+                                android:id="@+id/drinking_group_amount_male"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"></NumberPicker>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:paddingLeft="20dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/profil_gender_female"
+                                android:layout_gravity="center_horizontal" />
+
+                            <NumberPicker
+                                android:id="@+id/drinking_group_amount_female"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"></NumberPicker>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></NumberPicker>
+                        android:layout_height="match_parent"
+                        android:paddingLeft="30dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/profil_gender_female" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
 
-                    <NumberPicker
-                        android:id="@+id/drinking_group_amount_female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></NumberPicker>
-                </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/drinking_age_from"
+                                android:layout_gravity="center_horizontal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profil_age"
-                    android:textSize="24sp"/>
+                            <NumberPicker
+                                android:id="@+id/drinking_group_age_from"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"></NumberPicker>
+                        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="20dp">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/drinking_age_to"
+                                android:layout_gravity="center_horizontal" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/drinking_age_from" />
+                            <NumberPicker
+                                android:id="@+id/drinking_group_age_to"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"></NumberPicker>
+                        </LinearLayout>
+                    </LinearLayout>
 
-
-                    <NumberPicker
-                        android:id="@+id/drinking_group_age_from"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></NumberPicker>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/drinking_age_to" />
-
-                    <NumberPicker
-                        android:id="@+id/drinking_group_age_to"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></NumberPicker>
                 </LinearLayout>
 
             </LinearLayout>
