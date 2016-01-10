@@ -133,9 +133,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableTop="@drawable/ic_beer"
-                        android:gravity="right"
                         android:text="Join"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:gravity="center_horizontal" />
 
                 </LinearLayout>
 

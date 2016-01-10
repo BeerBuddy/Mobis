@@ -88,7 +88,6 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:gravity="right"
                 android:drawableTop="@android:drawable/ic_menu_view"
                 android:text="View"
                 android:textSize="14sp" />
