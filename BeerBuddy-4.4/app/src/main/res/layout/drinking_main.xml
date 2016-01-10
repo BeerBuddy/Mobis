@@ -212,12 +212,26 @@
                 android:textFilterEnabled="false"
                 />
 
-            <Button
-                android:id="@+id/drinking_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/drinking_save"
-                android:layout_marginTop="10dp"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/drinking_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drinking_save"
+                    android:layout_marginTop="10dp"/>
+
+                <Button
+                    android:id="@+id/drinking_deactivate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drinking_deactivate"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -7,6 +7,8 @@
     <string name="drinking_description">Description</string>
     <string name="drinking_invited">Invited</string>
     <string name="drinking_invite">Invite</string>
-    <string name="drinking_save">Save my Drinking Spot</string>
+    <string name="drinking_save">Save my Spot</string>
     <string name="drinking_saved">Drinking Spot saved</string>
+    <string name="drinking_deactivate">Close my spot</string>
+    <string name="drinking_deactivated">Drinking spot closed</string>
 </resources>

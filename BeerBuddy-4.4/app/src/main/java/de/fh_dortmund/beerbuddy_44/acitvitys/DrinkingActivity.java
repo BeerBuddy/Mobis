@@ -46,6 +46,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
     public void onFurtherCreate(Bundle savedInstanceState) {
             DrinkingListener drinkingListener = new DrinkingListener(this);
             Button save = (Button) findViewById(R.id.drinking_save);
+            Button deactivate = (Button) findViewById(R.id.drinking_deactivate);
             Button invite = (Button) findViewById(R.id.drinking_invite);
             RadioButton alone = (RadioButton) findViewById(R.id.drinking_alone);
             RadioButton group = (RadioButton) findViewById(R.id.drinking_group);
@@ -54,6 +55,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
             group.setOnClickListener(drinkingListener);
             invite.setOnClickListener(drinkingListener);
             save.setOnClickListener(drinkingListener);
+            deactivate.setOnClickListener(drinkingListener);
 
             ((RadioButton)findViewById(R.id.drinking_alone)).setChecked(true);
 
@@ -77,6 +79,8 @@ public class DrinkingActivity extends BeerBuddyActivity {
                      @Override
                      public void onRequestFailure(SpiceException e) {
                          Log.e(TAG, "Error accured during getDrinkingSpot", e);
+                         drinkingSpot = new DrinkingSpot();
+                         drinkingSpot.setCreator(creator);
                      }
 
                      @Override
@@ -130,10 +134,10 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
         //if it's a new spot, we need a spot-object first
         //and we set the current Person as its creator
-        if (drinkingSpot == null) {
+/*        if (drinkingSpot == null) {
             drinkingSpot = new DrinkingSpot();
             drinkingSpot.setCreator(creator);
-        }
+        }*/
 
         try {
             //get current Location

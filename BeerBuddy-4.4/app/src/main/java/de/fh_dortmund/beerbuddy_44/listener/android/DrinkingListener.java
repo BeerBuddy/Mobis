@@ -43,6 +43,9 @@ public class DrinkingListener implements View.OnClickListener {
             case R.id.drinking_save:
                 saveDrinkingSpot();
                 break;
+            case R.id.drinking_deactivate:
+                deactivateDrinkingSpot();
+                break;
             default:
                 Log.e(TAG, "No Action defined for " + v.getId());
                 break;
@@ -65,8 +68,23 @@ public class DrinkingListener implements View.OnClickListener {
                     context.startActivity(i);
                 }
             });
+    }
 
+    private void deactivateDrinkingSpot(){
+        DrinkingSpot drinkingSpot = context.getValue();
+        DAOFactory.getDrinkingSpotDAO(context).deactivate(drinkingSpot.getId(), new RequestListener<Void>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                Log.e(TAG, "Error during save of DrinkingSpot " ,spiceException );
+            }
 
+            @Override
+            public void onRequestSuccess(Void aVoid) {
+                Toast.makeText(context, context.getString(R.string.drinking_deactivated), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(context, MainViewActivity.class);
+                context.startActivity(i);
+            }
+        });
     }
 
     private void showInviteDialog() {
