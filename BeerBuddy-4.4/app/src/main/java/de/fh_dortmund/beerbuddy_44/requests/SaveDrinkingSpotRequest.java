@@ -27,7 +27,7 @@ public class SaveDrinkingSpotRequest extends SpringAndroidSpiceRequest<DrinkingS
   }
 
   public String createCacheKey() {
-    return "/drinkingspot/save." + drinkingSpot;
+    return "/drinkingspot/save/" + drinkingSpot.getId();
   }
 
 

@@ -28,7 +28,7 @@ public class DeletePersonRequest extends SpringAndroidSpiceRequest<Void> {
   }
 
   public String createCacheKey() {
-      return "deletePerson."+person.getId();
+      return "/person/remove/"+person.getId();
   }
 
 

@@ -39,7 +39,7 @@ public class SavePersonRequest extends SpringAndroidSpiceRequest<Person> {
   }
 
   public String createCacheKey() {
-      return "/person/save"+person.getId();
+      return "/person/save/"+person.getId();
   }
 
 

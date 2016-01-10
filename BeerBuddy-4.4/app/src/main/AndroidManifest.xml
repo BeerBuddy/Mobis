@@ -92,6 +92,10 @@
         <service
             android:name="de.fh_dortmund.beerbuddy_44.dao.remote.JsonSpiceService"
             android:exported="false" />
+
+        <service
+            android:name="de.fh_dortmund.beerbuddy_44.dao.sync.SyncService"
+            />
     </application>
 
 

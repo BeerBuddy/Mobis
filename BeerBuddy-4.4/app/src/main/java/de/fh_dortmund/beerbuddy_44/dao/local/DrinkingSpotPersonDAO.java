@@ -20,7 +20,7 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 /**
  * Created by grimm on 07.01.2016.
  */
-public class DrinkingSpotPersonDAO {
+class DrinkingSpotPersonDAO {
     private final BeerBuddyActivity context;
     private final PersonDAOLocal personDAOLocal;
     BeerBuddyDbHelper dbHelper;

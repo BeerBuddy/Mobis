@@ -16,7 +16,7 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 /**
  * Created by grimm on 07.01.2016.
  */
-public class FriendListPersonDAOLocal {
+class FriendListPersonDAOLocal {
     BeerBuddyDbHelper dbHelper;
     PersonDAOLocal personDAO;
     public FriendListPersonDAOLocal(BeerBuddyActivity context) {

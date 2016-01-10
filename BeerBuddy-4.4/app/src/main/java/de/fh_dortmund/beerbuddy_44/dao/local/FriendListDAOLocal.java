@@ -53,7 +53,6 @@ public class FriendListDAOLocal extends FriendListDAO {
         }
     }
 
-    //TODO
     public boolean isFriendFromId(long personid, long friendid) throws DataAccessException {
         SQLiteDatabase database = null;
         Cursor dbCursor = null;
@@ -66,17 +65,13 @@ public class FriendListDAOLocal extends FriendListDAO {
                 long friendlistid = friendList.getId();
                 dbCursor = database.query("friendlistperson", new String[]{"id"}, " personid = ? and friendlistid=?", new String[]{personid + "", friendlistid + ""}, null, null, null);
                 List<FriendInvitation> list = new LinkedList<FriendInvitation>();
-                while (dbCursor.moveToNext()) {
-                    return true;
-                }
-                return false;
+                return dbCursor.getCount() > 0;
             }
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
             }
-            if(database!= null)
-            {
+            if (database != null) {
                 database.close();
             }
         }
@@ -96,7 +91,7 @@ public class FriendListDAOLocal extends FriendListDAO {
         SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
         try {
-            dbCursor = database.rawQuery(SELECT +" WHERE fl.personid = ?;", new String[]{personid + ""});
+            dbCursor = database.rawQuery(SELECT + " WHERE fl.personid = ?;", new String[]{personid + ""});
             Collection<FriendList> entitys = getEntitys(dbCursor);
             if (!entitys.isEmpty()) {
                 return entitys.toArray(new FriendList[]{})[0];
