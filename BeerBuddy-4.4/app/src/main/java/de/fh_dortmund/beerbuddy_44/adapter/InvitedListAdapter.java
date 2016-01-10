@@ -18,9 +18,9 @@ import de.fh_dortmund.beerbuddy_44.R;
  * Created by grimm on 01.12.2015.
  */
 public class InvitedListAdapter extends ArrayAdapter<Person> {
+    private static final String TAG = "InvitedListAdapter";
     private final Person[] objects;
     private final Context context;
-    private static final String TAG = "InvitedListAdapter";
 
     public InvitedListAdapter(Context context, int resource, Person[] objects) {
         super(context, resource, objects);
@@ -48,6 +48,7 @@ public class InvitedListAdapter extends ArrayAdapter<Person> {
             ((TextView) rowView.findViewById(R.id.buddy_list_row_name)).setText(p.getUsername());
             rowView.findViewById(R.id.buddy_list_row_button_view).setOnClickListener(new IntentUtil.ShowProfilListener(context, p.getId()));
             rowView.findViewById(R.id.buddy_list_row_button_add).setVisibility(View.GONE);
+            rowView.findViewById(R.id.buddy_list_row_button_decline).setVisibility(View.GONE);
         }
         return rowView;
     }
