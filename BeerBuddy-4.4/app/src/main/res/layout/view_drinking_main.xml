@@ -114,8 +114,8 @@
                         android:id="@+id/drinking_view_navigate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableTop="@android:drawable/ic_menu_directions"
                         android:gravity="right"
-                        android:src="@android:drawable/ic_menu_directions"
                         android:text="Navigate"
                         android:textSize="14sp" />
 
@@ -123,8 +123,8 @@
                         android:id="@+id/drinking_view_showonmap"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableTop="@android:drawable/ic_dialog_map"
                         android:gravity="right"
-                        android:src="@android:drawable/ic_dialog_map"
                         android:text="Show on Map"
                         android:textSize="14sp" />
 
@@ -132,8 +132,8 @@
                         android:id="@+id/drinking_view_join"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/ic_beer"
                         android:gravity="right"
-                        android:src="@drawable/ic_beer"
                         android:text="Join"
                         android:textSize="14sp" />
 
