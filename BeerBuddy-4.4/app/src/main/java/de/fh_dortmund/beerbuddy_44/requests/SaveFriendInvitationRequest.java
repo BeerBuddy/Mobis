@@ -30,7 +30,7 @@ public class SaveFriendInvitationRequest extends SpringAndroidSpiceRequest<Frien
   }
 
   public String createCacheKey() {
-      return "saveFriendInvitation."+person;
+      return "/friendinvitation/save/"+person.getId();
   }
 
 

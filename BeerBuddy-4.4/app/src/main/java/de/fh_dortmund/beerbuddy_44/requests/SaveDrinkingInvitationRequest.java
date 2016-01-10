@@ -30,7 +30,7 @@ public class SaveDrinkingInvitationRequest extends SpringAndroidSpiceRequest<Dri
   }
 
   public String createCacheKey() {
-      return "/drinkinginvitation/save."+person;
+      return "/drinkinginvitation/save/"+person.getId();
   }
 
 

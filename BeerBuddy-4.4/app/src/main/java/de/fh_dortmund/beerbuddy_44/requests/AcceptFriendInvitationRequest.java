@@ -25,7 +25,7 @@ public class AcceptFriendInvitationRequest extends SpringAndroidSpiceRequest<Voi
     }
 
     public String createCacheKey() {
-        return "/friendinvitation/accept"+person.getId();
+        return "/friendinvitation/accept/"+person.getId();
     }
 
 }

@@ -25,7 +25,7 @@ public class DeclineFriendInvitationRequest extends SpringAndroidSpiceRequest<Vo
     }
 
     public String createCacheKey() {
-        return "/friendinvitation/decline"+person.getId();
+        return "/friendinvitation/decline/"+person.getId();
     }
 
 }

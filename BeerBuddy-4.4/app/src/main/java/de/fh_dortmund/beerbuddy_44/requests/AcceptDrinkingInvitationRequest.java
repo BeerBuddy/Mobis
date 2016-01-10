@@ -27,7 +27,7 @@ public class AcceptDrinkingInvitationRequest extends SpringAndroidSpiceRequest<V
     }
 
     public String createCacheKey() {
-        return "/drinkinginvitation/accept"+person.getId();
+        return "/drinkinginvitation/accept/"+person.getId();
     }
 
 }
