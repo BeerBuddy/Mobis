@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,14 +29,12 @@ public class DrinkingSpotPersonDAO {
     public DrinkingSpotPersonDAO(BeerBuddyActivity context) {
         this.context = context;
         dbHelper = BeerBuddyDbHelper.getInstance(context);
-         personDAOLocal = new PersonDAOLocal(context);
+        personDAOLocal = new PersonDAOLocal(context);
     }
 
-    public void deleteAll(long id,SQLiteDatabase database) throws DataAccessException {
+    public void deleteAll(long id, SQLiteDatabase database) throws DataAccessException {
         try {
-            SQLiteStatement stmt = database.compileStatement("DELETE FROM drinkingspotperson WHERE drinkingSpotId = ?");
-            stmt.bindLong(1, id);
-            stmt.executeUpdateDelete();
+            database.delete("drinkingspotperson", "drinkingSpotId = ?", new String[]{id+""});
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to delete all DrinkingSpotPerson", e);
@@ -44,12 +43,11 @@ public class DrinkingSpotPersonDAO {
 
     public void saveAll(long id, List<Person> persons, SQLiteDatabase database) throws DataAccessException {
         try {
-            for(Person p: persons)
-            {
-                SQLiteStatement stmt = database.compileStatement("INSERT INTO drinkingspotperson (drinkingSpotId,personid) VALUES(?,?)");
-                stmt.bindLong(1, id);
-                stmt.bindLong(2, p.getId());
-                stmt.executeInsert();
+            for (Person p : persons) {
+                ContentValues values = new ContentValues();
+                values.put("drinkingSpotId", id);
+                values.put("personid", p.getId());
+                database.insert("drinkingspotperson", null, values);
             }
         } catch (Exception e) {
             e.printStackTrace();

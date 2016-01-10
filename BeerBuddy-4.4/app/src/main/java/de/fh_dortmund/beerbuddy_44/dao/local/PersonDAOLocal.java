@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -74,26 +75,15 @@ public class PersonDAOLocal extends PersonDAO {
     }
 
     public void getById(long id, RequestListener<Person> listener) {
-        SQLiteDatabase database = dbHelper.getDatabase();
-        Cursor dbCursor = null;
 
         try {
-            dbCursor = database.query("person", new String[]{"id", "email", "username", "image", "password", "gender", "dateOfBirth", "interests", "prefers", "version"}, "id=?", new String[]{id + ""}, null, null, null);
-            List<Person> list = new LinkedList<Person>();
-            while (dbCursor.moveToNext()) {
-                Person di = getPerson(dbCursor);
-                listener.onRequestSuccess(di);
-                return;
-            }
-        } catch (Exception e) {
+            listener.onRequestSuccess(getById(id));
+        } catch (       Exception e             )
+        {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
-        } finally {
-            if (dbCursor != null) {
-                dbCursor.close();
-            }
-            database.close();
         }
+
     }
 
     @Override
@@ -133,69 +123,77 @@ public class PersonDAOLocal extends PersonDAO {
         }
     }
 
-    private Person insert(Person p) throws DataAccessException {
+    public Person insert(Person p) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
-        database.beginTransaction();
+
+        ContentValues values = new ContentValues();
         try {
-            SQLiteStatement stmt = database.compileStatement("INSERT INTO person (email,username,image,password,gender,dateOfBirth,interests,prefers,version) VALUES(?,?,?,?,?,?,?,?,?)");
-            stmt.bindString(1, p.getEmail());
+            values.put("email", p.getEmail());
+            values.put("password", p.getPassword());
+            values.put("gender", p.getGender());
+            values.put("version", p.getVersion());
+
             if (p.getUsername() != null)
-                stmt.bindString(2, p.getUsername());
+                values.put("username", p.getUsername());
             if (p.getImage() != null)
-                stmt.bindBlob(3, p.getImage());
-            if (p.getPassword() != null)
-                stmt.bindString(4, p.getPassword());
-            stmt.bindLong(5, p.getGender());
+                values.put("image", p.getImage());
+
             if (p.getDateOfBirth() != null) {
-                stmt.bindString(6, BeerBuddyDbHelper.DATE_FORMAT.format(p.getDateOfBirth()));
+                values.put("dateOfBirth", BeerBuddyDbHelper.DATE_FORMAT.format(p.getDateOfBirth()));
             }
             if (p.getInterests() != null)
-                stmt.bindString(7, p.getInterests());
+                values.put("interests", p.getInterests());
+
             if (p.getPrefers() != null)
-                stmt.bindString(8, p.getPrefers());
-            stmt.bindLong(9, p.getVersion());
-            p.setId(stmt.executeInsert());
+                values.put("prefers", p.getPrefers());
+
+            p.setId(database.insert("person", null, values));
             return p;
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to insert Person", e);
         } finally {
-            database.endTransaction();
             database.close();
         }
     }
 
-    private Person update(Person p) throws DataAccessException {
+    public Person update(Person p) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
-        database.beginTransaction();
         try {
-            SQLiteStatement stmt = database.compileStatement("UPDATE person SET email=?,username=?,image=?,password=?,gender=?,dateOfBirth=?,interests=?,prefers=?,version=? WHERE id=?");
-            stmt.bindString(1, p.getEmail());
-            stmt.bindString(2, p.getUsername());
-            stmt.bindBlob(3, p.getImage());
-            stmt.bindString(4, p.getPassword());
-            stmt.bindLong(5, p.getGender());
+            ContentValues values = new ContentValues();
+            values.put("email", p.getInterests());
+            values.put("password", p.getInterests());
+            values.put("gender", p.getInterests());
+            values.put("version", p.getVersion());
+
+            if (p.getUsername() != null)
+                values.put("username", p.getUsername());
+            if (p.getImage() != null)
+                values.put("image", p.getImage());
+
             if (p.getDateOfBirth() != null) {
-                stmt.bindString(6, BeerBuddyDbHelper.DATE_FORMAT.format(p.getDateOfBirth()));
+                values.put("dateOfBirth", BeerBuddyDbHelper.DATE_FORMAT.format(p.getDateOfBirth()));
             }
-            stmt.bindString(7, p.getInterests());
-            stmt.bindString(8, p.getPrefers());
-            stmt.bindLong(9, p.getVersion());
-            stmt.bindLong(10, p.getId());
-            stmt.executeUpdateDelete();
+            if (p.getInterests() != null)
+                values.put("interests", p.getInterests());
+
+            if (p.getPrefers() != null)
+                values.put("prefers", p.getPrefers());
+
+            database.update("person", values, "id=?", new String[]{p.getId() + ""});
             return p;
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Failed to update Person", e);
         } finally {
-            database.endTransaction();
             database.close();
         }
 
     }
 
 
-    public Person getById(long id, SQLiteDatabase database) throws DataAccessException {
+    public Person getById(long id) throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
         Cursor dbCursor = null;
 
         try {
@@ -213,6 +211,7 @@ public class PersonDAOLocal extends PersonDAO {
             if (dbCursor != null) {
                 dbCursor.close();
             }
+            database.close();
         }
     }
 }

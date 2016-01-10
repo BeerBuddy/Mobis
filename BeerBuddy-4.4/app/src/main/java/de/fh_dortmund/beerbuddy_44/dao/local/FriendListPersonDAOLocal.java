@@ -1,5 +1,6 @@
 package de.fh_dortmund.beerbuddy_44.dao.local;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -27,27 +28,24 @@ public class FriendListPersonDAOLocal {
         try {
             for(Person p: friends)
             {
-                SQLiteStatement stmt = database.compileStatement("INSERT INTO friendlistperson (friendlistid,personid) VALUES(?,?)");
-                stmt.bindLong(1, l);
-                stmt.bindLong(2, p.getId());
-                stmt.executeInsert();
+
+                ContentValues values = new ContentValues();
+                values.put("personid", p.getId());
+                values.put("friendlistid", l);
+                database.insert("friendlistperson", null, values);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataAccessException("Failed to insert DrinkingSpotPerson", e);
-        } finally {
+            throw new DataAccessException("Failed to insert friendlistperson", e);
         }
     }
 
     public void deleteAll(long id,SQLiteDatabase database ) throws DataAccessException {
         try {
-            SQLiteStatement stmt = database.compileStatement("DELETE FROM friendlistperson WHERE friendlistid = ?");
-            stmt.bindLong(1, id);
-            stmt.executeUpdateDelete();
+            database.delete("friendlistperson", "friendlistid = ?", new String[]{id + ""});
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataAccessException("Failed to delete all DrinkingSpotPerson", e);
-        } finally {
+            throw new DataAccessException("Failed to delete all friendlistperson", e);
         }
     }
 }

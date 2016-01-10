@@ -185,7 +185,7 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
 
                             @Override
                             public void onRequestSuccess(DrinkingSpot drinkingSpot) {
-                                assertFalse(drinkingSpot.getId() == 0);
+                                assertTrue(drinkingSpot.getId()  != -1);
                                 assertEquals(p1, drinkingSpot.getCreator());
                                 assertEquals(gps, drinkingSpot.getGps());
                                 assertNotNull(drinkingSpot.getStartTime());
@@ -315,7 +315,7 @@ public abstract class DrinkingInvitationDAOTest extends ActivityInstrumentationT
 
                             @Override
                             public void onRequestSuccess(DrinkingSpot drinkingSpot) {
-                                assertFalse(drinkingSpot.getId() == 0);
+                                assertFalse(drinkingSpot.getId() == -1);
                                 assertEquals(p1, drinkingSpot.getCreator());
                                 assertEquals(gps, drinkingSpot.getGps());
                                 assertNotNull(drinkingSpot.getStartTime());

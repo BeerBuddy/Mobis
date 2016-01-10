@@ -79,6 +79,7 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
 
                             @Override
                             public void onRequestSuccess(FriendList drinkingSpot) {
+                                assertFalse(drinkingSpot.getId() == -1);
                                 assertFalse(drinkingSpot.getId() == 0);
                                 assertEquals(p1.getId(), drinkingSpot.getPersonid());
                                 FriendInvitation drinkingInvitation = new FriendInvitation();
@@ -180,6 +181,7 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
                             @Override
                             public void onRequestSuccess(FriendList drinkingSpot) {
                                 assertFalse(drinkingSpot.getId() == 0);
+                                assertFalse(drinkingSpot.getId() == -1);
                                 assertEquals(p1.getId(), drinkingSpot.getPersonid());
                                 FriendInvitation drinkingInvitation = new FriendInvitation();
                                 drinkingInvitation.setEingeladenerId(p2.getId());
@@ -333,6 +335,7 @@ public abstract class FriendInvitationDAOTest extends ActivityInstrumentationTes
                             @Override
                             public void onRequestSuccess(FriendList drinkingSpot) {
                                 assertFalse(drinkingSpot.getId() == 0);
+                                assertFalse(drinkingSpot.getId() == -1);
                                 assertEquals(p1.getId(), drinkingSpot.getPersonid());
                                 FriendInvitation drinkingInvitation = new FriendInvitation();
                                 drinkingInvitation.setEingeladenerId(p2.getId());
