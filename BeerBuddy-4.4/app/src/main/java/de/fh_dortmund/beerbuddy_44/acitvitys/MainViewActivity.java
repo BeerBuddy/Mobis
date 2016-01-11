@@ -79,7 +79,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
             //get current GPS position
             if (location != null) {
                 //move the map to current location
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
             }
 
         } catch (Exception e) {
@@ -141,7 +141,17 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
             }
         });
         final Context context = this;
-        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(getResources().getText(R.string.mainview_person_count).toString() + " " + spot.getTotalAmount() + " " + getResources().getText(R.string.mainview_age).toString() + " " + spot.getAgeFrom() + " - " + spot.getAgeTo());
+        int totalAmount = spot.getTotalAmount() + 1;
+        int ageFrom = spot.getAgeFrom();
+        if (ageFrom == 0){
+            ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+        int ageTo = spot.getAgeFrom();
+        if (ageTo == 0){
+            ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+
+        ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(getResources().getText(R.string.mainview_person_count).toString() + " " + totalAmount + " " + getResources().getText(R.string.mainview_age).toString() + " " + ageFrom + " - " + ageTo);
         slidingUpPanelLayout.findViewById(R.id.mainview_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId(), true));
         slidingUpPanelLayout.findViewById(R.id.mainview_navigate).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_name)).setText(spot.getCreator().getUsername() + " is drinking");

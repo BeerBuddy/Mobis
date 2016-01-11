@@ -151,7 +151,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/drinking_description"
-                android:textSize="24sp"
                 android:textStyle="bold"/>
 
 
@@ -204,15 +203,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/drinking_save"
-                    android:layout_marginTop="10dp"/>
+                    android:drawableTop="@drawable/ic_content_save"
+                    android:layout_marginTop="10dp"
+                    android:drawableTint="#ffffff" />
 
                 <Button
                     android:id="@+id/drinking_deactivate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/drinking_deactivate"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="10dp" />
+                    android:drawableTop="@drawable/ic_close_box_outline"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableTint="#ffffff" />
             </LinearLayout>
 
         </LinearLayout>

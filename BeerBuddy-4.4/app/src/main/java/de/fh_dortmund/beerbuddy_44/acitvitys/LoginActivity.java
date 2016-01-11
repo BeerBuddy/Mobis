@@ -68,7 +68,7 @@ public class LoginActivity extends BeerBuddyActivity {
         //findViewById(R.id.sign_in_button).setOnClickListener(loginListener);
         //register login/register Button
         try {
-            if (DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() == 0) {
+            if (DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() != 0) {
                 //send him to the Login
                 this.startActivityForResult(new Intent(this, MainViewActivity.class), Activity.RESULT_OK);
             } else {

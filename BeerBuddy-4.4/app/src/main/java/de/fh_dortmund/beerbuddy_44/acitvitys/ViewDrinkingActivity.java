@@ -13,6 +13,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.List;
+
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
@@ -45,7 +47,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         //get current GPS position
         if (drinkingSpot != null) {
             //move the map to current location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 20));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 15));
             createMarker(drinkingSpot, googleMap);
         }
     }
@@ -56,6 +58,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         Bundle b = getIntent().getExtras();
         long id = b.getLong("id");
 
@@ -71,6 +74,8 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
                     public void onRequestSuccess(DrinkingSpot drinkingSpot) {
                         if (drinkingSpot != null) {
                             setValue(drinkingSpot);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 15));
+                            createMarker(drinkingSpot, mMap);
                         }
                     }
                 });
@@ -85,7 +90,15 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
     }
 
     public void setValue(final DrinkingSpot spot) {
-        ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() + " - " + spot.getAgeTo());
+        int ageFrom = spot.getAgeFrom();
+        if (ageFrom == 0){
+            ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+        int ageTo = spot.getAgeFrom();
+        if (ageTo == 0){
+            ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+        ((TextView) findViewById(R.id.drinking_view_age)).setText(ageFrom + " - " + ageTo);
 
         if (spot.getCreator().getUsername() != null) {
             ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(getResources().getText(R.string.mainview_creator) + ": " + spot.getCreator().getUsername());
@@ -94,6 +107,23 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         }
 
         ((TextView) findViewById(R.id.drinking_view_description)).setText(spot.getBeschreibung());
+
+        try {
+            long id = DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId();
+            List<Person> persons = spot.getPersons();
+            if (spot.getCreator().getId() == id){
+                findViewById(R.id.drinking_view_join).setVisibility(View.GONE);
+            }
+            else {
+                for (Person p : persons) {
+                    if (p.getId() == id) {
+                        findViewById(R.id.drinking_view_join).setVisibility(View.GONE);
+                    }
+                }
+            }
+        }catch (BeerBuddyException e){
+            Log.d(TAG, "Error occured during getCurrentPersonId" + e);
+        }
 
         final BeerBuddyActivity context = this;
 
@@ -123,7 +153,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         */
         int amount = spot.getAmountMaleWithoutBeerBuddy() +
                 spot.getAmountFemaleWithoutBeerBuddy() +
-                spot.getPersons().size();
+                spot.getPersons().size() + 1;
         ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
 
         ((ListView) findViewById(R.id.drinking_view_usersjoined)).setAdapter(new FriendListAdapter(context, R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{})));

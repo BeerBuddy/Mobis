@@ -8,7 +8,7 @@
     <string name="drinking_invited">Eingeladene</string>
     <string name="drinking_invite">Einladen</string>
     <string name="drinking_save">Spot speichern</string>
-    <string name="drinking_saved">Drinking spot gespeichert</string>
-    <string name="drinking_deactivate">Spot deaktivieren</string>
-    <string name="drinking_deactivated">Drinking spot deaktiviert</string>
+    <string name="drinking_saved">Drinking Spot gespeichert</string>
+    <string name="drinking_deactivate">Spot schließen</string>
+    <string name="drinking_deactivated">Drinking Spot geschlossen</string>
 </resources>

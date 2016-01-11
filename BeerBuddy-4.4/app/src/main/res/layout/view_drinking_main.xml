@@ -70,7 +70,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:text="is Drinking in a Group of x:"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,7 +79,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:text="@string/profil_age"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
 
                 <TextView
@@ -95,7 +97,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:text="@string/drinking_description"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/drinking_view_description"
@@ -115,17 +118,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableTop="@android:drawable/ic_menu_directions"
-                        android:gravity="right"
-                        android:text="Navigate"
-                        android:textSize="14sp" />
+                        android:gravity="center_horizontal"
+                        android:textSize="14sp"
+                        android:text="@string/spot_navigate" />
 
                     <Button
                         android:id="@+id/drinking_view_showonmap"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableTop="@android:drawable/ic_dialog_map"
-                        android:gravity="right"
-                        android:text="Show on Map"
+                        android:gravity="center_horizontal"
+                        android:text="@string/spot_onmap"
                         android:textSize="14sp" />
 
                     <Button
@@ -133,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableTop="@drawable/ic_beer"
-                        android:text="Join"
+                        android:text="@string/spot_join"
                         android:textSize="14sp"
                         android:gravity="center_horizontal" />
 
@@ -149,7 +152,8 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="@string/mainview_usersjoined"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/drinking_view_usersjoined"

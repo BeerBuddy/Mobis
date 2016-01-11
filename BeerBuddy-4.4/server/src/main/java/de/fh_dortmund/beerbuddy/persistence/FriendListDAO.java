@@ -21,7 +21,7 @@ public class FriendListDAO extends AbstractDAO<FriendList> implements IFriendLis
     }
 
     public boolean isFriendFromId(long personid, long friendid) throws BeerBuddyException {
-        FriendList friendList = getFriendLists(personid).get(0);
+        FriendList friendList = getFriendList(personid);
         for (Person person : friendList.getFriends()) {
             if (person.getId() == friendid) {
                 return true;

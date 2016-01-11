@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="spot_join">Join</string>
+    <string name="spot_navigate">Navigate</string>
+    <string name="spot_onmap">Show on Map</string>
+    <string name="spot_view">View</string>
+</resources>
