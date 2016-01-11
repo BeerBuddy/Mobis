@@ -13,6 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.Date;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
@@ -91,13 +92,21 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
 
     public void setValue(final DrinkingSpot spot) {
         int ageFrom = spot.getAgeFrom();
-        if (ageFrom == 0){
-            ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
-        }
         int ageTo = spot.getAgeTo();
-        if (ageTo == 0){
-            ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+
+        Date dateOfBirth = spot.getCreator().getDateOfBirth();
+        if(dateOfBirth != null)
+        {
+            if (ageFrom == 0){
+
+                ageFrom = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
+            }
+
+            if (ageTo == 0){
+                ageTo = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
+            }
         }
+
         ((TextView) findViewById(R.id.drinking_view_age)).setText(ageFrom + " - " + ageTo);
 
         if (spot.getCreator().getUsername() != null) {

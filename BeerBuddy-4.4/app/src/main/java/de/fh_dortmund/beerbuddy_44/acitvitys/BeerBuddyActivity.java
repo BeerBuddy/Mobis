@@ -38,6 +38,12 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
     private final int layout;
     private final boolean finishOnLogout;
     private final boolean toolbar;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
 
     public BeerBuddyActivity(int layout, boolean finishOnLogout) {
         this.layout = layout;
@@ -66,6 +72,12 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -73,12 +85,7 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
             //finish instance on Logout
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("de.fh_dortmund.beerbuddy_44.ACTION_LOGOUT");
-            registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    finish();
-                }
-            }, intentFilter);
+            registerReceiver(receiver, intentFilter);
         }
 
         setContentView(layout);
