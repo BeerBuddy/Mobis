@@ -68,6 +68,6 @@ public class DrinkingSpot implements Serializable {
 
     @JsonIgnore
     public int getTotalAmount() {
-        return persons.size() + amountFemaleWithoutBeerBuddy + amountMaleWithoutBeerBuddy;
+        return amountFemaleWithoutBeerBuddy + amountMaleWithoutBeerBuddy;
     }
 }
