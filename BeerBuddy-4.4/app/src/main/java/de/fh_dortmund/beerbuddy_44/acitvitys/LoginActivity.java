@@ -1,16 +1,20 @@
 package de.fh_dortmund.beerbuddy_44.acitvitys;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 
 
 import de.fh_dortmund.beerbuddy.entities.Person;
+import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.listener.android.LoginListener;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,6 +67,19 @@ public class LoginActivity extends BeerBuddyActivity {
         //register Google Login Listener
         //findViewById(R.id.sign_in_button).setOnClickListener(loginListener);
         //register login/register Button
+        try {
+            if (DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() == 0) {
+                //send him to the Login
+                this.startActivityForResult(new Intent(this, MainViewActivity.class), Activity.RESULT_OK);
+            } else {
+                Log.i(TAG, "user is logged in: " + DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
+            }
+        } catch (BeerBuddyException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error accured during Logincheck ", e);
+        }
+
+
         findViewById(R.id.action_login).setOnClickListener(loginListener);
     }
 

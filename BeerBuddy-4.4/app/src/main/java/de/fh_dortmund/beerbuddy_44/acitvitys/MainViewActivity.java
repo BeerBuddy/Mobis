@@ -156,18 +156,6 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        try {
-            if (DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId() == 0) {
-                //send him to the Login
-                this.startActivityForResult(new Intent(this, LoginActivity.class), Activity.RESULT_OK);
-            } else {
-                Log.i(TAG, "user is logged in: " + DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId());
-            }
-        } catch (BeerBuddyException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error accured during Logincheck ", e);
-        }
-
         //TODO check if called with Extra Value long "id" if called show this drinking spot
 
         try {
