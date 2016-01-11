@@ -94,7 +94,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         if (ageFrom == 0){
             ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
         }
-        int ageTo = spot.getAgeFrom();
+        int ageTo = spot.getAgeTo();
         if (ageTo == 0){
             ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
         }
