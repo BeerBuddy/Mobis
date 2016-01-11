@@ -66,46 +66,48 @@ public class DrinkingListener implements View.OnClickListener {
                     invitation.setEinladerId(drinkingSpot.getCreator().getId());
                     invitation.setFreitext("Hey Buddy, join my DrinkingSpot!");
 
-                    //for all invited persons
-                    int zaehler = 0;
-                    while(zaehler < context.getInvitedPersons().length && context.getInvitedPersons()[zaehler] != 0) {
-                        invitation.setEingeladenerId(context.getInvitedPersons()[zaehler]);
-                        //are there open invitations for the person?
-                        DAOFactory.getDrinkingInvitationDAO(context).getAllFor(invitation.getEingeladenerId(), new RequestListener<DrinkingInvitation[]>() {
-                            @Override
-                            public void onRequestFailure(SpiceException spiceException) {
-                                Log.d(TAG , "Error GettingActive " + invitation.getEingeladenerId());
-                            }
+                    if(context.getInvitedPersons() != null) {
+                        //for all invited persons
+                        int zaehler = 0;
+                        while (zaehler < context.getInvitedPersons().length && context.getInvitedPersons()[zaehler] != 0) {
+                            invitation.setEingeladenerId(context.getInvitedPersons()[zaehler]);
+                            //are there open invitations for the person?
+                            DAOFactory.getDrinkingInvitationDAO(context).getAllFor(invitation.getEingeladenerId(), new RequestListener<DrinkingInvitation[]>() {
+                                @Override
+                                public void onRequestFailure(SpiceException spiceException) {
+                                    Log.d(TAG, "Error GettingActive " + invitation.getEingeladenerId());
+                                }
 
-                            @Override
-                            public void onRequestSuccess(DrinkingInvitation[] oldInvitations) {
-                                //is one of these invitations for the current spot?
-                                boolean notInvited = true;
-                                for (int i = 0; i < oldInvitations.length; i++) {
-                                    long oldInvit = oldInvitations[i].getDrinkingSpotId();
-                                    long newInvit = invitation.getDrinkingSpotId();
-                                    if (oldInvit == newInvit) {
-                                        notInvited = false;
-                                        break;
+                                @Override
+                                public void onRequestSuccess(DrinkingInvitation[] oldInvitations) {
+                                    //is one of these invitations for the current spot?
+                                    boolean notInvited = true;
+                                    for (int i = 0; i < oldInvitations.length; i++) {
+                                        long oldInvit = oldInvitations[i].getDrinkingSpotId();
+                                        long newInvit = invitation.getDrinkingSpotId();
+                                        if (oldInvit == newInvit) {
+                                            notInvited = false;
+                                            break;
+                                        }
+                                    }
+                                    //if there is NO invitation for the current spot, send the invitation
+                                    if (notInvited) {
+                                        DAOFactory.getDrinkingInvitationDAO(context).insertOrUpdate(invitation, new RequestListener<DrinkingInvitation>() {
+                                            @Override
+                                            public void onRequestFailure(SpiceException e) {
+                                                Log.d(TAG, "Error during sending Invitation", e);
+                                            }
+
+                                            @Override
+                                            public void onRequestSuccess(DrinkingInvitation drinkingInvitation) {
+                                                //do nothing
+                                            }
+                                        });
                                     }
                                 }
-                                //if there is NO invitation for the current spot, send the invitation
-                                if (notInvited) {
-                                    DAOFactory.getDrinkingInvitationDAO(context).insertOrUpdate(invitation, new RequestListener<DrinkingInvitation>() {
-                                        @Override
-                                        public void onRequestFailure(SpiceException e) {
-                                            Log.d(TAG,"Error during sending Invitation", e);
-                                        }
-
-                                        @Override
-                                        public void onRequestSuccess(DrinkingInvitation drinkingInvitation) {
-                                            //do nothing
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        zaehler++;
+                            });
+                            zaehler++;
+                        }
                     }
                     //Spot saved, change activity
                     context.setInvitedPersons(null);
