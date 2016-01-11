@@ -153,10 +153,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
             Log.e(TAG, "Error accured during Location ", e);
         }
 
-        if (!drinkingSpot.getPersons().contains(drinkingSpot.getCreator())) {
-            drinkingSpot.getPersons().add(drinkingSpot.getCreator());
-        }
-
         drinkingSpot.setStartTime(new Date());
         drinkingSpot.setBeschreibung(((EditText) findViewById(R.id.drinking_description)).getText().toString());
         drinkingSpot.setAmountFemaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_female)).getValue());

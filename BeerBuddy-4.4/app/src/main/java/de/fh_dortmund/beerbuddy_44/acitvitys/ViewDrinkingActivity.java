@@ -90,7 +90,15 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
     }
 
     public void setValue(final DrinkingSpot spot) {
-        ((TextView) findViewById(R.id.drinking_view_age)).setText(spot.getAgeFrom() + " - " + spot.getAgeTo());
+        int ageFrom = spot.getAgeFrom();
+        if (ageFrom == 0){
+            ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+        int ageTo = spot.getAgeFrom();
+        if (ageTo == 0){
+            ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+        ((TextView) findViewById(R.id.drinking_view_age)).setText(ageFrom + " - " + ageTo);
 
         if (spot.getCreator().getUsername() != null) {
             ((TextView) findViewById(R.id.drinking_view_creatorname)).setText(getResources().getText(R.string.mainview_creator) + ": " + spot.getCreator().getUsername());
@@ -145,7 +153,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         */
         int amount = spot.getAmountMaleWithoutBeerBuddy() +
                 spot.getAmountFemaleWithoutBeerBuddy() +
-                spot.getPersons().size();
+                spot.getPersons().size() + 1;
         ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
 
         ((ListView) findViewById(R.id.drinking_view_usersjoined)).setAdapter(new FriendListAdapter(context, R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{})));
