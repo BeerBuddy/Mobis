@@ -79,7 +79,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
             //get current GPS position
             if (location != null) {
                 //move the map to current location
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 20));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
             }
 
         } catch (Exception e) {

@@ -77,7 +77,6 @@ public class DrinkingActivity extends BeerBuddyActivity {
                          //and we set the current Person as its creator
                          if (drinkingSpot == null) {
                              createDrinkingSpot();
-                             drinkingSpot.setCreator(creator);
                          }
                      }
 
@@ -128,12 +127,17 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
     public void createDrinkingSpot(){
         drinkingSpot = new DrinkingSpot();
+        drinkingSpot.setCreator(creator);
     }
 
     public DrinkingSpot getValue() {
         try {
             //get current Location
             LatLng location = ObjectMapperUtil.getLatLngFromLocation(DAOFactory.getLocationDAO(this).getCurrentLocation());
+
+            if (drinkingSpot == null) {
+                createDrinkingSpot();
+            }
 
             //Converting Location: LatLng --> String
             if (location != null) {
@@ -148,7 +152,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
             e.printStackTrace();
             Log.e(TAG, "Error accured during Location ", e);
         }
-
+        
         drinkingSpot.setStartTime(new Date());
         drinkingSpot.setBeschreibung(((EditText) findViewById(R.id.drinking_description)).getText().toString());
         drinkingSpot.setAmountFemaleWithoutBeerBuddy(((NumberPicker) findViewById(R.id.drinking_group_amount_female)).getValue());
