@@ -50,7 +50,7 @@ public class ViewProfilListener implements View.OnClickListener {
             DAOFactory.getFriendInvitationDAO(viewProfilActivity).insertOrUpdate(i, new RequestListener<FriendInvitation>() {
                 @Override
                 public void onRequestFailure(SpiceException e) {
-                    Log.e(TAG, "Error accoured during request", e);
+                    Log.e(TAG, "Error occurred during request", e);
                 }
 
                 @Override
@@ -60,7 +60,7 @@ public class ViewProfilListener implements View.OnClickListener {
             });
 
         } catch (BeerBuddyException e) {
-            Log.e(TAG, "Error accoured during request", e);
+            Log.e(TAG, "Error occurred during request", e);
         }
     }
 }
