@@ -30,6 +30,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
     @Getter
     private DrinkingSpot drinkingSpot;
     private Person creator;
+    private long[] invitedPersons;
 
     public DrinkingActivity() {
         super(R.layout.drinking_activity_main, true);
@@ -73,8 +74,10 @@ public class DrinkingActivity extends BeerBuddyActivity {
                          Log.e(TAG, "Error accured during getDrinkingSpot", e);
                          //if it's a new spot, we need a spot-object first
                          //and we set the current Person as its creator
-                         createDrinkingSpot();
-                         drinkingSpot.setCreator(creator);
+                         if (drinkingSpot == null) {
+                             createDrinkingSpot();
+                             drinkingSpot.setCreator(creator);
+                         }
                      }
 
                      @Override
@@ -222,5 +225,13 @@ public class DrinkingActivity extends BeerBuddyActivity {
             ((NumberPicker)findViewById(R.id.drinking_group_age_to)).setValue(drinkingSpot.getAgeTo());
         }
         ((EditText)findViewById(R.id.drinking_description)).setText(spot.getBeschreibung());
+    }
+
+    public long[] getInvitedPersons(){
+        return invitedPersons;
+    }
+
+    public void setInvitedPersons(long[] iP){
+        invitedPersons = iP;
     }
 }

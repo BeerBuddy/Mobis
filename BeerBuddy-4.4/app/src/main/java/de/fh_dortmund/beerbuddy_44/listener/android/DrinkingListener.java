@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import de.fh_dortmund.beerbuddy.entities.DrinkingInvitation;
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
@@ -17,9 +18,6 @@ import de.fh_dortmund.beerbuddy_44.acitvitys.MainViewActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 import de.fh_dortmund.beerbuddy_44.picker.BuddyPicker;
 
-/**
- * Created by grimm on 01.12.2015.
- */
 public class DrinkingListener implements View.OnClickListener {
 
     private static final String TAG = "DrinkingListener";
@@ -50,7 +48,6 @@ public class DrinkingListener implements View.OnClickListener {
                 Log.e(TAG, "No Action defined for " + v.getId());
                 break;
         }
-
     }
 
     private void saveDrinkingSpot() {
@@ -63,6 +60,55 @@ public class DrinkingListener implements View.OnClickListener {
 
                 @Override
                 public void onRequestSuccess(DrinkingSpot drinkingSpot) {
+                    //sending the Invitations
+                    final DrinkingInvitation invitation = new DrinkingInvitation();
+                    invitation.setDrinkingSpotId(drinkingSpot.getId());
+                    invitation.setEinladerId(drinkingSpot.getCreator().getId());
+                    invitation.setFreitext("Hey Buddy, join my DrinkingSpot!");
+
+                    //for all invited persons
+                    int zaehler = 0;
+                    while(zaehler < context.getInvitedPersons().length && context.getInvitedPersons()[zaehler] != 0) {
+                        invitation.setEingeladenerId(context.getInvitedPersons()[zaehler]);
+                        //are there open invitations for the person?
+                        DAOFactory.getDrinkingInvitationDAO(context).getAllFor(invitation.getEingeladenerId(), new RequestListener<DrinkingInvitation[]>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                Log.d(TAG , "Error GettingActive " + invitation.getEingeladenerId());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(DrinkingInvitation[] oldInvitations) {
+                                //is one of these invitations for the current spot?
+                                boolean notInvited = true;
+                                for (int i = 0; i < oldInvitations.length; i++) {
+                                    long oldInvit = oldInvitations[i].getDrinkingSpotId();
+                                    long newInvit = invitation.getDrinkingSpotId();
+                                    if (oldInvit == newInvit) {
+                                        notInvited = false;
+                                        break;
+                                    }
+                                }
+                                //if there is NO invitation for the current spot, send the invitation
+                                if (notInvited) {
+                                    DAOFactory.getDrinkingInvitationDAO(context).insertOrUpdate(invitation, new RequestListener<DrinkingInvitation>() {
+                                        @Override
+                                        public void onRequestFailure(SpiceException e) {
+                                            Log.d(TAG,"Error during sending Invitation", e);
+                                        }
+
+                                        @Override
+                                        public void onRequestSuccess(DrinkingInvitation drinkingInvitation) {
+                                            //do nothing
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        zaehler++;
+                    }
+                    //Spot saved, change activity
+                    context.setInvitedPersons(null);
                     Toast.makeText(context, context.getString(R.string.drinking_saved), Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(context, MainViewActivity.class);
                     context.startActivity(i);
@@ -75,7 +121,7 @@ public class DrinkingListener implements View.OnClickListener {
         DAOFactory.getDrinkingSpotDAO(context).deactivate(drinkingSpot.getId(), new RequestListener<Void>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                Log.e(TAG, "Error during save of DrinkingSpot " ,spiceException );
+                Log.e(TAG, "Error during save of DrinkingSpot ", spiceException);
             }
 
             @Override

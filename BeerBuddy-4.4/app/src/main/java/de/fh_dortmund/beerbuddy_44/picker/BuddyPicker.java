@@ -6,10 +6,8 @@ import android.content.DialogInterface;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import java.util.Collection;
 import java.util.List;
 
-import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.FriendList;
 import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
@@ -17,11 +15,6 @@ import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.dao.DAOFactory;
 
-/**
- * Created by David on 02.12.2015.
- * <p/>
- * Redesigned by Marco on 10.12.2015.
- */
 public class BuddyPicker {
 
     public static void show(final DrinkingActivity context) {
@@ -36,16 +29,18 @@ public class BuddyPicker {
 
                 @Override
                 public void onRequestSuccess(final FriendList friendList) {
-                    final DrinkingSpot spot = context.getDrinkingSpot();
                     final AlertDialog.Builder b = new AlertDialog.Builder(context);
                     final CharSequence[] s = new CharSequence[friendList.getFriends().size()];
-                    int i = 0;
-                    for (Person p : friendList.getFriends()) {
-                        s[i] = p.getUsername();
-                        i++;
-                    }
-
                     final boolean[] checked = new boolean[friendList.getFriends().size()];
+                    final long[] invitedPersons = new long[friendList.getFriends().size()];
+
+                    int anz = 0;
+                    for (Person p : friendList.getFriends()) {
+                        if (!alreadyJoined(p.getId(), context)) {
+                            s[anz] = p.getUsername();
+                            anz++;
+                        }
+                    }
 
                     //Using Multiple Choice of Buddys --> Checkboxes
                     b.setTitle(context.getString(R.string.drinkinginvitation_title));
@@ -60,15 +55,15 @@ public class BuddyPicker {
                     b.setPositiveButton(context.getString(R.string.button_inviteselected), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            int zaehler = 0;
                             for (int i = 0; i < checked.length; i++) {
                                 if (checked[i]) {
-                                    Person invitedPerson = friendList.getFriends().toArray(new Person[]{})[i];
-                                    if (invite(spot.getPersons(), invitedPerson)) {
-                                        spot.getPersons().add(invitedPerson);
-                                    }
+                                    long invitedPerson = friendList.getFriends().toArray(new Person[]{})[i].getId();
+                                    invitedPersons[zaehler] = invitedPerson;
+                                    zaehler++;
                                 }
                             }
-                            context.setValue(spot);
+                            context.setInvitedPersons(invitedPersons);
                         }
                     });
 
@@ -77,14 +72,14 @@ public class BuddyPicker {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Select all Buddys
+                            int zaehler = 0;
                             for (int i = 0; i < checked.length; i++) {
                                 checked[i] = true;
-                                Person invitedPerson = friendList.getFriends().toArray(new Person[]{})[i];
-                                if (invite(spot.getPersons(), invitedPerson)) {
-                                    spot.getPersons().add(invitedPerson);
-                                }
+                                long invitedPerson = friendList.getFriends().toArray(new Person[]{})[i].getId();
+                                invitedPersons[zaehler] = invitedPerson;
+                                zaehler++;
                             }
-                            context.setValue(spot);
+                            context.setInvitedPersons(invitedPersons);
                         }
                     });
 
@@ -96,13 +91,15 @@ public class BuddyPicker {
                             for (int i = 0; i < checked.length; i++) {
                                 checked[i] = false;
                             }
+                            context.setInvitedPersons(invitedPersons);
                         }
                     });
 
                     //Show the Dialog
-                    AlertDialog ad = b.create();
-                    ad.show();
-
+                    if (anz > 0) {
+                        AlertDialog ad = b.create();
+                        ad.show();
+                    }
                 }
             });
 
@@ -111,14 +108,16 @@ public class BuddyPicker {
         }
     }
 
-    //check if you have to invite the Person
-    //true --> invite, false --> is already invited
-    private static boolean invite(Collection<Person> invitedPersons, Person person) {
-        for (Person ip : invitedPersons) {
-            if (person.getId() == ip.getId()) {
-                return false;
+    private static boolean alreadyJoined(long person, DrinkingActivity context){
+        boolean alreadyJoined = false;
+        if (context.getDrinkingSpot() != null) {
+            List<Person> joined = context.getDrinkingSpot().getPersons();
+            for (Person p : joined) {
+                if (p.getId() == person) {
+                    alreadyJoined = true;
+                }
             }
         }
-        return true;
+        return alreadyJoined;
     }
 }
