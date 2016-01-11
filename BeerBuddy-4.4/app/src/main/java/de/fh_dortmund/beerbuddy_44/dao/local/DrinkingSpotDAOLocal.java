@@ -48,16 +48,8 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
 
     @Override
     public void getAll(RequestListener<DrinkingSpot[]> listener) {
-        SQLiteDatabase database = dbHelper.getDatabase();
-        Cursor dbCursor = null;
         try {
-            dbCursor = database.rawQuery(SELECT + " WHERE  ds.active = ?;", new String[]{ BeerBuddyDbHelper.BOOLEAN_TRUE + ""});
-            Collection<DrinkingSpot> drinkingSpot = getDrinkingSpot(dbCursor);
-            if (!drinkingSpot.isEmpty()) {
-                listener.onRequestSuccess(drinkingSpot.toArray(new DrinkingSpot[]{}));
-            } else {
-                listener.onRequestSuccess(null);
-            }
+            listener.onRequestSuccess(getAll());
         } catch (
                 Exception e
                 )
@@ -65,6 +57,27 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
+        }
+    }
+
+    public DrinkingSpot[] getAll() throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
+        Cursor dbCursor = null;
+        try {
+            dbCursor = database.rawQuery(SELECT + " WHERE  ds.active = ?;", new String[]{BeerBuddyDbHelper.BOOLEAN_TRUE + ""});
+            Collection<DrinkingSpot> drinkingSpot = getDrinkingSpot(dbCursor);
+            if (!drinkingSpot.isEmpty()) {
+                return (drinkingSpot.toArray(new DrinkingSpot[]{}));
+            } else {
+                return (null);
+            }
+        } catch (
+                Exception e
+                )
+
+        {
+            e.printStackTrace();
+            throw new DataAccessException("Failed to getAll DrinkingSpot", e);
         } finally
 
         {
@@ -84,9 +97,11 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             if (map.get(dsid) == null) {
                 DrinkingSpot di = new DrinkingSpot();
                 di.setId(dsid);
-                if(person != null)
-                di.getPersons().add(person);
-                di.setCreator(getCreator(dbCursor));
+                if (person != null)
+                    di.getPersons().add(person);
+                Person creator = getCreator(dbCursor);
+                if(creator!= null)
+                di.setCreator(creator);
                 di.setBeschreibung(dbCursor.getString(dbCursor.getColumnIndex("dsbeschreibung")));
                 String string = dbCursor.getString(dbCursor.getColumnIndex("dsstartTime"));
                 if (string != null)
@@ -100,8 +115,8 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
                 di.setActive(dbCursor.getInt(dbCursor.getColumnIndex("dsactive")) == BeerBuddyDbHelper.BOOLEAN_TRUE);
                 map.put(dsid, di);
             } else {
-                if(person != null)
-                map.get(dsid).getPersons().add(person);
+                if (person != null)
+                    map.get(dsid).getPersons().add(person);
             }
         }
         return map.values();
@@ -109,26 +124,30 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
 
     private Person getCreator(Cursor dbCursor) throws ParseException {
         Person p = new Person();
-        p.setId(dbCursor.getInt(dbCursor.getColumnIndex("creatorid")));
-        p.setUsername(dbCursor.getString(dbCursor.getColumnIndex("creatorusername")));
-        p.setEmail(dbCursor.getString(dbCursor.getColumnIndex("creatoremail")));
-        p.setPassword(dbCursor.getString(dbCursor.getColumnIndex("creatorpassword")));
-        String date = dbCursor.getString(dbCursor.getColumnIndex("creatordateOfBirth"));
-        if (date != null)
-            p.setDateOfBirth(BeerBuddyDbHelper.DATE_FORMAT.parse(date));
-        p.setGender(dbCursor.getInt(dbCursor.getColumnIndex("creatorgender")));
-        p.setImage(dbCursor.getBlob(dbCursor.getColumnIndex("creatorimage")));
-        p.setInterests(dbCursor.getString(dbCursor.getColumnIndex("creatorinterests")));
-        p.setPrefers(dbCursor.getString(dbCursor.getColumnIndex("creatorprefers")));
-        p.setVersion(dbCursor.getInt(dbCursor.getColumnIndex("creatorversion")));
-        return p;
+        int creatorid = dbCursor.getInt(dbCursor.getColumnIndex("creatorid"));
+        if(creatorid != 0)
+        {
+            p.setId(creatorid);
+            p.setUsername(dbCursor.getString(dbCursor.getColumnIndex("creatorusername")));
+            p.setEmail(dbCursor.getString(dbCursor.getColumnIndex("creatoremail")));
+            p.setPassword(dbCursor.getString(dbCursor.getColumnIndex("creatorpassword")));
+            String date = dbCursor.getString(dbCursor.getColumnIndex("creatordateOfBirth"));
+            if (date != null)
+                p.setDateOfBirth(BeerBuddyDbHelper.DATE_FORMAT.parse(date));
+            p.setGender(dbCursor.getInt(dbCursor.getColumnIndex("creatorgender")));
+            p.setImage(dbCursor.getBlob(dbCursor.getColumnIndex("creatorimage")));
+            p.setInterests(dbCursor.getString(dbCursor.getColumnIndex("creatorinterests")));
+            p.setPrefers(dbCursor.getString(dbCursor.getColumnIndex("creatorprefers")));
+            p.setVersion(dbCursor.getInt(dbCursor.getColumnIndex("creatorversion")));
+            return p;
+        }
+       return null;
     }
 
     private Person getPerson(Cursor dbCursor) throws ParseException {
 
         int pid = dbCursor.getInt(dbCursor.getColumnIndex("pid"));
-        if(pid != 0)
-        {
+        if (pid != 0) {
             Person p = new Person();
             p.setId(pid);
             p.setUsername(dbCursor.getString(dbCursor.getColumnIndex("pusername")));
@@ -145,14 +164,14 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             return p;
         }
 
-      return null;
+        return null;
     }
 
 
     @Override
     public void getActiveByPersonId(long personId, RequestListener<DrinkingSpot> listener) {
         try {
-                listener.onRequestSuccess(getActiveByPersonId(personId));
+            listener.onRequestSuccess(getActiveByPersonId(personId));
         } catch (Exception e) {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
@@ -167,13 +186,13 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             dbCursor = database.rawQuery(SELECT + " WHERE ds.creatorId = ? and ds.active = ?;", new String[]{personId + "", BeerBuddyDbHelper.BOOLEAN_TRUE + ""});
             Collection<DrinkingSpot> drinkingSpot = getDrinkingSpot(dbCursor);
             if (!drinkingSpot.isEmpty()) {
-               return drinkingSpot.toArray(new DrinkingSpot[]{})[0];
+                return drinkingSpot.toArray(new DrinkingSpot[]{})[0];
             } else {
                 return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
-           throw new DataAccessException("Faield to getActiveByPersonId DrinkingSpot",e);
+            throw new DataAccessException("Faield to getActiveByPersonId DrinkingSpot", e);
         } finally {
             if (dbCursor != null) {
                 dbCursor.close();
@@ -181,8 +200,6 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             database.close();
         }
     }
-
-
 
 
     @Override
@@ -209,13 +226,15 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         ContentValues values = new ContentValues();
         try {
             values.put("creatorId", drinkingSpot.getCreator().getId());
+            if(drinkingSpot.getId() != 0)
+            values.put("id", drinkingSpot.getId());
             values.put("beschreibung", drinkingSpot.getBeschreibung());
             values.put("ageFrom", drinkingSpot.getAgeFrom());
             values.put("ageTo", drinkingSpot.getAgeTo());
             values.put("gps", drinkingSpot.getGps());
             values.put("amountMaleWithoutBeerBuddy", drinkingSpot.getAmountMaleWithoutBeerBuddy());
             values.put("amountFemaleWithoutBeerBuddy", drinkingSpot.getAmountFemaleWithoutBeerBuddy());
-            values.put("active", (drinkingSpot.isActive()) ? BeerBuddyDbHelper.BOOLEAN_TRUE: BeerBuddyDbHelper.BOOLEAN_FALSE);
+            values.put("active", (drinkingSpot.isActive()) ? BeerBuddyDbHelper.BOOLEAN_TRUE : BeerBuddyDbHelper.BOOLEAN_FALSE);
             values.put("startTime", BeerBuddyDbHelper.DATE_FORMAT.format(drinkingSpot.getStartTime()));
             values.put("version", drinkingSpot.getVersion());
 
@@ -242,7 +261,7 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
             values.put("gps", drinkingSpot.getGps());
             values.put("amountMaleWithoutBeerBuddy", drinkingSpot.getAmountMaleWithoutBeerBuddy());
             values.put("amountFemaleWithoutBeerBuddy", drinkingSpot.getAmountFemaleWithoutBeerBuddy());
-            values.put("active", (drinkingSpot.isActive()) ? BeerBuddyDbHelper.BOOLEAN_TRUE: BeerBuddyDbHelper.BOOLEAN_FALSE);
+            values.put("active", (drinkingSpot.isActive()) ? BeerBuddyDbHelper.BOOLEAN_TRUE : BeerBuddyDbHelper.BOOLEAN_FALSE);
             values.put("startTime", BeerBuddyDbHelper.DATE_FORMAT.format(drinkingSpot.getStartTime()));
             values.put("version", drinkingSpot.getVersion());
 
@@ -277,7 +296,6 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         drinkingSpot.getPersons().add(p);
         update(drinkingSpot);
     }
-
 
 
     public DrinkingSpot getById(long dsid) throws DataAccessException {
@@ -328,5 +346,22 @@ public class DrinkingSpotDAOLocal extends DrinkingSpotDAO {
         byId.setActive(false);
         update(byId);
     }
+
+    public void delete(DrinkingSpot ds) throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
+        Cursor dbCursor = null;
+        try {
+            database.delete("drinkingspot", "id=?", new String[]{ds.getId()+""});
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Failed to getById DrinkingSpot", e);
+        } finally {
+            if (dbCursor != null) {
+                dbCursor.close();
+            }
+            database.close();
+        }
+    }
+
 
 }

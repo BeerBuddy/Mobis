@@ -50,11 +50,13 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
 
     }
 
-    private FriendInvitation insert(FriendInvitation i) throws DataAccessException {
+    public FriendInvitation insert(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             ContentValues values = new ContentValues();
             values.put("einladerId", i.getEinladerId());
+            if(i.getId() != 0)
+            values.put("id", i.getId());
             values.put("eingeladenerId", i.getEingeladenerId());
             values.put("freitext", i.getFreitext());
             values.put("version", i.getVersion());
@@ -68,7 +70,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
         }
     }
 
-    private FriendInvitation update(FriendInvitation i) throws DataAccessException {
+    public FriendInvitation update(FriendInvitation i) throws DataAccessException {
         SQLiteDatabase database = dbHelper.getDatabase();
         try {
             ContentValues values = new ContentValues();
@@ -215,7 +217,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     @Override
     public void decline(FriendInvitation invitation, RequestListener<Void> listener) {
         try {
-            delete(invitation);
+            decline(invitation);
             listener.onRequestSuccess(null);
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -225,4 +227,7 @@ public class FriendInvitationDAOLocal extends FriendInvitationDAO {
     }
 
 
+    public void decline(FriendInvitation invitation) throws DataAccessException {
+        delete(invitation);
+    }
 }

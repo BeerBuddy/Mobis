@@ -12,6 +12,7 @@ import android.provider.Settings;
 
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.LocationDAO;
 import de.fh_dortmund.beerbuddy_44.exceptions.MissingPermissionException;
 
@@ -24,7 +25,7 @@ public class LocationDAOLocal extends LocationDAO implements LocationListener {
     private final LocationManager locationManager;
     private Location currentBestLocation = null;
 
-    public LocationDAOLocal(Context context) throws BeerBuddyException{
+    public LocationDAOLocal(BeerBuddyActivity context) throws BeerBuddyException{
         super(context);
         locationManager = (LocationManager)
                 context.getSystemService(Context.LOCATION_SERVICE);

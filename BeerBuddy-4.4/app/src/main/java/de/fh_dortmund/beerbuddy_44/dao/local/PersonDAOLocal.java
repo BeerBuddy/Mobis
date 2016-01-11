@@ -129,6 +129,8 @@ public class PersonDAOLocal extends PersonDAO {
         ContentValues values = new ContentValues();
         try {
             values.put("email", p.getEmail());
+            if(p.getId() != 0)
+            values.put("id", p.getId());
             values.put("password", p.getPassword());
             values.put("gender", p.getGender());
             values.put("version", p.getVersion());
@@ -211,6 +213,19 @@ public class PersonDAOLocal extends PersonDAO {
             if (dbCursor != null) {
                 dbCursor.close();
             }
+            database.close();
+        }
+    }
+
+    public void delete(Person p)  throws DataAccessException{
+        SQLiteDatabase database = dbHelper.getDatabase();
+
+        try {
+            database.delete("person", "id=?", new String[]{p.getId()+""});
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Failed to delete Person", e);
+        } finally {
             database.close();
         }
     }

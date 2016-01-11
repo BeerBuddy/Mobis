@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import de.fh_dortmund.beerbuddy_44.R;
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.BuddysActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingActivity;
 import de.fh_dortmund.beerbuddy_44.acitvitys.DrinkingInvitationActivity;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class NavigationListener implements NavigationView.OnNavigationItemSelectedListener {
 
     @NonNull
-    private Activity activity;
+    private BeerBuddyActivity activity;
     private static final String TAG = "NavigationListener";
 
     @Override

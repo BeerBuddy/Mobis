@@ -14,12 +14,12 @@ import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 /**
  * Created by David on 30.11.2015.
  */
-public abstract class DrinkingInvitationDAO {
+public abstract class DrinkingInvitationDAO extends DAO{
 
-    protected BeerBuddyActivity context;
+
 
     public DrinkingInvitationDAO(BeerBuddyActivity context) {
-        this.context = context;
+        super(context);
     }
 
     public abstract void insertOrUpdate(DrinkingInvitation i, RequestListener<DrinkingInvitation> listener);

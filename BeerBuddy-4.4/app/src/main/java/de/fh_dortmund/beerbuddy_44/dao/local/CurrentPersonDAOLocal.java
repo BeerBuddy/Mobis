@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.CurrentPersonDAO;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.exceptions.IdNotSetException;
@@ -14,7 +15,7 @@ import de.fh_dortmund.beerbuddy_44.exceptions.IdNotSetException;
 public class CurrentPersonDAOLocal extends CurrentPersonDAO{
 
     private SharedPreferences settings;
-    public CurrentPersonDAOLocal(Context context) {
+    public CurrentPersonDAOLocal(BeerBuddyActivity context) {
         super(context);
         settings = PreferenceManager.getDefaultSharedPreferences(context);
     }

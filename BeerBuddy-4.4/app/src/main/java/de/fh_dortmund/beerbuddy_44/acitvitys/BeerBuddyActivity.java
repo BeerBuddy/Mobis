@@ -25,6 +25,7 @@ import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
 import de.fh_dortmund.beerbuddy_44.R;
 import de.fh_dortmund.beerbuddy_44.dao.remote.JsonSpiceService;
+import de.fh_dortmund.beerbuddy_44.dao.sync.SyncService;
 import de.fh_dortmund.beerbuddy_44.listener.android.NavigationListener;
 import lombok.Getter;
 
@@ -51,11 +52,18 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
         this.toolbar = toolbar;
     }
 
-    protected SpiceManager spiceManager = new SpiceManager(JsonSpiceService.class);
-
     public SpiceManager getSpiceManager() {
         return spiceManager;
     }
+
+    protected SpiceManager spiceManager = new SpiceManager(JsonSpiceService.class);
+
+    public SyncService getSyncService() {
+        return syncService;
+    }
+
+    protected SyncService syncService = new SyncService();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,16 +110,18 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         spiceManager.start(this);
+        syncService.start(this);
     }
 
     @Override
     protected void onStop() {
         spiceManager.shouldStop();
+        syncService.shouldStop();
         super.onStop();
     }
 
     @Override
-      public void onBackPressed() {
+    public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -145,13 +155,12 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
     }
 
     protected void createMarker(DrinkingSpot ds, GoogleMap mMap) {
-        if(ds.getGps() != null && ds.getCreator() != null)
-        {
+        if (ds.getGps() != null && ds.getCreator() != null) {
             LatLng latLng = ObjectMapperUtil.getLatLangFropmGPS(ds.getGps());
-            mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title(( ds.getCreator().getUsername()) + " is drinking with " + ds.getPersons().size() + " others."));
+            mMap.addMarker(new MarkerOptions().position(latLng).snippet(ds.getId() + "").title((ds.getCreator().getUsername()) + " is drinking with " + ds.getPersons().size() + " others."));
 
         }
-       }
+    }
 
 
 }

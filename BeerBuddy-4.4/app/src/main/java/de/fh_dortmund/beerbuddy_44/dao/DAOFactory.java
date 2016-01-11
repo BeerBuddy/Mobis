@@ -43,7 +43,7 @@ public final class DAOFactory {
     }
 
 
-    public static LocationDAO getLocationDAO(Context context) throws BeerBuddyException
+    public static LocationDAO getLocationDAO(BeerBuddyActivity context) throws BeerBuddyException
     {
         if(locationDAO == null)
         {
@@ -57,7 +57,7 @@ public final class DAOFactory {
         return new PersonDAORemote(context);
     }
 
-    public static CurrentPersonDAO getCurrentPersonDAO(Context context){
+    public static CurrentPersonDAO getCurrentPersonDAO(BeerBuddyActivity context){
         return new CurrentPersonDAOLocal(context);
     }
 

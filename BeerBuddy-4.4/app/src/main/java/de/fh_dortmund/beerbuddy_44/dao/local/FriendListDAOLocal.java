@@ -178,6 +178,8 @@ public class FriendListDAOLocal extends FriendListDAO {
 
             ContentValues values = new ContentValues();
             values.put("personid", i.getPersonid());
+            if(i.getId() != 0)
+            values.put("id", i.getId());
             values.put("version", i.getVersion());
             i.setId(database.insert("friendlist", null, values));
             friendListPersonDAOLocal.saveAll(i.getId(), i.getFriends(), database);
@@ -202,6 +204,17 @@ public class FriendListDAOLocal extends FriendListDAO {
             return i;
         } catch (Exception e) {
             throw new DataAccessException("Failed to  update FriendList", e);
+        } finally {
+            database.close();
+        }
+    }
+
+    public void delete(FriendList friendList) throws DataAccessException {
+        SQLiteDatabase database = dbHelper.getDatabase();
+        try {
+            database.delete("friendlist", "id = ?", new String[]{friendList.getId() + ""});
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to  delete FriendList", e);
         } finally {
             database.close();
         }

@@ -16,12 +16,11 @@ import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 /**
  * Created by David on 26.11.2015.
  */
-public abstract class DrinkingSpotDAO  {
+public abstract class DrinkingSpotDAO extends DAO {
 
-    protected BeerBuddyActivity context;
 
     public DrinkingSpotDAO(BeerBuddyActivity context) {
-        this.context = context;
+        super(context);
     }
 
     public abstract void getAll(RequestListener<DrinkingSpot[]> listener);

@@ -53,6 +53,8 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
         ContentValues values = new ContentValues();
         try {
             values.put("einladerId",  i.getEinladerId());
+            if(i.getId() != 0)
+            values.put("id",  i.getId());
             values.put("drinkingSpotId", i.getDrinkingSpotId());
             values.put("eingeladenerId", i.getEingeladenerId());
             values.put("freitext", i.getFreitext());
@@ -193,15 +195,25 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
     @Override
     public void accept(DrinkingInvitation friendInvitation, RequestListener<Void> listener) {
         try {
-            //Eingeladener joined dem drinking Spot
-            DrinkingSpotDAOLocal dao = new DrinkingSpotDAOLocal(context);
-            dao.join(friendInvitation.getDrinkingSpotId(),friendInvitation.getEingeladenerId());
-            //löschen der Einladung
-            delete(friendInvitation);
+            accept(friendInvitation);
             listener.onRequestSuccess(null);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
+        }
+
+    }
+
+    public void accept(DrinkingInvitation friendInvitation) throws DataAccessException {
+        try {
+            //Eingeladener joined dem drinking Spot
+            DrinkingSpotDAOLocal dao = new DrinkingSpotDAOLocal(context);
+            dao.join(friendInvitation.getDrinkingSpotId(), friendInvitation.getEingeladenerId());
+            //löschen der Einladung
+            delete(friendInvitation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Failed to accept DrinkingInvitation",e);
         }
 
     }
@@ -222,12 +234,22 @@ public class DrinkingInvitationDAOLocal extends DrinkingInvitationDAO {
     public void decline(DrinkingInvitation invitation, RequestListener<Void> listener) {
         try {
             //löschen der Einladung
-            delete(invitation);
+            decline(invitation);
             listener.onRequestSuccess(null);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onRequestFailure(new SpiceException(e));
         }
+    }
+
+    public void decline(DrinkingInvitation friendInvitation) throws DataAccessException {
+        try {
+            delete(friendInvitation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Failed to decline DrinkingInvitation",e);
+        }
+
     }
 
 

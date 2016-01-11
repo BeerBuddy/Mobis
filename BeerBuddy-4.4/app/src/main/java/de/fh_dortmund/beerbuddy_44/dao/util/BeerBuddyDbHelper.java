@@ -13,7 +13,7 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
     public static final int BOOLEAN_TRUE = 0;
     public static final int BOOLEAN_FALSE = 1;
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    public static final int DATABASE_VERSION = 12;
+    public static final int DATABASE_VERSION = 13;
     public static final String DATABASE_NAME = "BeerBuddy.db";
     public static String SQL_DELETE_friendlistperson = "DROP TABLE friendlistperson;";
     public static String SQL_DELETE_friendinvitation = "DROP TABLE friendinvitation;";
@@ -41,16 +41,16 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS friendlist (" +
                     "id INTEGER PRIMARY KEY," +
                     "personid INTEGER," +
-                    "version INTEGER," +
-                    "FOREIGN KEY(id) REFERENCES person(id)" +
+                    "version INTEGER" +
+                    //",FOREIGN KEY(id) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_FriendListPerson =
             "CREATE TABLE IF NOT EXISTS friendlistperson (" +
                     "id INTEGER PRIMARY KEY," +
                     "friendlistid INTEGER," +
-                    "personid INTEGER," +
-                    "FOREIGN KEY(personid) REFERENCES person(id)," +
-                    "FOREIGN KEY(friendlistid) REFERENCES friendlist(id)" +
+                    "personid INTEGER" +
+                    //",FOREIGN KEY(personid) REFERENCES person(id)," +
+                    //"FOREIGN KEY(friendlistid) REFERENCES friendlist(id)" +
                     " );";
     public static String SQL_CREATE_FriendInvitation =
             "CREATE TABLE IF NOT EXISTS friendinvitation (" +
@@ -58,9 +58,9 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "einladerId INTEGER," +
                     "eingeladenerId INTEGER," +
                     "freitext TEXT," +
-                    "version INTEGER," +
-                    "FOREIGN KEY(einladerId) REFERENCES person(id)," +
-                    "FOREIGN KEY(eingeladenerId) REFERENCES person(id)" +
+                    "version INTEGER" +
+                    //",FOREIGN KEY(einladerId) REFERENCES person(id)," +
+                    //"FOREIGN KEY(eingeladenerId) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingInvitation =
             "CREATE TABLE IF NOT EXISTS drinkinginvitation (" +
@@ -69,10 +69,10 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "eingeladenerId INTEGER," +
                     "drinkingSpotId INTEGER," +
                     "freitext TEXT," +
-                    "version INTEGER," +
-                    "FOREIGN KEY(einladerId) REFERENCES person(id)," +
-                    "FOREIGN KEY(eingeladenerId) REFERENCES person(id)," +
-                    "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)" +
+                    "version INTEGER" +
+                    //",FOREIGN KEY(einladerId) REFERENCES person(id)," +
+                    //"FOREIGN KEY(eingeladenerId) REFERENCES person(id)," +
+                    //"FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingSpot =
             "CREATE TABLE IF NOT EXISTS drinkingspot (" +
@@ -86,16 +86,16 @@ public class BeerBuddyDbHelper extends SQLiteOpenHelper {
                     "amountMaleWithoutBeerBuddy INTEGER," +
                     "amountFemaleWithoutBeerBuddy INTEGER," +
                     "active INTEGER," +
-                    "version INTEGER," +
-                    "FOREIGN KEY(creatorid) REFERENCES person(id)" +
+                    "version INTEGER" +
+                    //",FOREIGN KEY(creatorid) REFERENCES person(id)" +
                     " );";
     public static String SQL_CREATE_DrinkingSpotPerson =
             "CREATE TABLE IF NOT EXISTS drinkingspotperson (" +
                     "id INTEGER PRIMARY KEY," +
                     "drinkingSpotId INTEGER," +
-                    "personid INTEGER," +
-                    "FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)," +
-                    "FOREIGN KEY(personid) REFERENCES person(id)" +
+                    "personid INTEGER" +
+                    //",FOREIGN KEY(drinkingSpotId) REFERENCES drinkingspot(id)," +
+                    //"FOREIGN KEY(personid) REFERENCES person(id)" +
                     " );";
 
 
