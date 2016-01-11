@@ -18,7 +18,10 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.List;
+
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
+import de.fh_dortmund.beerbuddy.entities.Person;
 import de.fh_dortmund.beerbuddy.exceptions.BeerBuddyException;
 import de.fh_dortmund.beerbuddy_44.IntentUtil;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
@@ -141,14 +144,25 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
             }
         });
         final Context context = this;
-        int totalAmount = spot.getTotalAmount() + 1;
+        int totalAmount = spot.getTotalAmount() + 1 + spot.getPersons().size();
         int ageFrom = spot.getAgeFrom();
         if (ageFrom == 0){
             ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
         }
-        int ageTo = spot.getAgeFrom();
+        int ageTo = spot.getAgeTo();
         if (ageTo == 0){
             ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        }
+
+        List<Person> persons= spot.getPersons();
+        for(Person p: persons){
+            int pAge = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
+            if (pAge < ageFrom){
+                ageFrom = pAge;
+            }
+            if (pAge > ageTo){
+                ageTo = pAge;
+            }
         }
 
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(getResources().getText(R.string.mainview_person_count).toString() + " " + totalAmount + " " + getResources().getText(R.string.mainview_age).toString() + " " + ageFrom + " - " + ageTo);
