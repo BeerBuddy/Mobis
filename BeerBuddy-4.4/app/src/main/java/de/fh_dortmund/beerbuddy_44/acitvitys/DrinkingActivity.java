@@ -15,6 +15,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.Date;
+import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy.entities.Person;
@@ -180,8 +181,12 @@ public class DrinkingActivity extends BeerBuddyActivity {
             //female = spot.getAmountFemaleWithoutBeerBuddy();
             minAge = spot.getAgeFrom();
             maxAge = spot.getAgeTo();
+            List<Person> persons = spot.getPersons();
+            if (!persons.contains(spot.getCreator())) {
+                persons.add(spot.getCreator());
+            }
 
-            for (Person p : spot.getPersons()) {
+            for (Person p : persons) {
                 int age = Integer.MAX_VALUE;
                 if (p.getDateOfBirth() != null) {
                     age = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
