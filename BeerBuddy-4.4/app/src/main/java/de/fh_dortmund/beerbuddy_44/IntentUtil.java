@@ -86,7 +86,7 @@ public class IntentUtil {
         @Override
         public void onClick(View v) {
             String geo = id.getGps().replace(";", ",");
-            Uri gmmIntentUri = Uri.parse("geo:" + geo);
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + geo + "&mode=w");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             if (mapIntent.resolveActivity(context.getPackageManager()) != null) {

@@ -45,7 +45,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         //get current GPS position
         if (drinkingSpot != null) {
             //move the map to current location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 20));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 15));
             createMarker(drinkingSpot, googleMap);
         }
     }
@@ -56,6 +56,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         Bundle b = getIntent().getExtras();
         long id = b.getLong("id");
 
@@ -71,6 +72,8 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
                     public void onRequestSuccess(DrinkingSpot drinkingSpot) {
                         if (drinkingSpot != null) {
                             setValue(drinkingSpot);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ObjectMapperUtil.getLatLangFropmGPS(drinkingSpot.getGps()), 15));
+                            createMarker(drinkingSpot, mMap);
                         }
                     }
                 });
