@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profil_username"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profil_username"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profil_gender"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profil_geschlecht"
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profil_age"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profil_alter"
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profil_interessen"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profil_interessen"
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profil_vorlieben"
-           />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profil_vorlieben"

@@ -78,9 +78,9 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:gravity="right"
+                android:gravity="center_horizontal"
                 android:drawableTop="@android:drawable/ic_menu_directions"
-                android:text="Navigate"
+                android:text="@string/spot_navigate"
                 android:textSize="14sp" />
 
             <Button
@@ -89,8 +89,9 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:drawableTop="@android:drawable/ic_menu_view"
-                android:text="View"
-                android:textSize="14sp" />
+                android:text="@string/spot_view"
+                android:textSize="14sp"
+                android:gravity="center_horizontal"/>
         </LinearLayout>
     </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
