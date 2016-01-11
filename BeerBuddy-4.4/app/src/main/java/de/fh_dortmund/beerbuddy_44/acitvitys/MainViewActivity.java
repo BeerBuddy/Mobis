@@ -18,6 +18,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.Date;
 import java.util.List;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
@@ -32,6 +33,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
     private static final String TAG = "MainViewActivity";
     private SlidingUpPanelLayout.PanelState defaultState;
     private LatLng location;
+
     public MainViewActivity() {
         super(R.layout.mainview_activity_main, true);
     }
@@ -108,7 +110,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         //maybe this should help
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
-       // ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        // ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
     }
 
     public void showDrinkingView(final DrinkingSpot spot) {
@@ -146,23 +148,32 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         final Context context = this;
         int totalAmount = spot.getTotalAmount() + 1 + spot.getPersons().size();
         int ageFrom = spot.getAgeFrom();
-        if (ageFrom == 0){
-            ageFrom = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
-        }
         int ageTo = spot.getAgeTo();
-        if (ageTo == 0){
-            ageTo = ObjectMapperUtil.getAgeFromBirthday(spot.getCreator().getDateOfBirth());
+        Date dateOfBirth = spot.getCreator().getDateOfBirth();
+        if (dateOfBirth != null) {
+            if (ageFrom == 0) {
+                ageFrom = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
+            }
+
+            if (ageTo == 0) {
+                ageTo = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
+            }
         }
 
-        List<Person> persons= spot.getPersons();
-        for(Person p: persons){
-            int pAge = ObjectMapperUtil.getAgeFromBirthday(p.getDateOfBirth());
-            if (pAge < ageFrom){
-                ageFrom = pAge;
+
+        List<Person> persons = spot.getPersons();
+        for (Person p : persons) {
+            Date dateOfBirth1 = p.getDateOfBirth();
+            if (dateOfBirth1 != null) {
+                int pAge = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth1);
+                if (pAge < ageFrom) {
+                    ageFrom = pAge;
+                }
+                if (pAge > ageTo) {
+                    ageTo = pAge;
+                }
             }
-            if (pAge > ageTo){
-                ageTo = pAge;
-            }
+
         }
 
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(getResources().getText(R.string.mainview_person_count).toString() + " " + totalAmount + " " + getResources().getText(R.string.mainview_age).toString() + " " + ageFrom + " - " + ageTo);
@@ -174,7 +185,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
 
     @Override
     protected void onFurtherCreate(Bundle savedInstanceState) {
-       this.defaultState =  ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).getPanelState();
+        this.defaultState = ((SlidingUpPanelLayout) findViewById(R.id.sliding_layout)).getPanelState();
         //Get the Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -188,7 +199,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
                 Bundle b = intent.getExtras();
                 long id = b.getLong("id");
                 if (id != 0) {
-                   DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
+                    DAOFactory.getDrinkingSpotDAO(this).getById(id, new RequestListener<DrinkingSpot>() {
                         @Override
                         public void onRequestFailure(SpiceException spiceException) {
 
