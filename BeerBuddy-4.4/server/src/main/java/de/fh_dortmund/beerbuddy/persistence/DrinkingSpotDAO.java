@@ -50,9 +50,13 @@ public class DrinkingSpotDAO extends AbstractDAO<DrinkingSpot> implements IDrink
     public void join(long dsid, long personId) throws BeerBuddyException {
         DrinkingSpot drinkingSpot = getById(dsid);
         List<Person> persons = drinkingSpot.getPersons();
-        persons.add(personDAO.getById(personId));
-        drinkingSpot.setPersons(persons);
-        insertOrUpdate(drinkingSpot);
+        Person newPerson = personDAO.getById(personId);
+        if(!persons.contains(newPerson)){
+            // if the person is not already drinking in this spot, add it!
+            persons.add(newPerson);
+            drinkingSpot.setPersons(persons);
+            insertOrUpdate(drinkingSpot);
+        }
     }
 
     @Override
