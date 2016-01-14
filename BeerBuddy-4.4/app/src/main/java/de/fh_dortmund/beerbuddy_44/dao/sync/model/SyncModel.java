@@ -8,12 +8,19 @@ import de.fh_dortmund.beerbuddy_44.dao.interfaces.DAO;
 /**
  * Created by grimm on 11.01.2016.
  */
-public abstract class SyncModel implements Serializable{
+public abstract class SyncModel<E, T extends DAO> implements Serializable {
 
-    protected long id;
-    public SyncModel(long id){
-        this.id =id;
+    protected E localEntity;
+    protected transient T remoteDAO;
+
+    public SyncModel(E localEntity, T remoteDAO) {
+        this.localEntity = localEntity;
+        this.remoteDAO = remoteDAO;
     }
-    public abstract void performSync(BeerBuddyActivity activity);
+
+    /**
+     * Method to perform a sync on a Sync Model
+     */
+    public abstract void performSync( BeerBuddyActivity activity );
 
 }

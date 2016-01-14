@@ -8,12 +8,7 @@ import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
 import de.fh_dortmund.beerbuddy_44.dao.interfaces.FriendListDAO;
 import de.fh_dortmund.beerbuddy_44.dao.local.FriendListDAOLocal;
 import de.fh_dortmund.beerbuddy_44.dao.remote.FriendListDAORemote;
-import de.fh_dortmund.beerbuddy_44.dao.sync.model.FriendListInvitationInsertSync;
-import de.fh_dortmund.beerbuddy_44.dao.sync.model.FriendListInvitationUpdateSync;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
-import de.fh_dortmund.beerbuddy_44.requests.GetFriendListRequest;
-import de.fh_dortmund.beerbuddy_44.requests.GetIsFriendRequest;
-import de.fh_dortmund.beerbuddy_44.requests.SaveFriendListRequest;
 
 /**
  * Created by David on 19.11.2015.
@@ -41,7 +36,6 @@ public class FriendListDAOSync extends FriendListDAO {
             @Override
             public void onRequestSuccess(Boolean aBoolean) {
                 listener.onRequestSuccess(aBoolean);
-
             }
         });
     }
@@ -63,49 +57,12 @@ public class FriendListDAOSync extends FriendListDAO {
                 } catch (DataAccessException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
-
     }
 
     @Override
     public void insertOrUpdate(final FriendList friendList, final RequestListener<FriendList> listener) {
-        remote.insertOrUpdate(friendList, new RequestListener<FriendList>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                if (friendList.getId() == 0) {
-                    try {
-                        FriendList i = local.insert(friendList);
-                        context.getSyncService().addSyncModel(new FriendListInvitationInsertSync(i.getId()));
-                        listener.onRequestSuccess(i);
-                    } catch (DataAccessException e) {
-                        e.printStackTrace();
-                    }
-
-
-                } else {
-                    try {
-                        listener.onRequestSuccess(local.update(friendList));
-                        context.getSyncService().addSyncModel(new FriendListInvitationUpdateSync(friendList.getId()));
-                    } catch (DataAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onRequestSuccess(FriendList friendList) {
-                listener.onRequestSuccess(friendList);
-                try {
-                    local.delete(friendList);
-                    local.insert(friendList);
-                } catch (DataAccessException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        // NOP
     }
 }

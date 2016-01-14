@@ -38,7 +38,6 @@ public class DrinkingInvitationDAO extends AbstractDAO<DrinkingInvitation> imple
     }
 
     public void accept(DrinkingInvitation invitation) throws BeerBuddyException {
-        Long einladerId = invitation.getEinladerId();
         Long eingeladenerId = invitation.getEingeladenerId();
         Long drinkingSpotId = invitation.getDrinkingSpotId();
 

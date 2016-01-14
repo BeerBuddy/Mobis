@@ -11,7 +11,6 @@ import de.fh_dortmund.beerbuddy_44.dao.remote.FriendInvitationDAORemote;
 import de.fh_dortmund.beerbuddy_44.dao.sync.model.FriendInvitationAcceptSync;
 import de.fh_dortmund.beerbuddy_44.dao.sync.model.FriendInvitationDeclineSync;
 import de.fh_dortmund.beerbuddy_44.dao.sync.model.FriendInvitationInsertSync;
-import de.fh_dortmund.beerbuddy_44.dao.sync.model.FriendInvitationUpdateSync;
 import de.fh_dortmund.beerbuddy_44.exceptions.DataAccessException;
 
 /**
@@ -35,13 +34,8 @@ public class FriendInvitationDAOSync extends FriendInvitationDAO {
             public void onRequestFailure(SpiceException spiceException) {
                 try {
                     if (i.getId() == 0) {
-
                         FriendInvitation newInvit = local.insert(i);
-                        context.getSyncService().addSyncModel(new FriendInvitationInsertSync(newInvit.getId()));
-                        listener.onRequestSuccess(newInvit);
-                    } else {
-                        FriendInvitation newInvit = local.update(i);
-                        context.getSyncService().addSyncModel(new FriendInvitationUpdateSync(newInvit.getId()));
+                        context.getSyncService().addSyncModel(new FriendInvitationInsertSync(newInvit, remote));
                         listener.onRequestSuccess(newInvit);
                     }
                 } catch (DataAccessException e) {
@@ -51,11 +45,11 @@ public class FriendInvitationDAOSync extends FriendInvitationDAO {
             }
 
             @Override
-            public void onRequestSuccess(FriendInvitation drinkingInvitation) {
-                onRequestSuccess(drinkingInvitation);
+            public void onRequestSuccess(FriendInvitation friendInvitation) {
+                onRequestSuccess(friendInvitation);
                 try {
-                    local.delete(drinkingInvitation);
-                    local.insert(drinkingInvitation);
+                    local.delete(friendInvitation);
+                    local.insert(friendInvitation);
                 } catch (DataAccessException e) {
                     e.printStackTrace();
                 }
@@ -95,9 +89,9 @@ public class FriendInvitationDAOSync extends FriendInvitationDAO {
             }
 
             @Override
-            public void onRequestSuccess(FriendInvitation[] drinkingInvitations) {
-                listener.onRequestSuccess(drinkingInvitations);
-                for (FriendInvitation di : drinkingInvitations) {
+            public void onRequestSuccess(FriendInvitation[] friendInvitations) {
+                listener.onRequestSuccess(friendInvitations);
+                for (FriendInvitation di : friendInvitations) {
                     try {
                         local.delete(di);
                         local.insert(di);
@@ -116,7 +110,7 @@ public class FriendInvitationDAOSync extends FriendInvitationDAO {
             public void onRequestFailure(SpiceException spiceException) {
                 try {
                     local.accept(friendInvitation);
-                    context.getSyncService().addSyncModel(new FriendInvitationAcceptSync(friendInvitation.getId()));
+                    context.getSyncService().addSyncModel(new FriendInvitationAcceptSync(friendInvitation, remote));
                 } catch (DataAccessException e) {
                     e.printStackTrace();
                     listener.onRequestFailure(new SpiceException(e));
@@ -142,7 +136,7 @@ public class FriendInvitationDAOSync extends FriendInvitationDAO {
             public void onRequestFailure(SpiceException spiceException) {
                 try {
                     local.decline(invitation);
-                    context.getSyncService().addSyncModel(new FriendInvitationDeclineSync(invitation.getId()));
+                    context.getSyncService().addSyncModel(new FriendInvitationDeclineSync(invitation,remote));
                 } catch (DataAccessException e) {
                     e.printStackTrace();
                     listener.onRequestFailure(new SpiceException(e));

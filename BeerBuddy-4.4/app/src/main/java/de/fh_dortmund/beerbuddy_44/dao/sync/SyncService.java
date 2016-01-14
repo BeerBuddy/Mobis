@@ -3,44 +3,26 @@ package de.fh_dortmund.beerbuddy_44.dao.sync;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.UriMatcher;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
 import java.util.Stack;
-import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import de.fh_dortmund.beerbuddy_44.acitvitys.BeerBuddyActivity;
-import de.fh_dortmund.beerbuddy_44.dao.local.PersonDAOLocal;
-import de.fh_dortmund.beerbuddy_44.dao.remote.PersonDAORemote;
 import de.fh_dortmund.beerbuddy_44.dao.sync.model.SyncModel;
-import lombok.Setter;
 
 public class SyncService extends Service {
 
     private static final String FILENAME = "Sync_requests";
-    private BeerBuddyActivity activiy;
+    private BeerBuddyActivity activity;
     private SyncThread thread;
 
     public void shouldStop() {
@@ -52,7 +34,7 @@ public class SyncService extends Service {
            Log.w("BeerBuddy", "SyncService Already started!");
         }
         else{
-            this.activiy = activity;
+            this.activity = activity;
             thread = new SyncThread(activity);
             FileInputStream fos = null;
             ObjectInputStream oi = null;
@@ -104,7 +86,7 @@ public class SyncService extends Service {
             FileOutputStream fos = null;
             ObjectOutputStream out = null;
             try {
-                fos = this.activiy.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+                fos = this.activity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
                 out = new ObjectOutputStream(fos);
                 out.writeObject(thread.requests);
                 out.close();
@@ -141,10 +123,12 @@ public class SyncService extends Service {
 
         public SyncThread(BeerBuddyActivity activity) {
             this.activity = activity;
+            this.requests = new Stack<>();
         }
 
         private boolean stop = false;
-        Stack<SyncModel> requests = new Stack<SyncModel>();
+
+        Stack<SyncModel> requests;
 
         public synchronized void shouldStop() {
             stop = true;
@@ -163,7 +147,6 @@ public class SyncService extends Service {
                         e.printStackTrace();
                     }
                 }
-
             }
         }
 

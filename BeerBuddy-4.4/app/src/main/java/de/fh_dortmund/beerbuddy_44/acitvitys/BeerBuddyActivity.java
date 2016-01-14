@@ -18,8 +18,9 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
+
+import java.io.Serializable;
 
 import de.fh_dortmund.beerbuddy.entities.DrinkingSpot;
 import de.fh_dortmund.beerbuddy_44.ObjectMapperUtil;
@@ -32,7 +33,7 @@ import lombok.Getter;
 /**
  * Created by David on 19.12.2015.
  */
-public abstract class BeerBuddyActivity extends AppCompatActivity {
+public abstract class BeerBuddyActivity extends AppCompatActivity implements Serializable {
 
 
     private final int layout;
@@ -68,7 +69,7 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
         return syncService;
     }
 
-    protected SyncService syncService = new SyncService();
+    private SyncService syncService = new SyncService();
 
 
     @Override
@@ -168,6 +169,4 @@ public abstract class BeerBuddyActivity extends AppCompatActivity {
 
         }
     }
-
-
 }

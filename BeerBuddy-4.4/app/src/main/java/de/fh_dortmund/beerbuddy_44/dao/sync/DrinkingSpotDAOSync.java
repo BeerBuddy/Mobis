@@ -57,11 +57,9 @@ public class DrinkingSpotDAOSync extends DrinkingSpotDAO {
                 }
             }
         });
-
     }
 
     @Override
-
     public void getActiveByPersonId(final long personId, final RequestListener<DrinkingSpot> listener) {
         remote.getActiveByPersonId(personId, new RequestListener<DrinkingSpot>() {
             @Override
@@ -90,14 +88,13 @@ public class DrinkingSpotDAOSync extends DrinkingSpotDAO {
                 try {
                     if (drinkingSpot.getId() == 0) {
                         DrinkingSpot insert = local.insert(drinkingSpot);
-                        context.getSyncService().addSyncModel(new DrinkingSpotInsertSync(insert.getId()));
+                        context.getSyncService().addSyncModel(new DrinkingSpotInsertSync(insert, remote));
                         listener.onRequestSuccess(insert);
 
                     } else {
                         listener.onRequestSuccess(local.update(drinkingSpot));
-                        context.getSyncService().addSyncModel(new DrinkingSpotUpdateSync(drinkingSpot.getId()));
+                        context.getSyncService().addSyncModel(new DrinkingSpotUpdateSync(drinkingSpot, remote));
                     }
-
                 } catch (DataAccessException e) {
                     e.printStackTrace();
                 }
@@ -147,7 +144,13 @@ public class DrinkingSpotDAOSync extends DrinkingSpotDAO {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 local.join(dsid, personId, listener);
-                context.getSyncService().addSyncModel(new DrinkingSpotJoinSync(dsid, personId));
+                DrinkingSpot localDrinkingSpot = null;
+                try {
+                    localDrinkingSpot = local.getById(dsid);
+                } catch (DataAccessException e) {
+                    e.printStackTrace();
+                }
+                context.getSyncService().addSyncModel(new DrinkingSpotJoinSync(localDrinkingSpot, personId, remote));
             }
 
             @Override
@@ -168,7 +171,13 @@ public class DrinkingSpotDAOSync extends DrinkingSpotDAO {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 local.deactivate(dsid, listener);
-                context.getSyncService().addSyncModel(new DrinkingSpotDeactivateSync(dsid));
+                DrinkingSpot localDrinkingSpot = null;
+                try {
+                    localDrinkingSpot = local.getById(dsid);
+                } catch (DataAccessException e) {
+                    e.printStackTrace();
+                }
+                context.getSyncService().addSyncModel(new DrinkingSpotDeactivateSync(localDrinkingSpot,remote));
             }
 
             @Override
