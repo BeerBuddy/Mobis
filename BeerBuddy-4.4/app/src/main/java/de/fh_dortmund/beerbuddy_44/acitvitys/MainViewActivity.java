@@ -149,17 +149,18 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         int totalAmount = spot.getTotalAmount() + 1 + spot.getPersons().size();
         int ageFrom = spot.getAgeFrom();
         int ageTo = spot.getAgeTo();
+
         Date dateOfBirth = spot.getCreator().getDateOfBirth();
-        if (dateOfBirth != null) {
-            if (ageFrom == 0) {
+        if(dateOfBirth != null)
+        {
+            if (ageFrom > ObjectMapperUtil.getAgeFromBirthday((dateOfBirth)) || (ageFrom == 0)){
                 ageFrom = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
             }
 
-            if (ageTo == 0) {
+            if (ageTo < ObjectMapperUtil.getAgeFromBirthday((dateOfBirth))){
                 ageTo = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
             }
         }
-
 
         List<Person> persons = spot.getPersons();
         for (Person p : persons) {
@@ -176,6 +177,7 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
 
         }
 
+
         ((TextView) slidingUpPanelLayout.findViewById(R.id.mainview_group)).setText(getResources().getText(R.string.mainview_person_count).toString() + " " + totalAmount + " " + getResources().getText(R.string.mainview_age).toString() + " " + ageFrom + " - " + ageTo);
         slidingUpPanelLayout.findViewById(R.id.mainview_view).setOnClickListener(new IntentUtil.ShowDrinkingSpotListener(context, spot.getId(), true));
         slidingUpPanelLayout.findViewById(R.id.mainview_navigate).setOnClickListener(new IntentUtil.ShowDrinkingSpotOnGoogleMapListener(context, spot));
@@ -190,8 +192,6 @@ public class MainViewActivity extends BeerBuddyActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        //TODO check if called with Extra Value long "id" if called show this drinking spot
 
         try {
             Intent intent = getIntent();

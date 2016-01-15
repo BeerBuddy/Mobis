@@ -164,7 +164,7 @@ public class DrinkingActivity extends BeerBuddyActivity {
 
     public void setValue(DrinkingSpot spot) {
 
-        if(spot.getPersons().isEmpty() && spot.getAgeFrom() == 0 && spot.getAgeTo() == 0 && spot.getAmountFemaleWithoutBeerBuddy() ==0 && spot.getAmountMaleWithoutBeerBuddy() == 0)
+        if(spot.getAmountFemaleWithoutBeerBuddy() ==0 && spot.getAmountMaleWithoutBeerBuddy() == 0)
         {
             //hes drinking alone
             ((RadioButton)findViewById(R.id.drinking_alone)).setChecked(true);
@@ -177,18 +177,13 @@ public class DrinkingActivity extends BeerBuddyActivity {
             layout.setVisibility(View.VISIBLE);
             //start counting
 
-            int male = 0;
-            int female = 0;
             int minAge =  Integer.MAX_VALUE;
             int maxAge = -1;
-            //male = spot.getAmountMaleWithoutBeerBuddy();
-            //female = spot.getAmountFemaleWithoutBeerBuddy();
+            int male = spot.getAmountMaleWithoutBeerBuddy();
+            int female = spot.getAmountFemaleWithoutBeerBuddy();
             minAge = spot.getAgeFrom();
             maxAge = spot.getAgeTo();
             List<Person> persons = spot.getPersons();
-            if (!persons.contains(spot.getCreator())) {
-                persons.add(spot.getCreator());
-            }
 
             for (Person p : persons) {
                 int age = Integer.MAX_VALUE;
@@ -206,13 +201,13 @@ public class DrinkingActivity extends BeerBuddyActivity {
                     minAge = age;
                 }
 
-                if (p.getGender() == Person.Gender.MALE) {
+                /*if (p.getGender() == Person.Gender.MALE) {
                     male++;
                 } else if (p.getGender() == Person.Gender.FEMALE) {
                     female++;
                 } else {
                     Log.e(TAG, "undefined Gender in person: " +p.getId());
-                }
+                }*/
             }
 
             if((minAge < spot.getAgeFrom() && minAge != Integer.MAX_VALUE)|| (minAge == 0));

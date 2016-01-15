@@ -93,17 +93,46 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
     public void setValue(final DrinkingSpot spot) {
         int ageFrom = spot.getAgeFrom();
         int ageTo = spot.getAgeTo();
+        int male = spot.getAmountMaleWithoutBeerBuddy();
+        int female = spot.getAmountFemaleWithoutBeerBuddy();
 
         Date dateOfBirth = spot.getCreator().getDateOfBirth();
         if(dateOfBirth != null)
         {
-            if (ageFrom == 0){
-
+            if (ageFrom > ObjectMapperUtil.getAgeFromBirthday((dateOfBirth)) || (ageFrom == 0)){
                 ageFrom = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
             }
 
-            if (ageTo == 0){
+            if (ageTo < ObjectMapperUtil.getAgeFromBirthday((dateOfBirth))){
                 ageTo = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth);
+            }
+        }
+
+        if (spot.getCreator().getGender() == Person.Gender.MALE){
+            male++;
+        }
+        else if (spot.getCreator().getGender() == Person.Gender.FEMALE){
+            female++;
+        }
+
+        List<Person> persons = spot.getPersons();
+        for (Person p : persons) {
+            Date dateOfBirth1 = p.getDateOfBirth();
+            if (dateOfBirth1 != null) {
+                int pAge = ObjectMapperUtil.getAgeFromBirthday(dateOfBirth1);
+                if (pAge < ageFrom) {
+                    ageFrom = pAge;
+                }
+                if (pAge > ageTo) {
+                    ageTo = pAge;
+                }
+            }
+
+            if (p.getGender() == Person.Gender.MALE){
+                male++;
+            }
+            if (p.getGender() == Person.Gender.FEMALE){
+                female++;
             }
         }
 
@@ -119,7 +148,6 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
 
         try {
             long id = DAOFactory.getCurrentPersonDAO(this).getCurrentPersonId();
-            List<Person> persons = spot.getPersons();
             if (spot.getCreator().getId() == id){
                 findViewById(R.id.drinking_view_join).setVisibility(View.GONE);
             }
@@ -163,7 +191,7 @@ public class ViewDrinkingActivity extends BeerBuddyActivity implements OnMapRead
         int amount = spot.getAmountMaleWithoutBeerBuddy() +
                 spot.getAmountFemaleWithoutBeerBuddy() +
                 spot.getPersons().size() + 1;
-        ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount);
+        ((TextView) findViewById(R.id.drinking_view_isdrinkingtext)).setText(getString(R.string.mainview_isdrinkinginagroup) + " " + amount + " (M: " + male + " / F: " + female + ")");
 
         ((ListView) findViewById(R.id.drinking_view_usersjoined)).setAdapter(new FriendListAdapter(context, R.layout.buddy_list_row_layout, spot.getPersons().toArray(new Person[]{})));
         findViewById(R.id.drinking_view_creatorprofil).setOnClickListener(new IntentUtil.ShowProfilListener(context, spot.getCreator().getId()));
